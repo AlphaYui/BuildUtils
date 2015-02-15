@@ -10,7 +10,7 @@ import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
 public interface ArgumentType {
 	public Object readAndValidateFrom(ArgumentReader ar) throws ArgumentException;
-	
+	public String name();
 	
 	////-----------------------------------------------------------------
 	/// Numbers (in LOCALE-SPECIFIC Format)
@@ -34,6 +34,7 @@ public interface ArgumentType {
 				ar.syntaxError("Expected number");
 			return n;
 		}
+		public String name(){return "Locale specific number";}
 	};
 	public static final TLocaleSpecificNumber LS_NUMBER 
 		= new TLocaleSpecificNumber(false);
@@ -57,6 +58,7 @@ public interface ArgumentType {
 			ar.back();
 			return res.toString();
 		}
+		public String name(){return "Identifier";}
 	};
 	public final static TIdentifier IDENTIFIER = new TIdentifier();
 	
@@ -94,6 +96,7 @@ public interface ArgumentType {
 			ar.syntaxError("Expected boolean, got '"+ar.peekChar()+"'.");
 			return null;
 		}
+		public String name(){return "Boolean";}
 	};
 	public final static TBoolean BOOLEAN = new TBoolean();
 	
@@ -115,6 +118,7 @@ public interface ArgumentType {
 				ar.syntaxError("Expected base "+radix+" digit, got '"+d+"'.");
 			return r;
 		}
+		public String name(){return "Base "+radix+" Digit";}
 	};
 	public final static TDigit OCTAL_DIGIT = new TDigit(8);
 	public final static TDigit DECIMAL_DIGIT = new TDigit(10);
@@ -140,6 +144,7 @@ public interface ArgumentType {
 			}while(c!='\0' && d!=-1);
 			return res;
 		}
+		public String name(){return "Base "+radix+" integer";}
 	};
 	public final static TFixedRadixInteger BINARY_INTEGER
 		= new TFixedRadixInteger(2);
@@ -175,6 +180,7 @@ public interface ArgumentType {
 			}
 			return (new TFixedRadixInteger(radix)).readAndValidateFrom(ar);
 		}
+		public String name(){return "integer";}
 	};
 	public final static TInteger INTEGER = new TInteger();
 	
@@ -195,6 +201,7 @@ public interface ArgumentType {
 				ar.syntaxError("Expected integer >="+min+", got "+res+".");
 			return res;
 		}
+		public String name(){return "integer ["+min+";"+max+"]";}
 	};
 	
 	////-----------------------------------------------------------------
@@ -232,6 +239,7 @@ public interface ArgumentType {
 			
 			return res;
 		}
+		public String name(){return "Base "+radix+" float";}
 	};
 	public static final TFixedRadixFloat BINARY_FLOAT
 		= new TFixedRadixFloat(2);
@@ -271,7 +279,7 @@ public interface ArgumentType {
 			}
 			return (new TFixedRadixFloat(radix)).readAndValidateFrom(ar);
 		}
-		
+		public String name(){return "float";}
 	};
 	public static final TFloat FLOAT = new TFloat('.');
 	
@@ -296,6 +304,7 @@ public interface ArgumentType {
 				ar.syntaxError("Expected float >="+min+", got "+res+".");
 			return res;
 		}
+		public String name(){return "float ["+min+";"+max+"]";}
 	};	
 	
 	////-----------------------------------------------------------------
@@ -319,6 +328,7 @@ public interface ArgumentType {
 				return null;
 			}
 		}
+		public String name(){return "Enum "+enumType.getName();}
 	};
 	
 	////-----------------------------------------------------------------
@@ -329,6 +339,7 @@ public interface ArgumentType {
 		public Byte readAndValidateFrom(ArgumentReader ar) throws ArgumentException{
 			return sub.readAndValidateFrom(ar).byteValue();
 		}
+		public String name(){return "byte";}
 	};
 	public static final TByte BYTE = new TByte();
 	
@@ -363,6 +374,7 @@ public interface ArgumentType {
 				ar.syntaxError("\""+name+"\" is not a valid value");
 			return map.get(name);
 		}
+		public String name(){return "custom enum";} //TODO: improve
 	};
 	
 	////-----------------------------------------------------------------
@@ -379,6 +391,7 @@ public interface ArgumentType {
 				return null;
 			}
 		}
+		public String name(){return "Class";}
 	};
 	public static final TClass CLASS = new TClass();
 	
@@ -400,6 +413,7 @@ public interface ArgumentType {
 				res.append(c);
 			}
 		}
+		public String name(){return "string";}
 	};
 	public static final TString STRING = new TString();
 	
@@ -428,6 +442,16 @@ public interface ArgumentType {
 			}
 			ar.syntaxError("Invalid argument type"); //TODO: improve message
 			return null;
+		}
+		public String name(){
+			StringBuilder name = new StringBuilder();
+			boolean firstTime=true;
+			for(ArgumentType type:types){
+				if(firstTime){ firstTime=false; }
+				else name.append(" | ");
+				name.append(type.name());
+			}
+			return name.toString();
 		}
 	};
 	
@@ -468,6 +492,7 @@ public interface ArgumentType {
 			ar.expect(end, "at end of delimited list");
 			return res;
 		}
+		public String name(){return "list of ("+elementType.name()+")";}
 	};
 	
 }

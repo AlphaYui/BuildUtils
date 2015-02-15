@@ -1,6 +1,8 @@
 package com.gmail.marzipankaiser.argumentreader;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
@@ -66,4 +68,61 @@ public class CommandLibrary {
 	public void addCommand(Command cmd){
 		commandTable.put(cmd.name().toLowerCase(), cmd);
 	}
+	
+	public class HelpCommand implements Command{
+		@Override
+		public String name() {
+			return "help";
+		}
+		@Override
+		public String description() {
+			return "shows this help";
+		}
+		@Override
+		public Object execute(Map<String, Object> args, Context ctx) {
+			if(args.containsKey("about")){
+				Object about =args.get("about");
+				if(commandTable.containsKey(about)){
+					Command cmd = commandTable.get(about);
+					List<Argument> cargs = cmd.args();
+					
+					// Usage
+					ctx.print(cmd.name()+"");
+					for(Argument arg:cargs){
+						ctx.print(arg.name()+" ");
+					}
+					ctx.printLn("");
+					
+					// Description
+					ctx.printLn(" "+cmd.description());
+					
+					// Arguments
+					for(Argument arg:cargs){
+						ctx.printLn(arg.name()+" ("+arg.type().name()+"): "
+								+arg.description());
+					}
+				}
+			}else{
+				for(Command cmd : commandTable.values()){
+					List<Argument> cargs = cmd.args();
+					
+					// Usage
+					ctx.print(cmd.name()+"");
+					for(Argument arg:cargs){
+						ctx.print(arg.name()+" ");
+					}
+					ctx.printLn(": "+cmd.description());
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public List<Argument> args() {
+			return Arrays.asList(
+					new Argument("about", ArgumentType.IDENTIFIER)
+					);
+		}
+		
+	};
 }

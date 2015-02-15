@@ -9,4 +9,7 @@ public interface Context {
 	public void push(String name, Object value);
 	public Object pop(String name);
 	public Collection<Object> getAll(String name);
+	
+	public void print(String msg);
+	public void printLn(String msg);
 }

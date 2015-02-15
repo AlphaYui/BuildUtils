@@ -37,4 +37,14 @@ public class HashMapContext implements Context {
 		return values.get(name);
 	}
 
+	@Override
+	public void print(String msg) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void printLn(String msg) {
+		// TODO Auto-generated method stub
+	}
+
 }

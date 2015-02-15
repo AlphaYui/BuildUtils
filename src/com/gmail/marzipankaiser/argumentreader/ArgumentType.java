@@ -353,4 +353,15 @@ public interface ArgumentType {
 			}
 		}
 	};
+	
+	////-----------------------------------------------------------------
+	/// Bytes
+	public static class TByte implements ArgumentType{
+		static final TIntegerInRange sub = new TIntegerInRange(0,255); 
+		@Override
+		public Byte readAndValidateFrom(ArgumentReader ar) throws ArgumentException{
+			return sub.readAndValidateFrom(ar).byteValue();
+		}
+	};
+	public static final TByte BYTE = new TByte();
 }

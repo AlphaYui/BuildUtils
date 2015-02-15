@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class HashMapContext implements Context {
+	// Default implementation for Context.
 
 	public HashMap<String, Stack<Object>> values;
 	

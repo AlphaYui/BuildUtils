@@ -15,6 +15,7 @@ public class Argument implements Describable{
 	public Argument(String name, ArgumentType type, String description){
 		this.name=name; this.type=type; this.description=description;
 	}
+	
 	@Override
 	public String name(){ return name; }
 	public boolean hasName(String name){ // case insensitive
@@ -23,6 +24,7 @@ public class Argument implements Describable{
 	@Override
 	public String description(){ return description; }
 	public ArgumentType type(){ return type; }
+	
 	public Object readAndValidateValueFrom(ArgumentReader ar) 
 			throws ArgumentException{
 		ar.beginArgument(this);
@@ -30,6 +32,7 @@ public class Argument implements Describable{
 		ar.endArgument();
 		return res;
 	}
+	
 	
 	public static Argument findByName(String name, List<Argument> args){
 		for(Argument arg:args){

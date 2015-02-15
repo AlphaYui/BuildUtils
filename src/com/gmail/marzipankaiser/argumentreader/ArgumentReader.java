@@ -33,6 +33,7 @@ public class ArgumentReader {
 	public class UnknownArgumentException extends ArgumentException{
 		private static final long serialVersionUID = 2261534049445636858L;
 		protected String name;
+		public String getArgumentName(){return name;}
 		public UnknownArgumentException(String msg, String name){
 			super(msg); this.name=name;
 		}

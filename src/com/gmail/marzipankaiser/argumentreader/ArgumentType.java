@@ -61,8 +61,13 @@ public interface ArgumentType {
 	public final static TIdentifier IDENTIFIER = new TIdentifier();
 	
 	////-----------------------------------------------------------------
+	/// Flags
+	// to be inherited by Boolean-like, i.e. Flag (+/-) arg
+	public static interface TFlag extends ArgumentType{}; 
+	
+	////-----------------------------------------------------------------
 	/// Booleans
-	public static class TBoolean implements ArgumentType{
+	public static class TBoolean implements ArgumentType, TFlag{
 		@Override
 		public Boolean readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {

@@ -1,5 +1,7 @@
 package com.gmail.marzipankaiser.argumentreader;
 
+import java.util.List;
+
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
 
@@ -27,5 +29,13 @@ public class Argument implements Describable{
 		Object res = type.readAndValidateFrom(ar);
 		ar.endArgument();
 		return res;
+	}
+	
+	public static Argument findByName(String name, List<Argument> args){
+		for(Argument arg:args){
+			if(arg.name().toLowerCase()==name.toLowerCase())
+				return arg;
+		}
+		return null;
 	}
 }

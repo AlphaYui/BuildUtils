@@ -1,5 +1,8 @@
 package com.gmail.marzipankaiser.argumentreader;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 public class ArgumentReader {
@@ -83,6 +86,9 @@ public class ArgumentReader {
 	public void back(){ // jump back one character (= unread)
 		position--;
 	}
+	public boolean atEnd(){
+		return position>=arguments.length();
+	}
 	
 	/// Internal
 	public void setPosition(int p){ position=p; }
@@ -124,5 +130,58 @@ public class ArgumentReader {
 			|| arguments.charAt(position)=='\t'){
 			position++;
 		}
+	}
+	
+	//// Argument syntax
+	public Object readArgument(Argument arg) throws ArgumentException{
+		return arg.readAndValidateValueFrom(this);
+	}
+	public Map<String, Object> readArguments(List<Argument> args) throws ArgumentException{
+		HashMap<String, Object> res = new HashMap<String, Object>();
+		int argumentPosition=0; // next positional argument
+		
+		while(!atEnd()){
+			skipWhitespace();
+			int pos = position; 
+			
+			// Check if it is a named argument (see below)
+			boolean named = true; String name="";
+			try{ // Kind of not-to-cool, deciding on error...
+				name = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
+				skipWhitespace();
+				expect('=',"");
+			}catch(ArgumentException e){
+				named=false; position=pos;
+			}
+			
+			if(named){ /// Named arguments. Syntax NAME = VALUE
+				Argument arg = Argument.findByName(name, args);
+				res.put(arg.name(), arg.readAndValidateValueFrom(this));
+			}
+			
+			else if(peekChar()=='+' || peekChar()=='-'){ // Special flags. Syntax: +FLAG / -FLAG
+				char c = readChar();
+				String flagName = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
+				Argument arg = Argument.findByName(flagName, args);
+				if(!(arg.type() instanceof ArgumentType.TFlag)) // not a flag
+					syntaxError("Argument "+arg.name()+" is not a valid flag");
+				if(c=='+') res.put(arg.name(), true);
+				if(c=='-') res.put(arg.name(), false);
+			}
+			
+			else{ // Positional argument
+				// skip already specified arguments
+				while(res.containsKey(args.get(argumentPosition).name())){
+					argumentPosition++;
+					if(argumentPosition>=args.size()) break; // prevent IndexOutOfBounds.
+				}
+				if(argumentPosition>=args.size())
+					syntaxError("Found trailing garbage (Found positional argument after all arguments were set)");
+				Argument arg = args.get(argumentPosition);
+				arg.readAndValidateValueFrom(this);
+			}
+		}
+		
+		return res;
 	}
 }

@@ -18,6 +18,7 @@ public class CommandLibrary {
 	public CommandLibrary(){
 		commandTable = new HashMap<String, Command>();
 		context = new HashMapContext();
+		addCommand(new HelpCommand()); // always help
 	}
 	
 	//// Error handling
@@ -49,6 +50,7 @@ public class CommandLibrary {
 		context.set("me", sender);
 	}
 	public Object execute(String name, String arguments){
+		if(name=="") name="help"; // default: help
 		
 		// lookup command name
 		if(!commandTable.containsKey(name.toLowerCase())){
@@ -69,6 +71,7 @@ public class CommandLibrary {
 		return cmd.execute(args, context);
 	}
 	public Object execute(String command){
+		if(command=="") return execute("help",""); // default: help
 		int i = command.indexOf(' ');
 		return execute(command.substring(0, i), command.substring(i+1));
 	}
@@ -78,9 +81,13 @@ public class CommandLibrary {
 		return execute(String.join(" ", args));
 	}
 	
-	
+	//// Adding commands
 	public void addCommand(Command cmd){
 		commandTable.put(cmd.name().toLowerCase(), cmd);
+	}
+	public void addCommands(Command...commands){
+		for(Command cmd:commands)
+			addCommand(cmd);
 	}
 	
 	public class HelpCommand implements Command{

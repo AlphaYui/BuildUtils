@@ -97,45 +97,7 @@ public interface ArgumentType {
 	};
 	public final static TBoolean BOOLEAN = new TBoolean();
 	
-	////-----------------------------------------------------------------
-	/// Delimited Lists
-	public static class TDelimitedList implements ArgumentType{
-		char start, delimiter, end;
-		boolean skipWhitespace;
-		ArgumentType elementType;
-		public TDelimitedList(char start, char delimiter, char end,
-				ArgumentType elementType,
-				boolean skipWhitespace){
-			this.start=start; this.delimiter=delimiter; this.end=end;
-			this.skipWhitespace=skipWhitespace;
-			this.elementType = elementType;
-		}
-		public TDelimitedList(char start, char delimiter, char end,
-				ArgumentType elementType){
-			this(start, delimiter, end, elementType, true);
-		}
-		public TDelimitedList(char start, char end, ArgumentType elementType){
-			this(start, ',', end, elementType, true);
-		}
-		public TDelimitedList(ArgumentType elementType){
-			this('(', ',', ')', elementType, true);
-		}
-		@Override
-		public List<Object> readAndValidateFrom(ArgumentReader ar)
-				throws ArgumentException {
-			if(skipWhitespace) ar.skipWhitespace();
-			ar.expect(start, "at beginning of delimited list");
-			List<Object> res = new ArrayList<Object>();
-			do{
-				if(skipWhitespace) ar.skipWhitespace();
-				res.add(elementType.readAndValidateFrom(ar));
-				if(skipWhitespace && delimiter!=' ') ar.skipWhitespace();
-			}while(ar.tryExpect(delimiter));
-			ar.expect(end, "at end of delimited list");
-			return res;
-		}
-	};
-	
+
 	////-----------------------------------------------------------------
 	/// Digits
 	public static class TDigit implements ArgumentType{
@@ -440,4 +402,72 @@ public interface ArgumentType {
 		}
 	};
 	public static final TString STRING = new TString();
+	
+	////-----------------------------------------------------------------
+	////-----------------------------------------------------------------
+	/// Type Combinators
+	
+	////-----------------------------------------------------------------
+	/// Or
+	public static class TOr implements ArgumentType{
+		ArgumentType[] types;
+		public TOr(ArgumentType...argumentTypes){
+			types=argumentTypes;
+		}
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			int position = ar.position();
+			for(ArgumentType type:types){
+				try{
+					Object res = type.readAndValidateFrom(ar);
+					return res;
+				}catch(ArgumentException e){
+					ar.setPosition(position);
+				}
+			}
+			ar.syntaxError("Invalid argument type"); //TODO: improve message
+			return null;
+		}
+	};
+	
+	////-----------------------------------------------------------------
+	/// Delimited Lists
+	public static class TDelimitedList implements ArgumentType{
+		char start, delimiter, end;
+		boolean skipWhitespace;
+		ArgumentType elementType;
+		public TDelimitedList(char start, char delimiter, char end,
+				ArgumentType elementType,
+				boolean skipWhitespace){
+			this.start=start; this.delimiter=delimiter; this.end=end;
+			this.skipWhitespace=skipWhitespace;
+			this.elementType = elementType;
+		}
+		public TDelimitedList(char start, char delimiter, char end,
+				ArgumentType elementType){
+			this(start, delimiter, end, elementType, true);
+		}
+		public TDelimitedList(char start, char end, ArgumentType elementType){
+			this(start, ',', end, elementType, true);
+		}
+		public TDelimitedList(ArgumentType elementType){
+			this('(', ',', ')', elementType, true);
+		}
+		@Override
+		public List<Object> readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			if(skipWhitespace) ar.skipWhitespace();
+			ar.expect(start, "at beginning of delimited list");
+			List<Object> res = new ArrayList<Object>();
+			do{
+				if(skipWhitespace) ar.skipWhitespace();
+				res.add(elementType.readAndValidateFrom(ar));
+				if(skipWhitespace && delimiter!=' ') ar.skipWhitespace();
+			}while(ar.tryExpect(delimiter));
+			ar.expect(end, "at end of delimited list");
+			return res;
+		}
+	};
+	
 }

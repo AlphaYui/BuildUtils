@@ -12,4 +12,6 @@ public interface Context {
 	
 	public void print(String msg);
 	public void printLn(String msg);
+	
+	public boolean amI(Class<?> type);
 }

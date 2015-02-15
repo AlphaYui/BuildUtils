@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Stack;
 
+import org.bukkit.command.CommandSender;
+
 public class HashMapContext implements Context {
 	// Default implementation for Context.
 
@@ -38,13 +40,21 @@ public class HashMapContext implements Context {
 	}
 
 	@Override
-	public void print(String msg) {
-		// TODO Auto-generated method stub
+	public void print(String msg){
+		if(!(get("me") instanceof CommandSender))
+			return; //TODO: handle
+		((CommandSender) get("me")).sendMessage(msg);
 	}
 
 	@Override
 	public void printLn(String msg) {
-		// TODO Auto-generated method stub
+		if(!(get("me") instanceof CommandSender))
+			return; //TODO: handle
+		((CommandSender) get("me")).sendMessage(msg+"\n");
 	}
 
+	@Override
+	public boolean amI(Class<?> type) {
+		return type.isInstance(get("me"));
+	}
 }

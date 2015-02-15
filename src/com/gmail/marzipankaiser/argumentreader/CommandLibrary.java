@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.UnknownArgumentException;
 
@@ -19,30 +22,32 @@ public class CommandLibrary {
 	
 	//// Error handling
 	public void printErrorLn(String msg){
-		//TODO
+		context.printLn(ChatColor.RED+"[E] "+msg);
 	}
 	public void unknownCommand(String name){
-		printErrorLn("Unknown command "+name+"!");
+		printErrorLn(ChatColor.YELLOW+"Unknown command "+name+"!");
 	}
 	public void handleArgumentException(ArgumentException e, Command cmd){
 		if(e instanceof ArgumentReader.ArgumentSyntaxException){
 			Argument arg = ((ArgumentReader.ArgumentSyntaxException)e).inArgument();
 			if(arg==null){ // in between arguments
-				printErrorLn("Syntax error: "+e.getMessage());
+				printErrorLn(ChatColor.YELLOW+"Syntax error: "+e.getMessage());
 			}else{
-				printErrorLn("Syntax error in argument "+arg.name()
+				printErrorLn(ChatColor.YELLOW+"Syntax error in argument "+arg.name()
 						+": "+e.getMessage());
 			}
 		}else if(e instanceof UnknownArgumentException){
-			printErrorLn("Unknown argument "
+			printErrorLn(ChatColor.YELLOW+"Unknown argument "
 				+((UnknownArgumentException)e).getArgumentName()
 				+" for command "+cmd.name()+"!");
 		}else{
-			printErrorLn("ERROR: "+e.getMessage());
+			printErrorLn(ChatColor.RED+"ERROR: "+e.getMessage());
 		}
 	}
 	
-	
+	public void setCommandSender(CommandSender sender){
+		context.set("me", sender);
+	}
 	public Object execute(String name, String arguments){
 		
 		// lookup command name
@@ -62,6 +67,10 @@ public class CommandLibrary {
 		
 		// execute command
 		return cmd.execute(args, context);
+	}
+	public Object execute(String command){
+		int i = command.indexOf(' ');
+		return execute(command.substring(0, i), command.substring(i+1));
 	}
 	
 	
@@ -87,19 +96,21 @@ public class CommandLibrary {
 					List<Argument> cargs = cmd.args();
 					
 					// Usage
-					ctx.print(cmd.name()+"");
+					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+"");
 					for(Argument arg:cargs){
 						ctx.print(arg.name()+" ");
 					}
 					ctx.printLn("");
 					
 					// Description
-					ctx.printLn(" "+cmd.description());
+					ctx.printLn(" "+ChatColor.RESET+cmd.description());
 					
 					// Arguments
 					for(Argument arg:cargs){
-						ctx.printLn(arg.name()+" ("+arg.type().name()+"): "
-								+arg.description());
+						ctx.printLn(
+								ChatColor.BLUE+arg.name()
+								+ChatColor.GRAY+" ("+arg.type().name()+"): "
+								+ChatColor.RESET+arg.description());
 					}
 				}
 			}else{
@@ -107,11 +118,11 @@ public class CommandLibrary {
 					List<Argument> cargs = cmd.args();
 					
 					// Usage
-					ctx.print(cmd.name()+"");
+					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+"");
 					for(Argument arg:cargs){
 						ctx.print(arg.name()+" ");
 					}
-					ctx.printLn(": "+cmd.description());
+					ctx.printLn(": "+ChatColor.RESET+cmd.description());
 				}
 			}
 			return null;

@@ -3,6 +3,7 @@ package com.gmail.marzipankaiser.argumentreader;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
@@ -334,8 +335,10 @@ public interface ArgumentType {
 	/// Enums
 	public static class TEnum implements ArgumentType{
 		Class<? extends Enum<?>> enumType;
+		Enum<?>[] constants;
 		public <T extends Enum<T>> TEnum(Class<T> enumClass){
 			this.enumType=enumClass;
+			constants = enumType.getEnumConstants();
 		}
 		
 		@Override
@@ -364,4 +367,37 @@ public interface ArgumentType {
 		}
 	};
 	public static final TByte BYTE = new TByte();
+	
+	////-----------------------------------------------------------------
+	/// Custom Enum (HashMap based)
+	public static class TCustomEnum implements ArgumentType{
+		HashMap<String, Object> map; boolean caseSensitive;
+		public TCustomEnum(boolean caseSensitive){
+			map = new HashMap<String, Object>();
+			this.caseSensitive=caseSensitive;
+		}
+		public void put(String name, Object value){
+			if(caseSensitive)
+				map.put(name, value);
+			else map.put(name.toLowerCase(), value);
+		}
+		public void putEnumConstants(Class<? extends Enum<?>> e){
+			Enum<?>[] consts = e.getEnumConstants();
+			for(Enum<?> enumConst : consts){
+				put(enumConst.name(),enumConst);
+			}
+		}
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			String name;
+			if(caseSensitive)
+				name = IDENTIFIER.readAndValidateFrom(ar);
+			else
+				name = IDENTIFIER.readAndValidateFrom(ar).toLowerCase();
+			if(!map.containsKey(name))
+				ar.syntaxError("\""+name+"\" is not a valid value");
+			return map.get(name);
+		}
+	};
 }

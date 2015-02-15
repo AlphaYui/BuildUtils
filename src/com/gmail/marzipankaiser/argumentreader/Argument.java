@@ -3,7 +3,7 @@ package com.gmail.marzipankaiser.argumentreader;
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
 
-public class Argument {
+public class Argument implements Describable{
 	String name, description;
 	ArgumentType type;
 	
@@ -13,11 +13,12 @@ public class Argument {
 	public Argument(String name, ArgumentType type, String description){
 		this.name=name; this.type=type; this.description=description;
 	}
-	
+	@Override
 	public String name(){ return name; }
 	public boolean hasName(String name){ // case insensitive
 		return this.name.toLowerCase().equals(name.toLowerCase());
 	}
+	@Override
 	public String description(){ return description; }
 	public ArgumentType type(){ return type; }
 	public Object readAndValidateValueFrom(ArgumentReader ar) 

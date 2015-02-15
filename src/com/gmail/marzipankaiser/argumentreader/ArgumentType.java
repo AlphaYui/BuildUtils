@@ -129,7 +129,7 @@ public interface ArgumentType {
 			do{
 				if(skipWhitespace) ar.skipWhitespace();
 				res.add(elementType.readAndValidateFrom(ar));
-				if(skipWhitespace) ar.skipWhitespace();
+				if(skipWhitespace && delimiter!=' ') ar.skipWhitespace();
 			}while(ar.tryExpect(delimiter));
 			ar.expect(end, "at end of delimited list");
 			return res;
@@ -419,4 +419,25 @@ public interface ArgumentType {
 		}
 	};
 	public static final TClass CLASS = new TClass();
+	
+	////-----------------------------------------------------------------
+	/// Strings (with "" - see also: TIdentifier)
+	public static class TString implements ArgumentType{
+		@Override
+		public String readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			ar.expect('"', "before String");
+			StringBuilder res = new StringBuilder();
+			while(true){
+				char c = ar.readChar();
+				if(c=='"') return res.toString();
+				if(c=='\\'){ // escape character
+					c = ar.readChar();
+					//TODO: add handling digits and specials etc (\0, \n, ...)
+				}
+				res.append(c);
+			}
+		}
+	};
+	public static final TString STRING = new TString();
 }

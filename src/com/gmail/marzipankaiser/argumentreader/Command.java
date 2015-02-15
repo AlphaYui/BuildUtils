@@ -4,6 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface Command extends Describable {
-	public void execute(Map<String, Object> args);
+	public Object execute(Map<String, Object> args, Context ctx);
 	public List<Argument> args();
 }

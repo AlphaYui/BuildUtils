@@ -15,6 +15,7 @@ public class CommandLibrary {
 		context = new HashMapContext();
 	}
 	
+	//// Error handling
 	public void printErrorLn(String msg){
 		//TODO
 	}
@@ -38,10 +39,12 @@ public class CommandLibrary {
 			printErrorLn("ERROR: "+e.getMessage());
 		}
 	}
+	
+	
 	public Object execute(String name, String arguments){
 		
 		// lookup command name
-		if(!commandTable.containsKey(name)){
+		if(!commandTable.containsKey(name.toLowerCase())){
 			unknownCommand(name); return null;
 		}
 		Command cmd = commandTable.get(name);
@@ -57,5 +60,10 @@ public class CommandLibrary {
 		
 		// execute command
 		return cmd.execute(args, context);
+	}
+	
+	
+	public void addCommand(Command cmd){
+		commandTable.put(cmd.name().toLowerCase(), cmd);
 	}
 }

@@ -335,22 +335,19 @@ public interface ArgumentType {
 	/// Enums
 	public static class TEnum implements ArgumentType{
 		Class<? extends Enum<?>> enumType;
-		Enum<?>[] constants;
 		public <T extends Enum<T>> TEnum(Class<T> enumClass){
 			this.enumType=enumClass;
-			constants = enumType.getEnumConstants();
 		}
 		
 		@Override
 		public Enum<?> readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
 			String name = IDENTIFIER.readAndValidateFrom(ar);
-			try { // TODO: DIRTY HACK!!
+			try { // TODO: DIRTY HACK!! Need to find better way.
 				return (Enum<?>) enumType
 									.getMethod("valueOf", String.class)
 									.invoke(null, name);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
 			}
@@ -400,4 +397,21 @@ public interface ArgumentType {
 			return map.get(name);
 		}
 	};
+	
+	////-----------------------------------------------------------------
+	/// Classes
+	public static class TClass implements ArgumentType{
+		@Override
+		public Class<?> readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			String name=IDENTIFIER.readAndValidateFrom(ar);
+			try {
+				return Class.forName(name);
+			} catch (ClassNotFoundException e) {
+				ar.syntaxError("Invalid class name "+name);
+				return null;
+			}
+		}
+	};
+	public static final TClass CLASS = new TClass();
 }

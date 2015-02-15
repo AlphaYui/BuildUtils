@@ -72,6 +72,11 @@ public class CommandLibrary {
 		int i = command.indexOf(' ');
 		return execute(command.substring(0, i), command.substring(i+1));
 	}
+	public Object handleCommand(CommandSender cs, org.bukkit.command.Command cmd,
+			String label, String[] args){
+		setCommandSender(cs);
+		return execute(String.join(" ", args));
+	}
 	
 	
 	public void addCommand(Command cmd){

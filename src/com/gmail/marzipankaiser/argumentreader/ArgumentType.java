@@ -32,6 +32,7 @@ public interface ArgumentType {
 			Number n = nf.parse(ar.getWholeArguments(), pp);
 			if(pp.getIndex()==ar.position()) // nothing read => no number
 				ar.syntaxError("Expected number");
+			ar.setPosition(pp.getIndex());
 			return n;
 		}
 		public String name(){return "Locale specific number";}

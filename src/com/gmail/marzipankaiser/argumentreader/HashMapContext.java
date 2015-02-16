@@ -62,4 +62,9 @@ public class HashMapContext implements Context {
 	public boolean amI(Class<?> type) {
 		return type.isInstance(get("me"));
 	}
+
+	@Override
+	public CommandSender getSender() {
+		return (CommandSender) get("me");
+	}
 }

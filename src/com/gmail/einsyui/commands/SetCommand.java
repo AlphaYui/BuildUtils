@@ -44,7 +44,7 @@ public class SetCommand implements Command{
 	public String execute(Map<String, Object> args, Context ctx) {
 		
 		CommandSender cs = (CommandSender) ctx.get( "me" );
-		
+
 		if( cs instanceof ConsoleCommandSender || cs instanceof RemoteConsoleCommandSender )
 			return executeForConsoles( args, ctx );
 		else if( cs instanceof Player )
@@ -84,7 +84,7 @@ public class SetCommand implements Command{
 		int z = (int) args.get( "z" );
 		
 		main.getStackFor( groupName ).pushToStack( new Location( w,x,y,z ) );
-		cs.sendMessage( ChatColor.GREEN + "Successfully pushed position to stack!" );		
+		cs.sendMessage( ChatColor.GREEN + "Successfully pushed position [" + w.getName() +"|"+x+"|"+y+"|"+z+ "] to stack '"+groupName+"'!" );		
 		return "";
 	}
 	
@@ -105,7 +105,7 @@ public class SetCommand implements Command{
 		int z = (int) Argument.getWithDefault( args, "z", p.getLocation().getBlockZ() );
 		
 		main.getStackFor( groupName ).pushToStack( new Location( w,x,y,z ) );
-		p.sendMessage( ChatColor.GREEN + "Successfully pushed position to stack!" );	
+		p.sendMessage( ChatColor.GREEN + "Successfully pushed position [" + w.getName() +"|"+x+"|"+y+"|"+z+ "] to stack '"+groupName+"'!" );	
 		
 		return "";
 	}
@@ -130,18 +130,18 @@ public class SetCommand implements Command{
 		
 		main.getStackFor( groupName ).pushToStack( new Location( w,x,y,z ) );
 
-		bcs.sendMessage( ChatColor.GREEN + "Successfully pushed position to stack!" );	
+		bcs.sendMessage( ChatColor.GREEN + "Successfully pushed position [" + w.getName() +"|"+x+"|"+y+"|"+z+ "] to stack '"+groupName+"'!" );	
 		return "";
 	}
 
 	@Override
 	public List<Argument> args() {
 		return (List<Argument>) Arrays.asList( 	
-								new Argument( "group", ArgumentType.STRING ),
-								new Argument( "x", ArgumentType.INTEGER ),
-								new Argument( "y", ArgumentType.INTEGER ),
-								new Argument( "z", ArgumentType.INTEGER ),
-								new Argument( "world", ArgumentType.STRING_IN_ANGLE_BRACKETS ));
+								new Argument( "group", ArgumentType.IDENTIFIER, "Name of the stack the location shall be pushed to" ),
+								new Argument( "x", ArgumentType.INTEGER, "X-coordinate of the point" ),
+								new Argument( "y", ArgumentType.INTEGER, "Y-coordinate of the point" ),
+								new Argument( "z", ArgumentType.INTEGER, "Z-coordinate of the point" ),
+								new Argument( "world", ArgumentType.IDENTIFIER, "Name of the world of the point" ));
 	}
 	
 	

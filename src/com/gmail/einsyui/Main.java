@@ -3,10 +3,12 @@ package com.gmail.einsyui;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.commands.SetCommand;
+import com.gmail.marzipankaiser.argumentreader.ArgumentReader;
 import com.gmail.marzipankaiser.argumentreader.CommandLibrary;
 
 public class Main extends JavaPlugin{
@@ -28,8 +30,13 @@ public class Main extends JavaPlugin{
 	{
 		if( !cmd.getName().equalsIgnoreCase( "bu" ) )
 			return true;
-		
+		try {
 		commands.handleCommand(cs, cmd, label, args);
+		} catch( ArgumentReader.ArgumentException ae )
+		{
+			cs.sendMessage( ChatColor.RED + "An error occured: " + ae.getMessage() );
+			return true;
+		}
 		
 		return true;
 	}

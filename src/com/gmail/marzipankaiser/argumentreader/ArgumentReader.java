@@ -64,7 +64,7 @@ public class ArgumentReader {
 				currentArgumentStack.peek());
 	}
 	public void unknownArgument(String name) throws UnknownArgumentException{
-		throw new UnknownArgumentException("Uknown argument name.", name);
+		throw new UnknownArgumentException("Unknown argument name.", name);
 	}
 	public void unspecifiedRequiredArgument(String name) throws ArgumentException{
 		throw new ArgumentException("Required argument "+name+"left unspecified");

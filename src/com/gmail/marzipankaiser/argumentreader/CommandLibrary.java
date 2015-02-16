@@ -94,10 +94,14 @@ public class CommandLibrary {
 	//If it shall not just write the string of the array in one string, separated by baseStr, it has to be rewritten
 	private String joinStr( String baseStr, String[]args )
 	{
-		String result = "";
-		for( String add : args )
-			result = result + add + baseStr;
-		return result;
+		if(args.length==0) return "";
+		StringBuilder result = new StringBuilder();
+		result.append(args[0]);
+		for(int i=1;i<args.length;i++){
+			result.append(baseStr);
+			result.append(args[i]);
+		}
+		return result.toString();
 	}
 	
 	//// Adding commands

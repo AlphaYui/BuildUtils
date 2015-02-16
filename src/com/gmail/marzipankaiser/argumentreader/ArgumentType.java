@@ -177,13 +177,14 @@ public interface ArgumentType {
 			int radix=10;
 			if(ar.peekChar()=='0'){
 				ar.readChar();
-				char f=ar.readChar();
+				char f=ar.tryReadChar();
 				switch(f){
 				case 'b': radix=2; break;
 				case 'o': radix=8; break;
 				case 'd': radix=10; break;
+				case '\0': radix=10; ar.back(); break;
 				case 'x': radix=16; break;
-				default: radix=8; ar.back(); // TODO: Java-like 010 == 8 ?
+				default: radix=8; ar.back(); ar.back(); // TODO: Java-like 010 == 8 ?
 				}
 			}
 			if(ar.tryExpect('r')){ //TODO: choose character to give radix
@@ -296,13 +297,14 @@ public interface ArgumentType {
 			int radix=10;
 			if(ar.peekChar()=='0'){
 				ar.readChar();
-				char f=ar.readChar();
+				char f=ar.tryReadChar();
 				switch(f){
 				case 'b': radix=2; break;
 				case 'o': radix=8; break;
 				case 'd': radix=10; break;
 				case 'x': radix=16; break;
-				default: radix=8; ar.back(); // TODO: Java-like 010 == 8 ?
+				case '\0': radix=10; ar.back(); break;
+				default: radix=8; ar.back(); ar.back(); // TODO: Java-like 010 == 8 ?
 				}
 			}
 			if(ar.tryExpect('r')){ //TODO: choose character to give radix

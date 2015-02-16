@@ -226,7 +226,7 @@ public class ArgumentReader {
 		// read command and execute it
 		String subcmd = 
 				ArgumentType.STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(this);
-		String value = subcommandLibrary.execute(subcmd).toString();
+		String value = subcommandLibrary.execute(subcmd);
 		
 		// replace in String (StringBuffer needed for replace by Index)
 		//  (sadly, String copied, so O(n)? )

@@ -49,7 +49,7 @@ public class CommandLibrary {
 	public void setCommandSender(CommandSender sender){
 		context.set("me", sender);
 	}
-	public Object execute(String name, String arguments){
+	public String execute(String name, String arguments){
 		if(name=="") name="help"; // default: help
 		
 		// lookup command name
@@ -70,7 +70,7 @@ public class CommandLibrary {
 		// execute command
 		return cmd.execute(args, context);
 	}
-	public Object execute(String command){
+	public String execute(String command){
 		if(command=="") return execute("help",""); // default: help
 		int i = command.indexOf(' ');
 		return execute(command.substring(0, i), command.substring(i+1));
@@ -100,7 +100,7 @@ public class CommandLibrary {
 			return "shows this help";
 		}
 		@Override
-		public Object execute(Map<String, Object> args, Context ctx) {
+		public String execute(Map<String, Object> args, Context ctx) {
 			if(args.containsKey("about")){
 				Object about =args.get("about");
 				if(commandTable.containsKey(about)){

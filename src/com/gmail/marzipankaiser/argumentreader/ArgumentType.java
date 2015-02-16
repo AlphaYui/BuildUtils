@@ -5,6 +5,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
@@ -504,6 +505,58 @@ public interface ArgumentType {
 		= new TStringInBalancedBrackets('<','>');
 	public static final TStringInBalancedBrackets STRING_IN_CURLY_BRACES 
 		= new TStringInBalancedBrackets('{','}');
+	
+	////-----------------------------------------------------------------
+	// Rest as String
+	public static class TRestAsString implements ArgumentType{
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			String res=ar.getWholeArguments().substring(ar.position());
+			ar.setPosition(ar.getWholeArguments().length());
+			return res;
+		}
+		@Override
+		public String name() {
+			return "raw";
+		}
+	};
+	public static final TRestAsString REST_AS_RAW_STRING
+		= new TRestAsString();
+	
+	////-----------------------------------------------------------------
+	/// UUIDs
+	public static class TUUID implements ArgumentType{
+		public static String readHexDigits(ArgumentReader ar, int n) 
+				throws ArgumentException{
+			StringBuilder sb = new StringBuilder();
+			for(int i=0;i<n;i++)
+				sb.append(Integer.toString(
+						HEXADECIMAL_DIGIT.readAndValidateFrom(ar),
+						16));
+			return sb.toString();
+		}
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			StringBuilder sb = new StringBuilder();
+			sb.append(readHexDigits(ar,8));
+			ar.expect('-',"in UUID"); sb.append('-');
+			sb.append(readHexDigits(ar,4));
+			ar.expect('-',"in UUID"); sb.append('-');
+			sb.append(readHexDigits(ar,4));
+			ar.expect('-',"in UUID"); sb.append('-');
+			sb.append(readHexDigits(ar,4));
+			ar.expect('-',"in UUID"); sb.append('-');
+			sb.append(readHexDigits(ar,12));
+			return UUID.fromString(sb.toString());
+		}
+		@Override
+		public String name() {
+			return "UUID";
+		}
+	};
+	public static final TUUID JAVA_UUID = new TUUID();
 	
 	////-----------------------------------------------------------------
 	////-----------------------------------------------------------------

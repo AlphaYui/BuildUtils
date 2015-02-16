@@ -147,5 +147,9 @@ public class CommandLibrary {
 					);
 		}
 		
+	}
+
+	public Context getContext() {
+		return context;
 	};
 }

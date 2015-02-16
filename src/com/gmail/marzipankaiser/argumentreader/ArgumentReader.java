@@ -204,6 +204,24 @@ public class ArgumentReader {
 			}
 		}
 		
+		// Handle default values
+		while(argumentPosition<args.size()){
+			if(!res.containsKey(args.get(argumentPosition))){
+				Argument arg = args.get(argumentPosition);
+				if(arg instanceof AbstractArgumentWithDefault){
+					if(subcommandLibrary!=null)
+						res.put(arg.name(), 
+								((ArgumentWithDefault) arg)
+								.defaultValue(subcommandLibrary.getContext()));
+					else
+						res.put(arg.name(), 
+								((ArgumentWithDefault) arg)
+								.defaultValue(null));
+				}
+			}
+			argumentPosition++;
+		}
+		
 		return res;
 	}
 	

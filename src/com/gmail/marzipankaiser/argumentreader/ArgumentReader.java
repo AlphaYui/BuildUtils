@@ -9,10 +9,18 @@ public class ArgumentReader {
 	String arguments;
 	int position;
 	Stack<Argument> currentArgumentStack;
+	CommandLibrary subcommandLibrary;
 	
-	public ArgumentReader(String arguments){
+	public ArgumentReader(String arguments, CommandLibrary subcommandLibrary){
 		this.arguments=arguments; position=0;
 		currentArgumentStack = new Stack<Argument>();
+		this.subcommandLibrary=subcommandLibrary;
+		if(subcommandLibrary==null)
+			replaceSubcommands=false;
+		else replaceSubcommands=true;
+	}
+	public ArgumentReader(String arguments){
+		this(arguments, null);
 	}
 	
 	//// Exception classes
@@ -60,29 +68,42 @@ public class ArgumentReader {
 	}
 	
 	//// Basic reading
-	public char readChar() throws ArgumentSyntaxException{
+	public char readChar() throws ArgumentException{
 		// Error if no character available (i.e. at end)
 		if(position+1>=arguments.length())
 			syntaxError("Premature end of command.");
+		if(arguments.charAt(position)=='[') replaceSubcommandHere();
 		return arguments.charAt(position++);
 	}
-	public char tryReadChar(){
+	public char tryReadChar() throws ArgumentException{
 		// return \0 character if no character available (i.e. at end)
 		if(position+1>=arguments.length())
 			return '\0'; 
+		if(arguments.charAt(position)=='[') replaceSubcommandHere();
 		return arguments.charAt(position++);
 	}
-	public String readString(int length) throws ArgumentSyntaxException{ 
+	public String readString(int length) throws ArgumentException{ 
 		// read String of specific length
 		// Error if not enough characters are available
-		if(position+length>=arguments.length())
+		if(position+length>=arguments.length()
+				&& (arguments.indexOf('[', position)==-1 
+					|| !replaceSubcommands))
 			syntaxError("Premature end of command.");
-		String res = arguments.substring(position, position+length);
+		String res = arguments.substring(position, 
+						Math.min(position+length,arguments.length()));
+		int i=res.indexOf('[');
+		if(replaceSubcommands && i!=-1){
+			position+=i;
+			replaceSubcommandHere();
+			return res.substring(0, i) + readString(length-i);
+		}
 		position+=length;
 		return res;
 	}
-	public char peekChar(){
-		return arguments.charAt(position);
+	public char peekChar() throws ArgumentException{
+		char c= tryReadChar();
+		back();
+		return c;
 	}
 	public void back(){ // jump back one character (= unread)
 		position--;
@@ -98,24 +119,24 @@ public class ArgumentReader {
 	
 	//// Expect
 	public void expect(char c, String positionDescription) 
-			throws ArgumentSyntaxException{
+			throws ArgumentException{
 		char got = readChar();
 		if(got!=c)
 			syntaxError("Expected '"+c+"' "+positionDescription+", got '"+got+"'.");
 	}
 	public void expect(String str, String positionDescription, boolean ignoreCase) 
-			throws ArgumentSyntaxException{
+			throws ArgumentException{
 		String got = readString(str.length());
 		if(str!=got)
 			syntaxError("Expected \""+str+"\" "+position+", got \""+got+"\".");
 	}
 	public void expect(String str, String positionDescription) 
-			throws ArgumentSyntaxException{
+			throws ArgumentException{
 		expect(str, positionDescription, true);
 	}
 	
 	//// if next thing is ..., read and return true. Else, return false
-	public boolean tryExpect(char c){
+	public boolean tryExpect(char c) throws ArgumentException{
 		return c==tryReadChar();
 	}
 	public boolean tryExpect(String str){
@@ -184,5 +205,36 @@ public class ArgumentReader {
 		}
 		
 		return res;
+	}
+	
+	//// Sub-commands
+	boolean replaceSubcommands=true;
+	public void deactivateSubcommands(){ replaceSubcommands = false; }
+	public void activateSubcommands(){
+		if(subcommandLibrary!=null)
+			replaceSubcommands = true; 
+	}
+	public boolean subcommandsActivated(){ return replaceSubcommands; }
+	public void setSubcommandLibrary(CommandLibrary cl){
+		subcommandLibrary = cl;
+	}
+	public CommandLibrary getSubcommandLibrary(){ return subcommandLibrary; }
+	protected void replaceSubcommandHere() throws ArgumentException{
+		if(!replaceSubcommands) return;
+		int pos=position; // save current position for later use
+		
+		// read command and execute it
+		String subcmd = 
+				ArgumentType.STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(this);
+		String value = subcommandLibrary.execute(subcmd).toString();
+		
+		// replace in String (StringBuffer needed for replace by Index)
+		//  (sadly, String copied, so O(n)? )
+		StringBuffer sb = new StringBuffer(arguments);
+		sb.replace(pos, position, value);
+		
+		// set arguments & position
+		arguments = sb.toString();
+		position=pos;
 	}
 }

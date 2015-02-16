@@ -163,7 +163,9 @@ public class ArgumentReader {
 	public Object readArgument(Argument arg) throws ArgumentException{
 		return arg.readAndValidateValueFrom(this);
 	}
-	public Map<String, Object> readArguments(List<Argument> args) throws ArgumentException{
+	public Map<String, Object> readArguments(List<Argument> args,
+			Context ctx) 
+			throws ArgumentException{
 		HashMap<String, Object> res = new HashMap<String, Object>();
 		int argumentPosition=0; // next positional argument
 		
@@ -216,14 +218,9 @@ public class ArgumentReader {
 			if(!res.containsKey(args.get(argumentPosition).name())){
 				Argument arg = args.get(argumentPosition);
 				if(arg instanceof AbstractArgumentWithDefault){
-					if(subcommandLibrary!=null)
-						res.put(arg.name(), 
-								((ArgumentWithDefault) arg)
-								.defaultValue(subcommandLibrary.getContext()));
-					else
-						res.put(arg.name(), 
-								((ArgumentWithDefault) arg)
-								.defaultValue(null));
+					res.put(arg.name(), 
+							((ArgumentWithDefault) arg)
+							.defaultValue(ctx));
 				}
 			}
 			argumentPosition++;

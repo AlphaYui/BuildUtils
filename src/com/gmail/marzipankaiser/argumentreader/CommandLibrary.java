@@ -63,7 +63,7 @@ public class CommandLibrary {
 		ArgumentReader ar = new ArgumentReader(arguments,this);
 		Map<String, Object> args;
 		try {
-			args = ar.readArguments(cmd.args());
+			args = ar.readArguments(cmd.args(), context);
 		} catch (ArgumentException e) {
 			handleArgumentException(e, cmd); return null;
 		}

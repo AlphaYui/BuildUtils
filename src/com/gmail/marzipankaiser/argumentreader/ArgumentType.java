@@ -135,6 +135,12 @@ public interface ArgumentType {
 		@Override
 		public Integer readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
+			int sign=1;
+			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
+				char s=ar.readChar();
+				if(s=='-') sign=-1;
+			}
+			
 			int res=0;
 			char c=ar.readChar();
 			int d = Character.digit(c, radix);
@@ -142,7 +148,8 @@ public interface ArgumentType {
 				res*=radix; res+=d;
 				c=ar.tryReadChar(); d=Character.digit(c, radix);
 			}while(c!='\0' && d!=-1);
-			return res;
+			if(c!='\0') ar.back();
+			return res*sign;
 		}
 		public String name(){return "Base "+radix+" integer";}
 	};
@@ -161,24 +168,31 @@ public interface ArgumentType {
 		@Override
 		public Integer readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
+			int sign=1;
+			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
+				char s=ar.readChar();
+				if(s=='-') sign=-1;
+			}
+			
 			int radix=10;
 			if(ar.peekChar()=='0'){
 				ar.readChar();
 				char f=ar.readChar();
 				switch(f){
-				case 'b': radix=2;
-				case 'o': radix=8;
-				case 'x': radix=16;
+				case 'b': radix=2; break;
+				case 'o': radix=8; break;
+				case 'd': radix=10; break;
+				case 'x': radix=16; break;
 				default: radix=8; ar.back(); // TODO: Java-like 010 == 8 ?
 				}
 			}
-			if(ar.tryExpect('\0')){ //TODO: choose character to give radix
+			if(ar.tryExpect('r')){ //TODO: choose character to give radix
 				radix = DECIMAL_INTEGER.readAndValidateFrom(ar);
 				if(radix>Character.MAX_RADIX || radix<Character.MIN_RADIX)
 					ar.syntaxError("Invalid radix "+radix+" in radix specification.");
-				ar.expect('\0', "after radix specification"); //TODO: choose char
+				ar.expect('r', "after radix specification"); //TODO: choose char
 			}
-			return (new TFixedRadixInteger(radix)).readAndValidateFrom(ar);
+			return sign*(new TFixedRadixInteger(radix)).readAndValidateFrom(ar);
 		}
 		public String name(){return "integer";}
 	};
@@ -217,6 +231,12 @@ public interface ArgumentType {
 		@Override
 		public Double readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
+			double sign=1;
+			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
+				char s=ar.readChar();
+				if(s=='-') sign=-1;
+			}
+			
 			// digits before dot
 			double res=0;
 			char c=ar.readChar();
@@ -235,9 +255,16 @@ public interface ArgumentType {
 					currentRadixExp/=radix;
 					c=ar.tryReadChar(); d=Character.digit(c, radix);
 				}while(c!='\0' && d!=-1);
+				
+				if(c=='e'  // exponent
+					|| (c=='*' && radix>=15)
+					|| (c=='x' && radix>=15)){
+					int exp = INTEGER.readAndValidateFrom(ar);
+					res*=Math.pow(radix, exp);
+				}
 			}
 			
-			return res;
+			return sign*res;
 		}
 		public String name(){return "Base "+radix+" float";}
 	};
@@ -260,24 +287,31 @@ public interface ArgumentType {
 		@Override
 		public Double readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
+			int sign=1;
+			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
+				char s=ar.readChar();
+				if(s=='-') sign=-1;
+			}
+			
 			int radix=10;
 			if(ar.peekChar()=='0'){
 				ar.readChar();
 				char f=ar.readChar();
 				switch(f){
-				case 'b': radix=2;
-				case 'o': radix=8;
-				case 'x': radix=16;
+				case 'b': radix=2; break;
+				case 'o': radix=8; break;
+				case 'd': radix=10; break;
+				case 'x': radix=16; break;
 				default: radix=8; ar.back(); // TODO: Java-like 010 == 8 ?
 				}
 			}
-			if(ar.tryExpect('\0')){ //TODO: choose character to give radix
+			if(ar.tryExpect('r')){ //TODO: choose character to give radix
 				radix = DECIMAL_INTEGER.readAndValidateFrom(ar);
 				if(radix>Character.MAX_RADIX || radix<Character.MIN_RADIX)
 					ar.syntaxError("Invalid radix "+radix+" in radix specification.");
-				ar.expect('\0', "after radix specification"); //TODO: choose char
+				ar.expect('r', "after radix specification"); //TODO: choose char
 			}
-			return (new TFixedRadixFloat(radix)).readAndValidateFrom(ar);
+			return sign*(new TFixedRadixFloat(radix)).readAndValidateFrom(ar);
 		}
 		public String name(){return "float";}
 	};

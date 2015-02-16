@@ -60,7 +60,7 @@ public class CommandLibrary {
 		Command cmd = commandTable.get(name);
 		
 		// parse arguments
-		ArgumentReader ar = new ArgumentReader(arguments);
+		ArgumentReader ar = new ArgumentReader(arguments,this);
 		Map<String, Object> args;
 		try {
 			args = ar.readArguments(cmd.args());
@@ -83,7 +83,6 @@ public class CommandLibrary {
 			String label, String[] args){
 		setCommandSender(cs);
 		String cmdstr = String.join(" ", args);
-		cs.sendMessage(cmdstr);
 		return execute(cmdstr);
 	}
 	

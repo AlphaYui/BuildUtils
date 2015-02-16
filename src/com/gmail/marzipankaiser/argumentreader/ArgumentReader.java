@@ -138,7 +138,10 @@ public class ArgumentReader {
 	
 	//// if next thing is ..., read and return true. Else, return false
 	public boolean tryExpect(char c) throws ArgumentException{
-		return c==tryReadChar();
+		if(c==tryReadChar()) return true;
+		else{
+			back(); return false;
+		}
 	}
 	public boolean tryExpect(String str){
 		if(arguments.regionMatches(position, str, 0, str.length())){
@@ -246,8 +249,10 @@ public class ArgumentReader {
 		int pos=position; // save current position for later use
 		
 		// read command and execute it
+		replaceSubcommands=false;
 		String subcmd = 
 				ArgumentType.STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(this);
+		replaceSubcommands=true;
 		String value = subcommandLibrary.execute(subcmd);
 		
 		// replace in String (StringBuffer needed for replace by Index)

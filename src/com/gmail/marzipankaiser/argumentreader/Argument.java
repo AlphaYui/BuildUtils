@@ -36,7 +36,7 @@ public class Argument implements Describable{
 	
 	public static Argument findByName(String name, List<Argument> args){
 		for(Argument arg:args){
-			if(arg.name().toLowerCase()==name.toLowerCase())
+			if(arg.name().equalsIgnoreCase(name))
 				return arg;
 		}
 		return null;

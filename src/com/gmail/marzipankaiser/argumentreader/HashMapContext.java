@@ -13,6 +13,7 @@ public class HashMapContext implements Context {
 	
 	public HashMapContext(){
 		values = new HashMap<String, Stack<Object>>();
+		printCache = new StringBuilder();
 	}
 	
 	@Override
@@ -43,18 +44,18 @@ public class HashMapContext implements Context {
 		return values.get(name);
 	}
 
+	protected StringBuilder printCache;
 	@Override
 	public void print(String msg){
-		if(!(get("me") instanceof CommandSender))
-			return; //TODO: handle
-		((CommandSender) get("me")).sendMessage(msg);
+		printCache.append(msg);
 	}
 
 	@Override
 	public void printLn(String msg) {
 		if(!(get("me") instanceof CommandSender))
 			return; //TODO: handle
-		((CommandSender) get("me")).sendMessage(msg+"\n");
+		((CommandSender) get("me")).sendMessage(printCache.append(msg).toString());
+		printCache = new StringBuilder();
 	}
 
 	@Override

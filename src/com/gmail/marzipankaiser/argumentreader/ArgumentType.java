@@ -55,7 +55,7 @@ public interface ArgumentType {
 				res.append(c);
 				c = ar.tryReadChar();
 			}while(Character.isJavaIdentifierPart(c) && c!='\0');
-			ar.back();
+			if(c!='\0') ar.back();
 			return res.toString();
 		}
 		public String name(){return "Identifier";}

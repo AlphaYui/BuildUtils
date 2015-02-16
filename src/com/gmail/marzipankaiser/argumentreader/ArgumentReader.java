@@ -70,14 +70,14 @@ public class ArgumentReader {
 	//// Basic reading
 	public char readChar() throws ArgumentException{
 		// Error if no character available (i.e. at end)
-		if(position+1>=arguments.length())
+		if(position+1>arguments.length())
 			syntaxError("Premature end of command.");
 		if(arguments.charAt(position)=='[') replaceSubcommandHere();
 		return arguments.charAt(position++);
 	}
 	public char tryReadChar() throws ArgumentException{
 		// return \0 character if no character available (i.e. at end)
-		if(position+1>=arguments.length())
+		if(position+1>arguments.length())
 			return '\0'; 
 		if(arguments.charAt(position)=='[') replaceSubcommandHere();
 		return arguments.charAt(position++);
@@ -101,8 +101,9 @@ public class ArgumentReader {
 		return res;
 	}
 	public char peekChar() throws ArgumentException{
+		int pos=position;
 		char c= tryReadChar();
-		back();
+		position=pos;
 		return c;
 	}
 	public void back(){ // jump back one character (= unread)
@@ -148,10 +149,11 @@ public class ArgumentReader {
 	
 	//// skip whitespace (spaces & tabs)
 	public void skipWhitespace(){
-		while(arguments.charAt(position)==' ' 
-			|| arguments.charAt(position)=='\t'){
-			position++;
-		}
+		if(!atEnd())
+			while(arguments.charAt(position)==' ' 
+				|| arguments.charAt(position)=='\t'){
+				position++;
+			}
 	}
 	
 	//// Argument syntax
@@ -178,6 +180,7 @@ public class ArgumentReader {
 			
 			if(named){ /// Named arguments. Syntax NAME = VALUE
 				Argument arg = Argument.findByName(name, args);
+				if(arg==null) unknownArgument(name);
 				res.put(arg.name(), arg.readAndValidateValueFrom(this));
 			}
 			
@@ -198,15 +201,16 @@ public class ArgumentReader {
 					if(argumentPosition>=args.size()) break; // prevent IndexOutOfBounds.
 				}
 				if(argumentPosition>=args.size())
-					syntaxError("Found trailing garbage (Found positional argument after all arguments were set)");
+					syntaxError("Found trailing garbage (Found positional argument after all arguments were set): "
+							+ arguments.substring(position));
 				Argument arg = args.get(argumentPosition);
-				arg.readAndValidateValueFrom(this);
+				res.put(arg.name(), arg.readAndValidateValueFrom(this));
 			}
 		}
 		
 		// Handle default values
 		while(argumentPosition<args.size()){
-			if(!res.containsKey(args.get(argumentPosition))){
+			if(!res.containsKey(args.get(argumentPosition).name())){
 				Argument arg = args.get(argumentPosition);
 				if(arg instanceof AbstractArgumentWithDefault){
 					if(subcommandLibrary!=null)

@@ -29,6 +29,7 @@ public class CommandLibrary {
 		printErrorLn(ChatColor.YELLOW+"Unknown command "+name+"!");
 	}
 	public void handleArgumentException(ArgumentException e, Command cmd){
+		e.printStackTrace();
 		if(e instanceof ArgumentReader.ArgumentSyntaxException){
 			Argument arg = ((ArgumentReader.ArgumentSyntaxException)e).inArgument();
 			if(arg==null){ // in between arguments
@@ -71,14 +72,19 @@ public class CommandLibrary {
 		return cmd.execute(args, context);
 	}
 	public String execute(String command){
-		if(command=="") return execute("help",""); // default: help
+		if(command.replace(" ", "")=="") return execute("help",""); // default: help
 		int i = command.indexOf(' ');
-		return execute(command.substring(0, i), command.substring(i+1));
+		if(i==-1)
+			return execute(command, "");
+		else
+			return execute(command.substring(0, i), command.substring(i+1));
 	}
 	public String handleCommand(CommandSender cs, org.bukkit.command.Command cmd,
 			String label, String[] args){
 		setCommandSender(cs);
-		return execute(String.join(" ", args));
+		String cmdstr = String.join(" ", args);
+		cs.sendMessage(cmdstr);
+		return execute(cmdstr);
 	}
 	
 	//// Adding commands
@@ -102,13 +108,13 @@ public class CommandLibrary {
 		@Override
 		public String execute(Map<String, Object> args, Context ctx) {
 			if(args.containsKey("about")){
-				Object about =args.get("about");
+				String about =((String)args.get("about")).toLowerCase();
 				if(commandTable.containsKey(about)){
 					Command cmd = commandTable.get(about);
 					List<Argument> cargs = cmd.args();
 					
 					// Usage
-					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+"");
+					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+" ");
 					for(Argument arg:cargs){
 						ctx.print(arg.name()+" ");
 					}
@@ -124,13 +130,15 @@ public class CommandLibrary {
 								+ChatColor.GRAY+" ("+arg.type().name()+"): "
 								+ChatColor.RESET+arg.description());
 					}
+				}else{
+					ctx.printLn("command not found");
 				}
 			}else{
 				for(Command cmd : commandTable.values()){
 					List<Argument> cargs = cmd.args();
 					
 					// Usage
-					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+"");
+					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+" ");
 					for(Argument arg:cargs){
 						ctx.print(arg.name()+" ");
 					}

@@ -66,6 +66,9 @@ public class ArgumentReader {
 	public void unknownArgument(String name) throws UnknownArgumentException{
 		throw new UnknownArgumentException("Uknown argument name.", name);
 	}
+	public void unspecifiedRequiredArgument(String name) throws ArgumentException{
+		throw new ArgumentException("Required argument "+name+"left unspecified");
+	}
 	
 	//// Basic reading
 	public char readChar() throws ArgumentException{
@@ -215,7 +218,7 @@ public class ArgumentReader {
 			}
 		}
 		
-		// Handle default values
+		// Handle default && required values
 		while(argumentPosition<args.size()){
 			if(!res.containsKey(args.get(argumentPosition).name())){
 				Argument arg = args.get(argumentPosition);
@@ -223,6 +226,8 @@ public class ArgumentReader {
 					res.put(arg.name(), 
 							((ArgumentWithDefault) arg)
 							.defaultValue(ctx));
+				}else if(arg.required()){
+					unspecifiedRequiredArgument(arg.name());
 				}
 			}
 			argumentPosition++;

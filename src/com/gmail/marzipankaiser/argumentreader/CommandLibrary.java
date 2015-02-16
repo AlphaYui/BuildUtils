@@ -85,7 +85,7 @@ public class CommandLibrary {
 		
 		//TODO: Implement the join function
 		//String cmdstr = String.join(" ", args);
-		String cmdstr = joinStr( "", args );
+		String cmdstr = joinStr(" ", args );
 		
 		return execute(cmdstr);
 	}

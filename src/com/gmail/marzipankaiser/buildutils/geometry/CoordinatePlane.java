@@ -3,6 +3,7 @@ package com.gmail.marzipankaiser.buildutils.geometry;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+
 public class CoordinatePlane extends Plane {
 
 	Vector ex, ey;

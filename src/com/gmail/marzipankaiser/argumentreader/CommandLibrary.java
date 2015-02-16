@@ -82,8 +82,22 @@ public class CommandLibrary {
 	public String handleCommand(CommandSender cs, org.bukkit.command.Command cmd,
 			String label, String[] args){
 		setCommandSender(cs);
-		String cmdstr = String.join(" ", args);
+		
+		//TODO: Implement the join function
+		//String cmdstr = String.join(" ", args);
+		String cmdstr = joinStr( "", args );
+		
 		return execute(cmdstr);
+	}
+	
+	//TODO: Needs to be written and moved somewhere else
+	//If it shall not just write the string of the array in one string, separated by baseStr, it has to be rewritten
+	private String joinStr( String baseStr, String[]args )
+	{
+		String result = "";
+		for( String add : args )
+			result = result + add + baseStr;
+		return result;
 	}
 	
 	//// Adding commands

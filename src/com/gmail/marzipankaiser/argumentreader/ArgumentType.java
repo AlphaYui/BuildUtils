@@ -416,6 +416,52 @@ public interface ArgumentType {
 		public String name(){return "string";}
 	};
 	public static final TString STRING = new TString();
+
+	////-----------------------------------------------------------------
+	/// in Balanced Brackets
+	public static class TStringInBalancedBrackets implements ArgumentType{
+		char open, close; boolean skipWhitespace;
+		public TStringInBalancedBrackets(char openBracket, char closeBracket,
+				boolean skipWhitespace){
+			open=openBracket; close=closeBracket;
+			this.skipWhitespace=skipWhitespace;
+		}
+		public TStringInBalancedBrackets(char openBracket, char closeBracket){
+			this(openBracket, closeBracket, false);
+		}
+		@Override
+		public String readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			if(skipWhitespace) ar.skipWhitespace();
+			ar.expect(open, "before bracketed expression");
+			StringBuilder res = new StringBuilder();
+			int depth=0;
+			while(true){
+				char c = ar.readChar();
+				if(skipWhitespace && c==' ') // multiple spaces => one space
+					ar.skipWhitespace();
+				if(c==close && depth==0) return res.toString();
+				if(c==close){ 
+					depth--;
+					if(depth<0) ar.syntaxError("Unmatched close "+close);
+				}
+				if(c==open) depth++;
+				res.append(c);
+			}
+		}
+		@Override
+		public String name() {
+			return "string in "+open+close;
+		}
+	};
+	public static final TStringInBalancedBrackets STRING_PARENTHESIZED 
+		= new TStringInBalancedBrackets('(',')');
+	public static final TStringInBalancedBrackets STRING_IN_SQUARE_BRACKETS 
+		= new TStringInBalancedBrackets('[',']');
+	public static final TStringInBalancedBrackets STRING_IN_ANGLE_BRACKETS 
+		= new TStringInBalancedBrackets('<','>');
+	public static final TStringInBalancedBrackets STRING_IN_CURLY_BRACES 
+		= new TStringInBalancedBrackets('{','}');
 	
 	////-----------------------------------------------------------------
 	////-----------------------------------------------------------------

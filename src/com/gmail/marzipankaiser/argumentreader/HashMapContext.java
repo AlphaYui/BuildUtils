@@ -11,6 +11,10 @@ public class HashMapContext implements Context {
 
 	public HashMap<String, Stack<Object>> values;
 	
+	public HashMapContext(){
+		values = new HashMap<String, Stack<Object>>();
+	}
+	
 	@Override
 	public Object get(String name) {
 		return values.get(name).peek();

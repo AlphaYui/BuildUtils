@@ -20,7 +20,6 @@ import com.gmail.marzipankaiser.argumentreader.Argument;
 import com.gmail.marzipankaiser.argumentreader.ArgumentType;
 import com.gmail.marzipankaiser.argumentreader.Command;
 import com.gmail.marzipankaiser.argumentreader.Context;
-import com.gmail.marzipankaiser.buildutils.geometry.Utils;
 
 public class SetCommand implements Command{
 
@@ -79,7 +78,7 @@ public class SetCommand implements Command{
 			return "";
 		}
 		
-		String groupName = (String) Utils.getWithDefault(args, "group", "#console" );
+		String groupName = (String) Argument.getWithDefault(args, "group", "#console" );
 		int x = (int) args.get( "x" );
 		int y = (int) args.get( "y" );
 		int z = (int) args.get( "z" );
@@ -92,7 +91,7 @@ public class SetCommand implements Command{
 	private String executeForPlayers( Map<String,Object>args, Context ctx )
 	{
 		Player p = (Player)ctx.get( "me" );
-		World w = Bukkit.getWorld( (String) Utils.getWithDefault( args, "world", p.getWorld().getName() ) );
+		World w = Bukkit.getWorld( (String) Argument.getWithDefault( args, "world", p.getWorld().getName() ) );
 
 		if( w == null )
 		{
@@ -100,10 +99,10 @@ public class SetCommand implements Command{
 			return "";
 		}
 		
-		String groupName = (String) Utils.getWithDefault( args, "group", p.getName() );
-		int x = (int) Utils.getWithDefault( args, "x", p.getLocation().getBlockX() );
-		int y = (int) Utils.getWithDefault( args, "y", p.getLocation().getBlockY() );
-		int z = (int) Utils.getWithDefault( args, "z", p.getLocation().getBlockZ() );
+		String groupName = (String) Argument.getWithDefault( args, "group", p.getName() );
+		int x = (int) Argument.getWithDefault( args, "x", p.getLocation().getBlockX() );
+		int y = (int) Argument.getWithDefault( args, "y", p.getLocation().getBlockY() );
+		int z = (int) Argument.getWithDefault( args, "z", p.getLocation().getBlockZ() );
 		
 		main.getStackFor( groupName ).pushToStack( new Location( w,x,y,z ) );
 		p.sendMessage( ChatColor.GREEN + "Successfully pushed position to stack!" );	
@@ -115,7 +114,7 @@ public class SetCommand implements Command{
 	{
 		BlockCommandSender bcs = (BlockCommandSender)ctx.get( "me" );
 		Block b = bcs.getBlock();
-		World w = Bukkit.getWorld( (String) Utils.getWithDefault( args, "world", b.getWorld().getName() ) );
+		World w = Bukkit.getWorld( (String) Argument.getWithDefault( args, "world", b.getWorld().getName() ) );
 
 		if( w == null )
 		{
@@ -124,10 +123,10 @@ public class SetCommand implements Command{
 		}
 		
 		//All commandblocks in one world are also in one group
-		String groupName = (String) Utils.getWithDefault( args, "group", "#blocks-" + w.getName() );
-		int x = (int) Utils.getWithDefault( args, "x", b.getX() );
-		int y = (int) Utils.getWithDefault( args, "y", b.getY() );
-		int z = (int) Utils.getWithDefault( args, "z", b.getZ() );
+		String groupName = (String) Argument.getWithDefault( args, "group", "#blocks-" + w.getName() );
+		int x = (int) Argument.getWithDefault( args, "x", b.getX() );
+		int y = (int) Argument.getWithDefault( args, "y", b.getY() );
+		int z = (int) Argument.getWithDefault( args, "z", b.getZ() );
 		
 		main.getStackFor( groupName ).pushToStack( new Location( w,x,y,z ) );
 

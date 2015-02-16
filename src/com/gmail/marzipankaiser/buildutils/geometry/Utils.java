@@ -1,7 +1,5 @@
 package com.gmail.marzipankaiser.buildutils.geometry;
 
-import java.util.Map;
-
 import org.bukkit.util.Vector;
 
 
@@ -18,14 +16,5 @@ public class Utils {
 	public static double getLengthInDirection(Vector v, Vector direction) {
 		direction = direction.normalize();
 		return direction.dot(v);
-	}
-	
-	public static Object getWithDefault( Map<String,Object>args, String name, Object def )
-	{
-		Object o = args.get( name );
-		if( o == null )
-			return def;
-		else
-			return o;
 	}
 }

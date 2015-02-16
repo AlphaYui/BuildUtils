@@ -1,6 +1,7 @@
 package com.gmail.marzipankaiser.argumentreader;
 
 import java.util.List;
+import java.util.Map;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
@@ -47,6 +48,14 @@ public class Argument implements Describable{
 	}
 	
 	
+	public static Object getWithDefault( Map<String,Object>args, String name, Object def )
+	{
+		Object o = args.get( name );
+		if( o == null )
+			return def;
+		else
+			return o;
+	}
 	public static Argument findByName(String name, List<Argument> args){
 		for(Argument arg:args){
 			if(arg.name().equalsIgnoreCase(name))

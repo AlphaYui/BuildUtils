@@ -420,9 +420,14 @@ public interface ArgumentType {
 		@Override
 		public Class<?> readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
-			String name=IDENTIFIER.readAndValidateFrom(ar);
+			StringBuilder name = new StringBuilder();
+			name.append(IDENTIFIER.readAndValidateFrom(ar));
+			while(ar.tryExpect('.')){
+				name.append('.');
+				name.append(IDENTIFIER.readAndValidateFrom(ar));
+			}
 			try {
-				return Class.forName(name);
+				return Class.forName(name.toString());
 			} catch (ClassNotFoundException e) {
 				ar.syntaxError("Invalid class name "+name);
 				return null;

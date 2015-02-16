@@ -138,9 +138,11 @@ public class ArgumentReader {
 	
 	//// if next thing is ..., read and return true. Else, return false
 	public boolean tryExpect(char c) throws ArgumentException{
+		int pos=position;
 		if(c==tryReadChar()) return true;
 		else{
-			back(); return false;
+			position=pos;
+			return false;
 		}
 	}
 	public boolean tryExpect(String str){

@@ -108,6 +108,7 @@ public class CommandLibrary {
 	public void addCommand(Command cmd){
 		commandTable.put(cmd.name().toLowerCase(), cmd);
 	}
+
 	public void addCommands(Command...commands){
 		for(Command cmd:commands)
 			addCommand(cmd);
@@ -122,47 +123,54 @@ public class CommandLibrary {
 		public String description() {
 			return "shows this help";
 		}
+		
 		@Override
 		public String execute(Map<String, Object> args, Context ctx) {
 			if(args.containsKey("about")){
 				String about =((String)args.get("about")).toLowerCase();
 				if(commandTable.containsKey(about)){
 					Command cmd = commandTable.get(about);
-					List<Argument> cargs = cmd.args();
-					
-					// Usage
-					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+" ");
-					for(Argument arg:cargs){
-						ctx.print(arg.name()+" ");
-					}
-					ctx.printLn("");
-					
-					// Description
-					ctx.printLn(" "+ChatColor.RESET+cmd.description());
-					
-					// Arguments
-					for(Argument arg:cargs){
-						ctx.printLn(
-								ChatColor.BLUE+arg.name()
-								+ChatColor.GRAY+" ("+arg.type().name()+"): "
-								+ChatColor.RESET+arg.description());
-					}
+					printLongDescription(cmd, ctx);
 				}else{
 					ctx.printLn("command not found");
 				}
 			}else{
 				for(Command cmd : commandTable.values()){
-					List<Argument> cargs = cmd.args();
-					
-					// Usage
-					ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+" ");
-					for(Argument arg:cargs){
-						ctx.print(arg.name()+" ");
-					}
-					ctx.printLn(": "+ChatColor.RESET+cmd.description());
+					printShortDescription(cmd, ctx);
 				}
 			}
 			return null;
+		}
+		private void printLongDescription(Command cmd, Context ctx) {
+			List<Argument> cargs = cmd.args();
+			
+			// Usage
+			ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+" ");
+			for(Argument arg:cargs){
+				ctx.print(arg.name()+" ");
+			}
+			ctx.printLn("");
+			
+			// Description
+			ctx.printLn(" "+ChatColor.RESET+cmd.description());
+			
+			// Arguments
+			for(Argument arg:cargs){
+				ctx.printLn(
+						ChatColor.BLUE+arg.name()
+						+ChatColor.GRAY+" ("+arg.type().name()+"): "
+						+ChatColor.RESET+arg.description());
+			}
+		}
+		private void printShortDescription(Command cmd, Context ctx) {
+			List<Argument> cargs = cmd.args();
+			
+			// Usage
+			ctx.print(ChatColor.DARK_BLUE+cmd.name()+ChatColor.GRAY+" ");
+			for(Argument arg:cargs){
+				ctx.print(arg.name()+" ");
+			}
+			ctx.printLn(": "+ChatColor.RESET+cmd.description());
 		}
 
 		@Override

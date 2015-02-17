@@ -58,7 +58,11 @@ public class BukkitArgumentType {
 		public Player readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
 			String name = (String) Name.readAndValidateFrom(ar);
-			return Bukkit.getPlayer(name);
+			Player p = Bukkit.getPlayer(name);
+			if(p==null){
+				ar.syntaxError("No player with name "+name);
+			}
+			return p;
 		}
 
 		@Override
@@ -76,7 +80,11 @@ public class BukkitArgumentType {
 		public OfflinePlayer readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
 			String name = (String) Name.readAndValidateFrom(ar);
-			return Bukkit.getOfflinePlayer(name);
+			OfflinePlayer p = Bukkit.getOfflinePlayer(name); 
+			if(p==null){
+				ar.syntaxError("No player with name "+name);
+			}
+			return p;
 		}
 
 		@Override

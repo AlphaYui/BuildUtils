@@ -1,5 +1,7 @@
 package com.gmail.einsyui;
 
-public interface ObjectGen {
+import org.bukkit.Location;
 
+public interface ObjectGen {
+	public void generateAt(Location l);
 }

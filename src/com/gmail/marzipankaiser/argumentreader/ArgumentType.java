@@ -537,7 +537,7 @@ public interface ArgumentType {
 			return sb.toString();
 		}
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar)
+		public UUID readAndValidateFrom(ArgumentReader ar)
 				throws ArgumentException {
 			StringBuilder sb = new StringBuilder();
 			sb.append(readHexDigits(ar,8));

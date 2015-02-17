@@ -1,6 +1,9 @@
 package com.gmail.marzipankaiser.argumentreader;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
@@ -47,4 +50,39 @@ public class BukkitArgumentType {
 	};
 	public static final TMaterial MATERIAL = new TMaterial();
 	////----------------------------------------------------------------------
+	/// Player
+	public static class TPlayer implements ArgumentType{
+		static final TOr Name = 
+				new TOr(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
+		@Override
+		public Player readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			String name = (String) Name.readAndValidateFrom(ar);
+			return Bukkit.getPlayer(name);
+		}
+
+		@Override
+		public String name() {
+			return "online player";
+		}
+	};
+	public static final TPlayer PLAYER = new TPlayer();
+	////----------------------------------------------------------------------
+	/// Offline Player
+	public static class TOfflinePlayer implements ArgumentType{
+		static final TOr Name = 
+				new TOr(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
+		@Override
+		public OfflinePlayer readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			String name = (String) Name.readAndValidateFrom(ar);
+			return Bukkit.getOfflinePlayer(name);
+		}
+
+		@Override
+		public String name() {
+			return "offine player";
+		}
+	};
+	public static final TOfflinePlayer OFFLINE_PLAYER = new TOfflinePlayer();
 }

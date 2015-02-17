@@ -50,7 +50,7 @@ public class CommandLibrary {
 	public void setCommandSender(CommandSender sender){
 		context.set("me", sender);
 	}
-	public String execute(String name, String arguments) throws ArgumentException{
+	public String execute(String name, String arguments){
 		if(name=="") name="help"; // default: help
 		
 		// lookup command name
@@ -71,7 +71,7 @@ public class CommandLibrary {
 		// execute command
 		return cmd.execute(args, context);
 	}
-	public String execute(String command) throws ArgumentException{
+	public String execute(String command){
 		if(command.replace(" ", "")=="") return execute("help",""); // default: help
 		int i = command.indexOf(' ');
 		if(i==-1)
@@ -80,7 +80,7 @@ public class CommandLibrary {
 			return execute(command.substring(0, i), command.substring(i+1));
 	}
 	public String handleCommand(CommandSender cs, org.bukkit.command.Command cmd,
-			String label, String[] args) throws ArgumentException{
+			String label, String[] args){
 		setCommandSender(cs);
 		
 		//TODO: Implement the join function

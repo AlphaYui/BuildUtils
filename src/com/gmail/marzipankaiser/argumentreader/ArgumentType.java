@@ -368,7 +368,13 @@ public interface ArgumentType {
 			return enumType.getEnumConstants();
 		}
 		protected String onlyAlphanumeric(String str){
-			return str.replaceAll("[^a-zA-Z0-9]", "");
+			StringBuilder sb = new StringBuilder();
+			for(char c:str.toCharArray()){
+				if(Character.isLetterOrDigit(c))
+					sb.append(c);
+			}
+			return sb.toString();
+			//return str.replaceAll("[^a-zA-Z0-9]", "");
 		}
 		@Override
 		public Enum<?> readAndValidateFrom(ArgumentReader ar, Context context)

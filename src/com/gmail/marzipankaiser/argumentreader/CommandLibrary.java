@@ -29,7 +29,7 @@ public class CommandLibrary {
 		printErrorLn(ChatColor.YELLOW+"Unknown command "+name+"!");
 	}
 	public void handleArgumentException(ArgumentException e, Command cmd){
-		e.printStackTrace();
+		//e.printStackTrace();
 		if(e instanceof ArgumentReader.ArgumentSyntaxException){
 			Argument arg = ((ArgumentReader.ArgumentSyntaxException)e).inArgument();
 			if(arg==null){ // in between arguments

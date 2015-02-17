@@ -1,13 +1,17 @@
 package com.gmail.marzipankaiser.argumentreader;
 
+import java.util.Arrays;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Art;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.TreeSpecies;
 import org.bukkit.World;
+import org.bukkit.block.CommandBlock;
 import org.bukkit.entity.Player;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
@@ -92,7 +96,39 @@ public class BukkitArgumentType {
 		@Override
 		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
-			//TODO: implement
+			if(ar.tryExpect("here")){
+				if(context!=null){
+					Object me = context.get("me");
+					if(me instanceof Player){
+						return ((Player) me).getLocation();
+					}else if(me instanceof CommandBlock){
+						return ((CommandBlock) me).getLocation();
+					}
+				}
+				ar.syntaxError("'here' can only be used by Players or CommandBlocks.");
+			}else if(ar.peekChar()=='('){
+				// Syntax in () like command
+				String args = STRING_PARENTHESIZED.readAndValidateFrom(ar, context);
+				ArgumentReader subargs 
+					= new ArgumentReader(args, ar.getSubcommandLibrary());
+				Map<String, Object> parsed =subargs.readArguments(
+						Arrays.asList(
+								new Argument("world", WORLD, true),
+								new Argument("x", FLOAT, true),
+								new Argument("y", FLOAT, true),
+								new Argument("z", FLOAT, true),
+								new ArgumentWithDefault("yaw", FLOAT, 0.0f),
+								new ArgumentWithDefault("pitch", FLOAT, 0.0f)
+						), context);
+				return new Location(
+						(World) parsed.get("world"),
+						(Double) parsed.get("x"), 
+						(Double) parsed.get("y"),
+						(Double) parsed.get("z"),
+						(float) (double) (Double) parsed.get("yaw"),
+						(float) (double) (Double) parsed.get("pitch"));
+			}
+			ar.syntaxError("Invalid syntax for Location"); 
 			return null;
 		}
 		@Override

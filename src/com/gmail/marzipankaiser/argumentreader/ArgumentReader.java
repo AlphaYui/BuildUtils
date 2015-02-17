@@ -149,6 +149,7 @@ public class ArgumentReader {
 		}
 	}
 	public boolean tryExpect(String str){
+		if(arguments.length()<=position+str.length()) return false;
 		if(arguments.regionMatches(position, str, 0, str.length())){
 			position+=str.length();
 			return true;

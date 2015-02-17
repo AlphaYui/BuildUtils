@@ -10,7 +10,8 @@ import java.util.UUID;
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
 
 public interface ArgumentType {
-	public Object readAndValidateFrom(ArgumentReader ar) throws ArgumentException;
+	public Object readAndValidateFrom(ArgumentReader ar, Context context) 
+			throws ArgumentException;
 	public String name();
 	
 	////-----------------------------------------------------------------
@@ -21,7 +22,7 @@ public interface ArgumentType {
 			this.integer=integer; 
 		}
 		@Override
-		public Number readAndValidateFrom(ArgumentReader ar) 
+		public Number readAndValidateFrom(ArgumentReader ar, Context context) 
 				throws ArgumentException {
 			// use Java's NumberFormat to read Numbers in Locale-specific Format
 			ParsePosition pp = new ParsePosition(ar.position());
@@ -47,7 +48,7 @@ public interface ArgumentType {
 	/// Identifiers (i.e.: valid Java identifiers as Strings)
 	public static class TIdentifier implements ArgumentType{
 		@Override
-		public String readAndValidateFrom(ArgumentReader ar)
+		public String readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			StringBuilder res = new StringBuilder(); // to hold result
 			char c = ar.readChar();
@@ -73,7 +74,7 @@ public interface ArgumentType {
 	/// Booleans
 	public static class TBoolean implements ArgumentType, TFlag{
 		@Override
-		public Boolean readAndValidateFrom(ArgumentReader ar)
+		public Boolean readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			switch(ar.readChar()){
 			case '+':
@@ -87,7 +88,7 @@ public interface ArgumentType {
 			
 			String name; int pos = ar.position();
 			try{
-				name = IDENTIFIER.readAndValidateFrom(ar).toLowerCase();
+				name = IDENTIFIER.readAndValidateFrom(ar, context).toLowerCase();
 				if("true".startsWith(name) || "yes".startsWith(name))
 					return true;
 				if("false".startsWith(name) || "no".startsWith(name))
@@ -112,7 +113,7 @@ public interface ArgumentType {
 			this.radix=radix;
 		}
 		@Override
-		public Integer readAndValidateFrom(ArgumentReader ar)
+		public Integer readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			char d = ar.readChar();
 			int r = Character.digit(d, radix);
@@ -135,7 +136,7 @@ public interface ArgumentType {
 			this.radix=radix;
 		}
 		@Override
-		public Integer readAndValidateFrom(ArgumentReader ar)
+		public Integer readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			int sign=1;
 			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
@@ -168,7 +169,7 @@ public interface ArgumentType {
 	/// Integers
 	public static class TInteger implements ArgumentType{
 		@Override
-		public Integer readAndValidateFrom(ArgumentReader ar)
+		public Integer readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			int sign=1;
 			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
@@ -190,12 +191,12 @@ public interface ArgumentType {
 				}
 			}
 			if(ar.tryExpect('r')){ //TODO: choose character to give radix
-				radix = DECIMAL_INTEGER.readAndValidateFrom(ar);
+				radix = DECIMAL_INTEGER.readAndValidateFrom(ar, context);
 				if(radix>Character.MAX_RADIX || radix<Character.MIN_RADIX)
 					ar.syntaxError("Invalid radix "+radix+" in radix specification.");
 				ar.expect('r', "after radix specification"); //TODO: choose char
 			}
-			return sign*(new TFixedRadixInteger(radix)).readAndValidateFrom(ar);
+			return sign*(new TFixedRadixInteger(radix)).readAndValidateFrom(ar, context);
 		}
 		public String name(){return "integer";}
 	};
@@ -209,9 +210,9 @@ public interface ArgumentType {
 			this.min = min; this.max = max;
 		}
 		@Override
-		public Integer readAndValidateFrom(ArgumentReader ar)
+		public Integer readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
-			int res = super.readAndValidateFrom(ar);
+			int res = super.readAndValidateFrom(ar, context);
 			if(res>max)
 				ar.syntaxError("Expected integer <="+max+", got "+res+".");
 			if(res<min)
@@ -232,7 +233,7 @@ public interface ArgumentType {
 			this(radix, '.');
 		}
 		@Override
-		public Double readAndValidateFrom(ArgumentReader ar)
+		public Double readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			double sign=1;
 			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
@@ -262,7 +263,7 @@ public interface ArgumentType {
 				if(c=='e'  // exponent
 					|| (c=='*' && radix>=15)
 					|| (c=='x' && radix>=15)){
-					int exp = INTEGER.readAndValidateFrom(ar);
+					int exp = INTEGER.readAndValidateFrom(ar, context);
 					res*=Math.pow(radix, exp);
 				}
 			}
@@ -288,7 +289,7 @@ public interface ArgumentType {
 			this.dot = dot;
 		}
 		@Override
-		public Double readAndValidateFrom(ArgumentReader ar)
+		public Double readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			int sign=1;
 			if(ar.peekChar()=='+' || ar.peekChar()=='-'){
@@ -310,12 +311,12 @@ public interface ArgumentType {
 				}
 			}
 			if(ar.tryExpect('r')){ //TODO: choose character to give radix
-				radix = DECIMAL_INTEGER.readAndValidateFrom(ar);
+				radix = DECIMAL_INTEGER.readAndValidateFrom(ar, context);
 				if(radix>Character.MAX_RADIX || radix<Character.MIN_RADIX)
 					ar.syntaxError("Invalid radix "+radix+" in radix specification.");
 				ar.expect('r', "after radix specification"); //TODO: choose char
 			}
-			return sign*(new TFixedRadixFloat(radix)).readAndValidateFrom(ar);
+			return sign*(new TFixedRadixFloat(radix)).readAndValidateFrom(ar, context);
 		}
 		public String name(){return "float";}
 	};
@@ -333,9 +334,9 @@ public interface ArgumentType {
 			this(min, max, '.');
 		}
 		@Override
-		public Double readAndValidateFrom(ArgumentReader ar)
+		public Double readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
-			double res = super.readAndValidateFrom(ar);
+			double res = super.readAndValidateFrom(ar, context);
 			if(res>max)
 				ar.syntaxError("Expected float <="+max+", got "+res+".");
 			if(res<min)
@@ -354,9 +355,9 @@ public interface ArgumentType {
 		}
 		
 		@Override
-		public Enum<?> readAndValidateFrom(ArgumentReader ar)
+		public Enum<?> readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
-			String name = IDENTIFIER.readAndValidateFrom(ar);
+			String name = IDENTIFIER.readAndValidateFrom(ar, context);
 			try { // TODO: DIRTY HACK!! Need to find better way.
 				return (Enum<?>) enumType
 									.getMethod("valueOf", String.class)
@@ -374,8 +375,8 @@ public interface ArgumentType {
 	public static class TByte implements ArgumentType{
 		static final TIntegerInRange sub = new TIntegerInRange(0,255); 
 		@Override
-		public Byte readAndValidateFrom(ArgumentReader ar) throws ArgumentException{
-			return sub.readAndValidateFrom(ar).byteValue();
+		public Byte readAndValidateFrom(ArgumentReader ar, Context context) throws ArgumentException{
+			return sub.readAndValidateFrom(ar, context).byteValue();
 		}
 		public String name(){return "byte";}
 	};
@@ -401,13 +402,13 @@ public interface ArgumentType {
 			}
 		}
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar)
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			String name;
 			if(caseSensitive)
-				name = IDENTIFIER.readAndValidateFrom(ar);
+				name = IDENTIFIER.readAndValidateFrom(ar, context);
 			else
-				name = IDENTIFIER.readAndValidateFrom(ar).toLowerCase();
+				name = IDENTIFIER.readAndValidateFrom(ar, context).toLowerCase();
 			if(!map.containsKey(name))
 				ar.syntaxError("\""+name+"\" is not a valid value");
 			return map.get(name);
@@ -419,13 +420,13 @@ public interface ArgumentType {
 	/// Classes
 	public static class TClass implements ArgumentType{
 		@Override
-		public Class<?> readAndValidateFrom(ArgumentReader ar)
+		public Class<?> readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			StringBuilder name = new StringBuilder();
-			name.append(IDENTIFIER.readAndValidateFrom(ar));
+			name.append(IDENTIFIER.readAndValidateFrom(ar, context));
 			while(ar.tryExpect('.')){
 				name.append('.');
-				name.append(IDENTIFIER.readAndValidateFrom(ar));
+				name.append(IDENTIFIER.readAndValidateFrom(ar, context));
 			}
 			try {
 				return Class.forName(name.toString());
@@ -442,7 +443,7 @@ public interface ArgumentType {
 	/// Strings (with "" - see also: TIdentifier)
 	public static class TString implements ArgumentType{
 		@Override
-		public String readAndValidateFrom(ArgumentReader ar)
+		public String readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			ar.expect('"', "before String");
 			StringBuilder res = new StringBuilder();
@@ -473,7 +474,7 @@ public interface ArgumentType {
 			this(openBracket, closeBracket, false);
 		}
 		@Override
-		public String readAndValidateFrom(ArgumentReader ar)
+		public String readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			if(skipWhitespace) ar.skipWhitespace();
 			ar.expect(open, "before bracketed expression");
@@ -510,7 +511,7 @@ public interface ArgumentType {
 	// Rest as String
 	public static class TRestAsString implements ArgumentType{
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar)
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			String res=ar.getWholeArguments().substring(ar.position());
 			ar.setPosition(ar.getWholeArguments().length());
@@ -527,28 +528,29 @@ public interface ArgumentType {
 	////-----------------------------------------------------------------
 	/// UUIDs
 	public static class TUUID implements ArgumentType{
-		public static String readHexDigits(ArgumentReader ar, int n) 
+		public static String readHexDigits(ArgumentReader ar, int n,
+				Context context) 
 				throws ArgumentException{
 			StringBuilder sb = new StringBuilder();
 			for(int i=0;i<n;i++)
 				sb.append(Integer.toString(
-						HEXADECIMAL_DIGIT.readAndValidateFrom(ar),
+						HEXADECIMAL_DIGIT.readAndValidateFrom(ar, context),
 						16));
 			return sb.toString();
 		}
 		@Override
-		public UUID readAndValidateFrom(ArgumentReader ar)
+		public UUID readAndValidateFrom(ArgumentReader ar, Context ctx)
 				throws ArgumentException {
 			StringBuilder sb = new StringBuilder();
-			sb.append(readHexDigits(ar,8));
+			sb.append(readHexDigits(ar,8, ctx));
 			ar.expect('-',"in UUID"); sb.append('-');
-			sb.append(readHexDigits(ar,4));
+			sb.append(readHexDigits(ar,4, ctx));
 			ar.expect('-',"in UUID"); sb.append('-');
-			sb.append(readHexDigits(ar,4));
+			sb.append(readHexDigits(ar,4, ctx));
 			ar.expect('-',"in UUID"); sb.append('-');
-			sb.append(readHexDigits(ar,4));
+			sb.append(readHexDigits(ar,4, ctx));
 			ar.expect('-',"in UUID"); sb.append('-');
-			sb.append(readHexDigits(ar,12));
+			sb.append(readHexDigits(ar,12, ctx));
 			return UUID.fromString(sb.toString());
 		}
 		@Override
@@ -570,12 +572,12 @@ public interface ArgumentType {
 			types=argumentTypes;
 		}
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar)
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			int position = ar.position();
 			for(ArgumentType type:types){
 				try{
-					Object res = type.readAndValidateFrom(ar);
+					Object res = type.readAndValidateFrom(ar, context);
 					return res;
 				}catch(ArgumentException e){
 					ar.setPosition(position);
@@ -620,14 +622,14 @@ public interface ArgumentType {
 			this('(', ',', ')', elementType, true);
 		}
 		@Override
-		public List<Object> readAndValidateFrom(ArgumentReader ar)
+		public List<Object> readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			if(skipWhitespace) ar.skipWhitespace();
 			ar.expect(start, "at beginning of delimited list");
 			List<Object> res = new ArrayList<Object>();
 			do{
 				if(skipWhitespace) ar.skipWhitespace();
-				res.add(elementType.readAndValidateFrom(ar));
+				res.add(elementType.readAndValidateFrom(ar, context));
 				if(skipWhitespace && delimiter!=' ') ar.skipWhitespace();
 			}while(ar.tryExpect(delimiter));
 			ar.expect(end, "at end of delimited list");

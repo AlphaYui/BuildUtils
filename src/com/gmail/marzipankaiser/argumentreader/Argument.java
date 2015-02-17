@@ -39,10 +39,10 @@ public class Argument implements Describable{
 	public ArgumentType type(){ return type; }
 	public boolean required(){ return required; }
 	
-	public Object readAndValidateValueFrom(ArgumentReader ar) 
+	public Object readAndValidateValueFrom(ArgumentReader ar, Context context) 
 			throws ArgumentException{
 		ar.beginArgument(this);
-		Object res = type.readAndValidateFrom(ar);
+		Object res = type.readAndValidateFrom(ar, context);
 		ar.endArgument();
 		return res;
 	}

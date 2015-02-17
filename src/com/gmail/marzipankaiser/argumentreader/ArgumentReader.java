@@ -165,8 +165,8 @@ public class ArgumentReader {
 	}
 	
 	//// Argument syntax
-	public Object readArgument(Argument arg) throws ArgumentException{
-		return arg.readAndValidateValueFrom(this);
+	public Object readArgument(Argument arg, Context context) throws ArgumentException{
+		return arg.readAndValidateValueFrom(this, context);
 	}
 	public Map<String, Object> readArguments(List<Argument> args,
 			Context ctx) 
@@ -182,7 +182,7 @@ public class ArgumentReader {
 			boolean named = true; String name="";
 			boolean positional=false;
 			try{ // Kind of not-to-cool, deciding on error...
-				name = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
+				name = ArgumentType.IDENTIFIER.readAndValidateFrom(this, ctx);
 				skipWhitespace();
 				expect('=',"");
 			}catch(ArgumentException e){
@@ -192,7 +192,7 @@ public class ArgumentReader {
 			if(named){ /// Named arguments. Syntax NAME = VALUE
 				Argument arg = Argument.findByName(name, args);
 				if(arg==null) unknownArgument(name);
-				res.put(arg.name(), arg.readAndValidateValueFrom(this));
+				res.put(arg.name(), arg.readAndValidateValueFrom(this, ctx));
 			}
 			
 			else if(peekChar()=='+' || peekChar()=='-'){ // Special flags. Syntax: +FLAG / -FLAG
@@ -200,7 +200,7 @@ public class ArgumentReader {
 				char c = readChar();
 				String flagName=null;
 				try{
-					flagName = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
+					flagName = ArgumentType.IDENTIFIER.readAndValidateFrom(this, ctx);
 				}catch(ArgumentException e){
 					position=oldpos;
 					positional=true;
@@ -225,7 +225,7 @@ public class ArgumentReader {
 					syntaxError("Found trailing garbage (Found positional argument after all arguments were set): "
 							+ arguments.substring(position));
 				Argument arg = args.get(argumentPosition);
-				res.put(arg.name(), arg.readAndValidateValueFrom(this));
+				res.put(arg.name(), arg.readAndValidateValueFrom(this, ctx));
 			}
 		}
 		
@@ -266,7 +266,7 @@ public class ArgumentReader {
 		// read command and execute it
 		replaceSubcommands=false;
 		String subcmd = 
-				ArgumentType.STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(this);
+				ArgumentType.STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(this, null);
 		replaceSubcommands=true;
 		String value = subcommandLibrary.execute(subcmd);
 		

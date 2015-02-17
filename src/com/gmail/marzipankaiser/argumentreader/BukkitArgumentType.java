@@ -12,9 +12,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.TreeSpecies;
 import org.bukkit.World;
 import org.bukkit.block.CommandBlock;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
+import com.gmail.marzipankaiser.argumentreader.ArgumentType.TEnum;
 
 public class BukkitArgumentType {
 
@@ -141,85 +143,8 @@ public class BukkitArgumentType {
 	////----------------------------------------------------------------------
 	////----------------------------------------------------------------------
 	/// Enums
-	
-	////----------------------------------------------------------------------
-	/// Material
-	public static class TMaterial implements ArgumentType{
-		@Override
-		public Material readAndValidateFrom(ArgumentReader ar, Context context)
-				throws ArgumentException {
-			Material res;
-			if(ar.tryExpect('#')){
-				int id = INTEGER.readAndValidateFrom(ar, context);
-				res = Material.getMaterial(id); // Deprected, but maybe ok?
-												 // (no other way...)
-			}else{
-				String name = IDENTIFIER.readAndValidateFrom(ar, context);
-				res = Material.matchMaterial(name);
-				if(res==null){ // Allow CamelCase
-					StringBuilder ccname = new StringBuilder();
-					for(char c:name.toCharArray()){
-						if(Character.isUpperCase(c))
-							ccname.append('_');
-						ccname.append(Character.toUpperCase(c));
-					}
-					res = Material.getMaterial(ccname.toString());
-				}
-				if(res==null){ // Allow removing _ and ignore case
-					for(Material m:Material.values()){
-						if(m.name().replace("_", "").equalsIgnoreCase(name)){
-							res=m;
-						}
-					}
-				}
-			}	
-			return res;
-		}
-		@Override
-		public String name() {
-			return "Material";
-		}
-	};
-	public static final TMaterial MATERIAL = new TMaterial();
-	////----------------------------------------------------------------------
-	/// Art
-	public static class TArt implements ArgumentType{
-		@Override
-		public Art readAndValidateFrom(ArgumentReader ar, Context context)
-				throws ArgumentException {
-			Art res=null;
-			String name = IDENTIFIER.readAndValidateFrom(ar, context);
-			res=Art.getByName(name);
-			if(res==null)
-				ar.syntaxError("Art "+name+" not found");
-			return res;
-		}
-
-		@Override
-		public String name() {
-			return "Art";
-		}
-	};
-	public static TArt ART = new TArt();
-	////----------------------------------------------------------------------
-	/// Tree species
-	public static class TTreeSpecies implements ArgumentType{
-		@Override
-		public TreeSpecies readAndValidateFrom(ArgumentReader ar, Context context)
-				throws ArgumentException {
-			TreeSpecies res=null;
-			String name = IDENTIFIER.readAndValidateFrom(ar, context);
-			res=TreeSpecies.valueOf(name.toUpperCase());
-			if(res==null)
-				ar.syntaxError("Tree species "+name+" not found");
-			return res;
-		}
-
-		@Override
-		public String name() {
-			return "Tree species";
-		}
-	};
-	public static TTreeSpecies TREE_SPECIES = new TTreeSpecies();
-
+	public static final TEnum MATERIAL = new TEnum(Material.class);
+	public static final TEnum ART = new TEnum(Art.class);
+	public static final TEnum ENTITY_TYPE = new TEnum(EntityType.class);
+	public static final TEnum TREE_SPECIES = new TEnum(TreeSpecies.class);
 };

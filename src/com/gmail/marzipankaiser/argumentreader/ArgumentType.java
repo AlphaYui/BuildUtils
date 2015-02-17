@@ -349,23 +349,45 @@ public interface ArgumentType {
 	////-----------------------------------------------------------------
 	/// Enums
 	public static class TEnum implements ArgumentType{
-		Class<? extends Enum<?>> enumType;
+		@SuppressWarnings("rawtypes")
+		Class<? extends Enum> enumType;
 		public <T extends Enum<T>> TEnum(Class<T> enumClass){
 			this.enumType=enumClass;
 		}
-		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		protected static Enum<?> valueOf(Class<? extends Enum> enumType,
+										String name){
+			try{
+				return Enum.valueOf(enumType, name);
+			}catch(IllegalArgumentException e){
+				return null;
+			}
+		}
+		@SuppressWarnings("rawtypes")
+		protected Enum<?>[] values(Class<? extends Enum> enumType){
+			return enumType.getEnumConstants();
+		}
+		protected String onlyAlphanumeric(String str){
+			return str.replaceAll("[^a-zA-Z0-9]", "");
+		}
 		@Override
 		public Enum<?> readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			String name = IDENTIFIER.readAndValidateFrom(ar, context);
-			try { // TODO: DIRTY HACK!! Need to find better way.
-				return (Enum<?>) enumType
-									.getMethod("valueOf", String.class)
-									.invoke(null, name);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
+			Enum<?> res = valueOf(enumType, name);
+			if(res==null)
+				res = valueOf(enumType, name.toUpperCase());
+			if(res==null){
+				Enum<?> values[] = values(enumType);
+				name = onlyAlphanumeric(name);
+				for(Enum<?> value:values){
+					if(onlyAlphanumeric(value.name())
+							.equalsIgnoreCase(name)){
+						return value;
+					}
+				}
 			}
+			return res;
 		}
 		public String name(){return "Enum "+enumType.getName();}
 	};

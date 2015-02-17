@@ -180,6 +180,7 @@ public class ArgumentReader {
 			
 			// Check if it is a named argument (see below)
 			boolean named = true; String name="";
+			boolean positional=false;
 			try{ // Kind of not-to-cool, deciding on error...
 				name = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
 				skipWhitespace();
@@ -195,16 +196,26 @@ public class ArgumentReader {
 			}
 			
 			else if(peekChar()=='+' || peekChar()=='-'){ // Special flags. Syntax: +FLAG / -FLAG
+				int oldpos=position;
 				char c = readChar();
-				String flagName = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
-				Argument arg = Argument.findByName(flagName, args);
-				if(!(arg.type() instanceof ArgumentType.TFlag)) // not a flag
-					syntaxError("Argument "+arg.name()+" is not a valid flag");
-				if(c=='+') res.put(arg.name(), true);
-				if(c=='-') res.put(arg.name(), false);
+				String flagName=null;
+				try{
+					flagName = ArgumentType.IDENTIFIER.readAndValidateFrom(this);
+				}catch(ArgumentException e){
+					position=oldpos;
+					positional=true;
+				}
+				if(!positional){
+					Argument arg = Argument.findByName(flagName, args);
+					if(!(arg.type() instanceof ArgumentType.TFlag)) // not a flag
+						syntaxError("Argument "+arg.name()+" is not a valid flag");
+					if(c=='+') res.put(arg.name(), true);
+					if(c=='-') res.put(arg.name(), false);
+				}
 			}
+			else positional=true;
 			
-			else{ // Positional argument
+			if(positional==true){ // Positional argument
 				// skip already specified arguments
 				while(res.containsKey(args.get(argumentPosition).name())){
 					argumentPosition++;

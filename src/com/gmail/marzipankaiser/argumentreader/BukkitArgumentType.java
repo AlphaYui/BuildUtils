@@ -1,8 +1,11 @@
 package com.gmail.marzipankaiser.argumentreader;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
@@ -93,4 +96,31 @@ public class BukkitArgumentType {
 		}
 	};
 	public static final TOfflinePlayer OFFLINE_PLAYER = new TOfflinePlayer();
+	////----------------------------------------------------------------------
+	/// World
+	public static class TWorld implements ArgumentType{
+		@Override
+		public World readAndValidateFrom(ArgumentReader ar)
+				throws ArgumentException {
+			World res=null;
+			if(ar.tryExpect('#')){ // by UUID
+				UUID uuid = JAVA_UUID.readAndValidateFrom(ar);
+				res = Bukkit.getServer().getWorld(uuid);
+				if(res==null)
+					ar.syntaxError("Couldn't find world with UUID "+uuid);
+			}else{
+				String name = IDENTIFIER.readAndValidateFrom(ar);
+				res = Bukkit.getServer().getWorld(name);
+				if(res==null)
+					ar.syntaxError("Couldn't find world with name "+name);
+			}
+			
+			return res;
+		}
+		@Override
+		public String name() {
+			return "world";
+		}
+	};
+	public static final TWorld WORLD = new TWorld();
 }

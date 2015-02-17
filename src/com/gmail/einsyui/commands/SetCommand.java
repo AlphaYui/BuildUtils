@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 import com.gmail.einsyui.Main;
 import com.gmail.marzipankaiser.argumentreader.Argument;
 import com.gmail.marzipankaiser.argumentreader.ArgumentType;
+import com.gmail.marzipankaiser.argumentreader.BukkitArgumentType;
 import com.gmail.marzipankaiser.argumentreader.Command;
 import com.gmail.marzipankaiser.argumentreader.Context;
 
@@ -70,13 +71,7 @@ public class SetCommand implements Command{
 			return "";
 		}
 		
-		World w = Bukkit.getWorld( (String)args.get( "world" ) );
-		
-		if( w == null )
-		{
-			cs.sendMessage( ChatColor.RED + "Couldn't find the world '" + (String)args.get( "world" ) + "'");
-			return "";
-		}
+		World w = (World) args.get( "world" );
 		
 		String groupName = (String) Argument.getWithDefault(args, "group", "#console" );
 		int x = (int) args.get( "x" );
@@ -91,13 +86,7 @@ public class SetCommand implements Command{
 	private String executeForPlayers( Map<String,Object>args, Context ctx )
 	{
 		Player p = (Player)ctx.get( "me" );
-		World w = Bukkit.getWorld( (String) Argument.getWithDefault( args, "world", p.getWorld().getName() ) );
-
-		if( w == null )
-		{
-			p.sendMessage( ChatColor.RED + "Couldn't find the world '" + (String)args.get( "world" ) + "'");
-			return "";
-		}
+		World w = (World) Argument.getWithDefault( args, "world", p.getWorld() );
 		
 		String groupName = (String) Argument.getWithDefault( args, "group", p.getName() );
 		int x = (int) Argument.getWithDefault( args, "x", p.getLocation().getBlockX() );
@@ -114,13 +103,7 @@ public class SetCommand implements Command{
 	{
 		BlockCommandSender bcs = (BlockCommandSender)ctx.get( "me" );
 		Block b = bcs.getBlock();
-		World w = Bukkit.getWorld( (String) Argument.getWithDefault( args, "world", b.getWorld().getName() ) );
-
-		if( w == null )
-		{
-			bcs.sendMessage( ChatColor.RED + "Couldn't find the world '" + (String)args.get( "world" ) + "'");
-			return "";
-		}
+		World w = (World) Argument.getWithDefault( args, "world", b.getWorld() );
 		
 		//All commandblocks in one world are also in one group
 		String groupName = (String) Argument.getWithDefault( args, "group", "#blocks-" + w.getName() );
@@ -141,7 +124,7 @@ public class SetCommand implements Command{
 								new Argument( "x", ArgumentType.INTEGER, "X-coordinate of the point" ),
 								new Argument( "y", ArgumentType.INTEGER, "Y-coordinate of the point" ),
 								new Argument( "z", ArgumentType.INTEGER, "Z-coordinate of the point" ),
-								new Argument( "world", ArgumentType.IDENTIFIER, "Name of the world of the point" ));
+								new Argument( "world", BukkitArgumentType.WORLD, "The world of the point" ));
 	}
 	
 	

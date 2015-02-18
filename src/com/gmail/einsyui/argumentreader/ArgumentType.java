@@ -5,6 +5,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
@@ -666,4 +667,66 @@ public interface ArgumentType {
 		public String name(){return "list of ("+elementType.name()+")";}
 	};
 	
+	////-----------------------------------------------------------------
+	/// Command arguments in brackets
+	public static class TCommandLikeArgumentsInBrackets implements ArgumentType{
+		List<Argument> args;
+		ArgumentType stringReader;
+		public TCommandLikeArgumentsInBrackets(char open, char close, 
+				List<Argument> args){
+			stringReader = new TStringInBalancedBrackets(open, close);
+			this.args=args;
+		}
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			String argstr = (String) stringReader.readAndValidateFrom(ar, context);
+			ArgumentReader subar = new ArgumentReader(argstr, 
+										ar.getSubcommandLibrary());
+			return subar.readArguments(args, context);
+		}
+		@Override
+		public String name() {
+			return "";
+		}
+	};
+	////-----------------------------------------------------------------
+	/// Constructor argument
+	public static abstract class TConstructorArgumentType implements ArgumentType{
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			String substr = STRING_IN_ANGLE_BRACKETS
+								.readAndValidateFrom(ar, context);
+			ArgumentReader subar = new ArgumentReader(substr, 
+										ar.getSubcommandLibrary());
+			return construct(subar.readArguments(args(), context), context);
+		}
+		public abstract List<Argument> args();
+		public abstract Object construct(Map<String, Object> args, Context ctx);
+	};
+	
+	////-----------------------------------------------------------------
+	/// Dispatch argument type	
+	public static abstract class TDispatchArgumentType implements ArgumentType {
+		public Map<String, ArgumentType> subTypes;
+		public TDispatchArgumentType(){
+			subTypes = new HashMap<String, ArgumentType>();
+		}
+		
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			char c = ar.peekChar();
+			if(subTypes.containsKey(String.valueOf(c))){
+				ar.readChar();
+				return subTypes.get(String.valueOf(c))
+						.readAndValidateFrom(ar, context);
+			}else{
+				String name = IDENTIFIER.readAndValidateFrom(ar, context);
+				return subTypes.get(name).readAndValidateFrom(ar, context);
+			}
+		}
+
+	}
 }

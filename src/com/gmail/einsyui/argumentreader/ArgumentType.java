@@ -727,6 +727,5 @@ public interface ArgumentType {
 				return subTypes.get(name).readAndValidateFrom(ar, context);
 			}
 		}
-
 	}
 }

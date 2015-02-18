@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.buildutils.geometry;
+package com.gmail.einsyui.geometry;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;

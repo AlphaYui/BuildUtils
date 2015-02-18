@@ -6,8 +6,8 @@ import java.util.Map;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.einsyui.argumentreader.CommandLibrary;
 import com.gmail.einsyui.commands.SetCommand;
-import com.gmail.marzipankaiser.argumentreader.CommandLibrary;
 
 public class Main extends JavaPlugin{
 	

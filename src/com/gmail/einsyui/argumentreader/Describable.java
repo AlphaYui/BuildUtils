@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 public interface Describable {
 	public String name();

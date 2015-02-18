@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 import java.text.NumberFormat;
 import java.text.ParsePosition;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
+import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
 
 public interface ArgumentType {
 	public Object readAndValidateFrom(ArgumentReader ar, Context context) 

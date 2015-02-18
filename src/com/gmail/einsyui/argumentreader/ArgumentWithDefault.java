@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 public class ArgumentWithDefault extends AbstractArgumentWithDefault {
 	Object defaultValue;

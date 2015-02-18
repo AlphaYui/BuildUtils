@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 public abstract class AbstractArgumentWithDefault extends Argument {
 	public AbstractArgumentWithDefault(String name, ArgumentType type) {

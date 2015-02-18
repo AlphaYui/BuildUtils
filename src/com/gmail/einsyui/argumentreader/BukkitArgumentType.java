@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -72,8 +72,8 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.messaging.PluginChannelDirection;
 import org.bukkit.potion.PotionType;
 
-import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
-import com.gmail.marzipankaiser.argumentreader.ArgumentType.TEnum;
+import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
+import com.gmail.einsyui.argumentreader.ArgumentType.TEnum;
 
 public class BukkitArgumentType {
 

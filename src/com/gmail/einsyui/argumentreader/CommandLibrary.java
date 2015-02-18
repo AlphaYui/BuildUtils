@@ -1,4 +1,4 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
-import com.gmail.marzipankaiser.argumentreader.ArgumentReader.UnknownArgumentException;
+import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
+import com.gmail.einsyui.argumentreader.ArgumentReader.UnknownArgumentException;
 
 public class CommandLibrary {
 	public HashMap<String, Command> commandTable;

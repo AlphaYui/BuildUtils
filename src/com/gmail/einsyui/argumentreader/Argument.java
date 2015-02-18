@@ -1,9 +1,9 @@
-package com.gmail.marzipankaiser.argumentreader;
+package com.gmail.einsyui.argumentreader;
 
 import java.util.List;
 import java.util.Map;
 
-import com.gmail.marzipankaiser.argumentreader.ArgumentReader.ArgumentException;
+import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
 
 
 public class Argument implements Describable{

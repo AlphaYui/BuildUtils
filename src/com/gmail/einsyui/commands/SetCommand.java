@@ -15,11 +15,11 @@ import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.einsyui.Main;
-import com.gmail.marzipankaiser.argumentreader.Argument;
-import com.gmail.marzipankaiser.argumentreader.ArgumentType;
-import com.gmail.marzipankaiser.argumentreader.BukkitArgumentType;
-import com.gmail.marzipankaiser.argumentreader.Command;
-import com.gmail.marzipankaiser.argumentreader.Context;
+import com.gmail.einsyui.argumentreader.Argument;
+import com.gmail.einsyui.argumentreader.ArgumentType;
+import com.gmail.einsyui.argumentreader.BukkitArgumentType;
+import com.gmail.einsyui.argumentreader.Command;
+import com.gmail.einsyui.argumentreader.Context;
 
 public class SetCommand implements Command{
 

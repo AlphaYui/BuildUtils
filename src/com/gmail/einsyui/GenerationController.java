@@ -47,6 +47,10 @@ public class GenerationController implements Runnable {
 	@Override
 	public void run() {
 		int numberOfStructs = todo.size();
+		if(numberOfStructs==0){ //nothing to do
+			stopGenerating();
+			return;
+		}
 		int blocksPerStruct = blocksPerPeriod/numberOfStructs;
 		for(int i=0;i<numberOfStructs;i++){
 			Struct s = todo.poll(); 

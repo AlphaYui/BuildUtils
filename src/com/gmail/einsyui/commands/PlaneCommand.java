@@ -35,7 +35,7 @@ public class PlaneCommand implements Command {
 		ObjectGen objectgen = (ObjectGen) args.get("with");
 		List<Location> l = ls.getLast(3);
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
-		Plane plane = new Plane(l.get(0), l.get(1), l.get(2), objectgen);
+		Plane plane = new Plane(l.get(2), l.get(1), l.get(0), objectgen);
 		ctx.getPlugin().generate(plane);
 		return "";
 	}

@@ -23,6 +23,10 @@ public class BlockIndex2D {
 	}
 	
 	public Location next(){
+		if(x==-1){
+			x=0;
+			return current;
+		}
 		x++;
 		if(x>=w){
 			y++;

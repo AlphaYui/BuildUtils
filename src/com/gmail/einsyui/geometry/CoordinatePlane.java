@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 
-public class CoordinatePlane extends Plane {
+public class CoordinatePlane extends MPlane {
 
 	Vector ex, ey;
 	

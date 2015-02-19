@@ -3,19 +3,19 @@ package com.gmail.einsyui.geometry;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class Plane {
+public class MPlane {
 
 	Location origin;
 	Vector normal;
 	
-	public Plane(Location origin, Vector normal){
+	public MPlane(Location origin, Vector normal){
 		this.origin=origin; this.normal=normal;
 	}
-	public Plane(Location origin, Vector u, Vector v){
+	public MPlane(Location origin, Vector u, Vector v){
 		this.origin = origin;
 		this.normal = u.crossProduct(v).normalize();
 	}
-	public Plane(Location origin, Location p, Location q){
+	public MPlane(Location origin, Location p, Location q){
 		this(origin, p.subtract(origin).toVector(), q.subtract(origin).toVector());
 	}
 	

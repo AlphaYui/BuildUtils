@@ -126,5 +126,4 @@ public class SetCommand implements Command{
 								new Argument( "world", BukkitArgumentType.WORLD, "The world of the point" ));
 	}
 	
-	
 }

@@ -3,7 +3,11 @@ package com.gmail.einsyui;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.RemoteConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.argumentreader.CommandLibrary;
@@ -43,5 +47,17 @@ public class Main extends JavaPlugin{
 			return stacks.get( s );
 		}
 		else return locStack;
+	}
+	public LocationStack getStackFor( CommandSender cs ){
+		if(cs instanceof Player){
+			return getStackFor(((Player)cs).getName());
+		}
+		if(cs instanceof ConsoleCommandSender 
+				|| cs instanceof RemoteConsoleCommandSender)
+			return getStackFor("#console");
+		if(cs instanceof BlockCommandSender)
+			return getStackFor("#blocks-"+((BlockCommandSender)cs)
+					.getBlock().getWorld());
+		return null;
 	}
 }

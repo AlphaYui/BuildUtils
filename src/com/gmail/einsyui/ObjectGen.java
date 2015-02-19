@@ -33,5 +33,5 @@ public interface ObjectGen {
 			return "object generator";
 		}
 	};
-	public static final TObjectGen OBJECT_GEN = new TObjectGen();
+	public static final TObjectGen OBJECT_GEN = TObjectGen.SINGLETON;
 }

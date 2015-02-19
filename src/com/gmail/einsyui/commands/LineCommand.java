@@ -32,7 +32,7 @@ public class LineCommand implements Command {
 	public String execute(Map<String, Object> args, Context ctx) {
 		LocationStack ls = (LocationStack) Argument.getWithDefault(args, "stack", 
 				ctx.getPlugin().getStackFor(ctx.getSender()));
-		ObjectGen objectgen = (ObjectGen) args.get("stack");
+		ObjectGen objectgen = (ObjectGen) args.get("with");
 		List<Location> l = ls.getLast(2);
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
 		Line line = new Line(l.get(0), l.get(1), objectgen);

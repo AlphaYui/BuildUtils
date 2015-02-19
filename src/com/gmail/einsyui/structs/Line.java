@@ -15,10 +15,11 @@ public class Line implements Struct {
 	
 	public Line(Location from, Location to, ObjectGen generator){
 		current=from;
-		end=to;
+		end=to; 
 		direction=to.subtract(from).toVector();
-		todo=(int) Math.ceil(direction.length());
+		todo=1+(int) Math.ceil(direction.length());
 		direction=direction.normalize();
+		this.generator=generator;
 	}
 
 	@Override

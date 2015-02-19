@@ -12,6 +12,7 @@ public class Plane implements Struct {
 	
 	public Plane(Location start, Location to1, Location to2, ObjectGen generator){
 		index = new BlockIndex2D(start, to1, to2);
+		this.generator = generator;
 	}
 	
 	@Override

@@ -12,7 +12,7 @@ public class BlockIndex2D {
 	
 	public BlockIndex2D(Location start, Location endX, Location endY) {
 		this.start=start;
-		current=start; currentY=start;
+		current=start.clone(); currentY=start.clone();
 		dirX=endX.subtract(start).toVector();
 		dirY=endY.subtract(start).toVector();
 		x=-1; y=0;
@@ -31,7 +31,7 @@ public class BlockIndex2D {
 				return null;
 			}else{
 				currentY=currentY.add(dirY);
-				current=currentY; x=0;
+				current=currentY.clone(); x=0;
 			}
 		}else{
 			current=current.add(dirX);

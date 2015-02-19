@@ -390,7 +390,7 @@ public interface ArgumentType {
 				for(Enum<?> value:values){
 					if(onlyAlphanumeric(value.name())
 							.equalsIgnoreCase(name)){
-						return value;
+						res = value; break;
 					}
 				}
 			}

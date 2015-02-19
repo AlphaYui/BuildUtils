@@ -72,6 +72,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.messaging.PluginChannelDirection;
 import org.bukkit.potion.PotionType;
 
+import com.gmail.einsyui.LocationStack;
 import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.argumentreader.ArgumentType.TEnum;
 
@@ -186,6 +187,10 @@ public class BukkitArgumentType {
 						(Double) parsed.get("z"),
 						(float) (double) (Double) parsed.get("yaw"),
 						(float) (double) (Double) parsed.get("pitch"));
+			}else{
+				String name = IDENTIFIER.readAndValidateFrom(ar, context);
+				LocationStack ls = context.getPlugin().getStackFor(name);
+				return ls.getLast(1).get(0);
 			}
 			ar.syntaxError("Invalid syntax for Location"); 
 			return null;

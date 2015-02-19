@@ -24,12 +24,14 @@ public class GenerationController implements Runnable {
 		if(taskId!=-1)
 			stopGenerating();
 		taskId=Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, period);
+		System.out.println("Start generating...");
 	}
 	public void stopGenerating(){
 		if(taskId!=-1){
 			Bukkit.getScheduler().cancelTask(taskId);
 			taskId=-1;
 		}
+		System.out.println("Stopped generating.");
 	} 
 	public boolean isGenerating(){ return taskId!=-1; }
 	

@@ -696,12 +696,20 @@ public interface ArgumentType {
 		@Override
 		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
-			String substr = STRING_IN_ANGLE_BRACKETS
-								.readAndValidateFrom(ar, context);
-			ArgumentReader subar = new ArgumentReader(substr, 
+			if(ar.peekChar()=='<'){
+				String substr = STRING_IN_ANGLE_BRACKETS
+									.readAndValidateFrom(ar, context);
+				ArgumentReader subar = new ArgumentReader(substr, 
 										ar.getSubcommandLibrary());
-			return construct(subar.readArguments(args(), context), context);
+				return construct(subar.readArguments(args(), context), context);
+			}else if(allowNothing()){
+				return construct(null, context);
+			}else{
+				ar.syntaxError("Expected '<', got "+ar.peekChar());
+				return null;
+			}
 		}
+		public boolean allowNothing(){ return false; }
 		public abstract List<Argument> args();
 		public abstract Object construct(Map<String, Object> args, Context ctx);
 	};
@@ -713,10 +721,15 @@ public interface ArgumentType {
 		public TDispatchArgumentType(){
 			subTypes = new HashMap<String, ArgumentType>();
 		}
-		
+		public Object readDefault(ArgumentReader ar, Context context) 
+				throws ArgumentException{
+			ar.syntaxError("Unknown syntax");
+			return null;
+		}
 		@Override
 		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
+			int pos = ar.position();
 			char c = ar.peekChar();
 			if(subTypes.containsKey(String.valueOf(c))){
 				ar.readChar();
@@ -724,7 +737,13 @@ public interface ArgumentType {
 						.readAndValidateFrom(ar, context);
 			}else{
 				String name = IDENTIFIER.readAndValidateFrom(ar, context);
-				return subTypes.get(name).readAndValidateFrom(ar, context);
+				ArgumentType t = subTypes.get(name);
+				if(t!=null){
+					return t.readAndValidateFrom(ar, context);
+				}else{
+					ar.setPosition(pos);
+					return readDefault(ar, context);
+				}
 			}
 		}
 	}

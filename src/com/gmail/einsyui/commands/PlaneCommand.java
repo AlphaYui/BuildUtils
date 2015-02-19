@@ -14,18 +14,18 @@ import com.gmail.einsyui.argumentreader.BukkitArgumentType;
 import com.gmail.einsyui.argumentreader.Command;
 import com.gmail.einsyui.argumentreader.Context;
 import com.gmail.einsyui.objectgens.MaterialGen;
-import com.gmail.einsyui.structs.Line;
+import com.gmail.einsyui.structs.Plane;
 
-public class LineCommand implements Command {
+public class PlaneCommand implements Command {
 
 	@Override
 	public String name() {
-		return "line";
+		return "plane";
 	}
 
 	@Override
 	public String description() {
-		return "Generates a line";
+		return "Generates a plane";
 	}
 
 	@Override
@@ -33,10 +33,10 @@ public class LineCommand implements Command {
 		LocationStack ls = (LocationStack) Argument.getWithDefault(args, "stack", 
 				ctx.getPlugin().getStackFor(ctx.getSender()));
 		ObjectGen objectgen = (ObjectGen) args.get("with");
-		List<Location> l = ls.getLast(2);
+		List<Location> l = ls.getLast(3);
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
-		Line line = new Line(l.get(0), l.get(1), objectgen);
-		ctx.getPlugin().generate(line);
+		Plane plane = new Plane(l.get(0), l.get(1), l.get(2), objectgen);
+		ctx.getPlugin().generate(plane);
 		return "";
 	}
 

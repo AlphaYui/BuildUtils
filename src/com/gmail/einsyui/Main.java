@@ -12,6 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.argumentreader.CommandLibrary;
 import com.gmail.einsyui.commands.LineCommand;
+import com.gmail.einsyui.commands.PlaneCommand;
 import com.gmail.einsyui.commands.SetCommand;
 
 public class Main extends JavaPlugin{
@@ -29,6 +30,7 @@ public class Main extends JavaPlugin{
 		commands = new CommandLibrary(this);
 		commands.addCommand( new SetCommand( this ) );
 		commands.addCommand( new LineCommand () );
+		commands.addCommand( new PlaneCommand () );
 		
 		generationController = new GenerationController(10, this, 2);
 	}

@@ -54,7 +54,12 @@ public class GenerationController implements Runnable {
 			return;
 		}
 		int blocksPerStruct = blocksPerPeriod/numberOfStructs;
-		for(int i=0;i<numberOfStructs;i++){
+		int structsToGenerate = numberOfStructs;
+		if(blocksPerStruct==0){
+			structsToGenerate=blocksPerPeriod;
+			blocksPerStruct=1;
+		}
+		for(int i=0;i<structsToGenerate;i++){
 			Struct s = todo.poll(); 
 			if(s!=null){
 				s.generate(blocksPerStruct);

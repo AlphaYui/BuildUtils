@@ -20,7 +20,7 @@ public class Main extends JavaPlugin{
 		stacks = new HashMap<String,LocationStack>();
 		
 		getLogger().info( "Loading commands..." );
-		commands = new CommandLibrary();
+		commands = new CommandLibrary(this);
 		commands.addCommand( new SetCommand( this ) );
 	}
 	

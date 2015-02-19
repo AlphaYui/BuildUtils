@@ -6,14 +6,18 @@ import java.util.Stack;
 
 import org.bukkit.command.CommandSender;
 
+import com.gmail.einsyui.Main;
+
 public class HashMapContext implements Context {
 	// Default implementation for Context.
 
 	public HashMap<String, Stack<Object>> values;
+	Main plugin;
 	
-	public HashMapContext(){
+	public HashMapContext(Main plugin){
 		values = new HashMap<String, Stack<Object>>();
 		printCache = new StringBuilder();
+		this.plugin = plugin;
 	}
 	
 	@Override
@@ -66,5 +70,10 @@ public class HashMapContext implements Context {
 	@Override
 	public CommandSender getSender() {
 		return (CommandSender) get("me");
+	}
+
+	@Override
+	public Main getPlugin() {
+		return plugin;
 	}
 }

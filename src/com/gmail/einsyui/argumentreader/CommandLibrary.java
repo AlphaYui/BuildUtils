@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import com.gmail.einsyui.Main;
 import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.argumentreader.ArgumentReader.UnknownArgumentException;
 
@@ -15,9 +16,9 @@ public class CommandLibrary {
 	public HashMap<String, Command> commandTable;
 	public Context context;
 	
-	public CommandLibrary(){
+	public CommandLibrary(Main plugin){
 		commandTable = new HashMap<String, Command>();
-		context = new HashMapContext();
+		context = new HashMapContext(plugin);
 		addCommand(new HelpCommand()); // always help
 	}
 	

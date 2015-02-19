@@ -3,6 +3,7 @@ package com.gmail.einsyui.argumentreader;
 import java.util.Collection;
 
 import org.bukkit.command.CommandSender;
+import com.gmail.einsyui.Main;
 
 public interface Context {
 	public Object get(String name);
@@ -17,4 +18,6 @@ public interface Context {
 	
 	public boolean amI(Class<?> type);
 	public CommandSender getSender();
+	
+	public Main getPlugin();
 }

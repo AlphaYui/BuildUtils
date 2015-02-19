@@ -11,12 +11,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.argumentreader.CommandLibrary;
+import com.gmail.einsyui.commands.LineCommand;
 import com.gmail.einsyui.commands.SetCommand;
 
 public class Main extends JavaPlugin{
 	
 	public Map<String,LocationStack> stacks;
 	public CommandLibrary commands;
+	public GenerationController generationController;
 	
 	@Override
 	public void onEnable()
@@ -26,6 +28,9 @@ public class Main extends JavaPlugin{
 		getLogger().info( "Loading commands..." );
 		commands = new CommandLibrary(this);
 		commands.addCommand( new SetCommand( this ) );
+		commands.addCommand( new LineCommand () );
+		
+		generationController = new GenerationController(10, this, 2);
 	}
 	
 	public boolean onCommand( CommandSender cs, org.bukkit.command.Command cmd, String label, String[] args )
@@ -59,5 +64,9 @@ public class Main extends JavaPlugin{
 			return getStackFor("#blocks-"+((BlockCommandSender)cs)
 					.getBlock().getWorld());
 		return null;
+	}
+
+	public void generate(Struct struct) {
+		generationController.generate(struct, true);
 	}
 }

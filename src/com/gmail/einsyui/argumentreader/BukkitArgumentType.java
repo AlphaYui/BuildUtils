@@ -272,4 +272,31 @@ public class BukkitArgumentType {
 	public static final TEnum SERVICE_PRIORITY = new TEnum(ServicePriority.class);
 	public static final TEnum PLUGIN_LOAD_ORDER = new TEnum(PluginLoadOrder.class);
 	public static final TEnum PLUGIN_CHANNEL_DIRECTION = new TEnum(PluginChannelDirection.class);
+	
+	
+	
+	
+	////-----------------------------------------------------------------------
+	/// Location stacks
+	public static class TLocationStack implements ArgumentType{
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			String name="";
+			if(ar.tryExpect('~')){
+				return context.getPlugin().getStackFor(context.getSender());
+			}else{
+				if(ar.tryExpect('#')){
+					name=name+'#';
+				}
+				name=name+IDENTIFIER.readAndValidateFrom(ar, context);
+			}
+			return context.getPlugin().getStackFor(name);
+		}
+		@Override
+		public String name() {
+			return "location stack";
+		}
+	};
+	public static final TLocationStack LOCATION_STACK = new TLocationStack();
 };

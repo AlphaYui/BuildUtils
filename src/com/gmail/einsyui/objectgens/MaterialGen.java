@@ -23,10 +23,10 @@ public class MaterialGen implements ObjectGen {
 	public void generateAt(Location l) {
 		l.getBlock().setType(material);
 	}
-	
+	public static final TMaterialGen MATERIAL_GEN_AT = new TMaterialGen();
 	public static class TMaterialGen extends TConstructorArgumentType{
 		static{
-			TObjectGen.register("m", new TMaterialGen());
+			TObjectGen.register("material", MATERIAL_GEN_AT);
 		}
 		@Override
 		public String name() {

@@ -6,6 +6,7 @@ import com.gmail.einsyui.argumentreader.ArgumentReader;
 import com.gmail.einsyui.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.argumentreader.ArgumentType;
 import com.gmail.einsyui.argumentreader.Context;
+import com.gmail.einsyui.objectgens.MaterialGen;
 
 public interface ObjectGen {
 	public void generateAt(Location l);
@@ -22,13 +23,10 @@ public interface ObjectGen {
 			SINGLETON.subTypes.put(name, objectGenArgumentType);
 		}
 		@Override
-		public ObjectGen readAndValidateFrom(ArgumentReader ar, Context ctx) 
+		public ObjectGen readDefault(ArgumentReader ar, Context context) 
 				throws ArgumentException{
-			//TODO: add "standard" syntax, i.e. CLAY or similar...
-			Object res = super.readAndValidateFrom(ar, ctx);
-			if(res==null || !(res instanceof ObjectGen))
-				ar.syntaxError("Not a valid object generator"); //TODO: improve
-			return (ObjectGen) res;
+			return (MaterialGen) MaterialGen.MATERIAL_GEN_AT
+					.readAndValidateFrom(ar, context);
 		}
 		@Override
 		public String name() {

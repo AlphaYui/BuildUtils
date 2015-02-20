@@ -20,7 +20,7 @@ public class Main extends JavaPlugin{
 	
 	public Map<String,LocationStack> stacks;
 	public CommandLibrary commands;
-	public GenerationController generationController;
+	public ScalingGenerationController generationController;
 	
 	@Override
 	public void onEnable()
@@ -35,7 +35,7 @@ public class Main extends JavaPlugin{
 		
 		commands.addCommand(new DebugCommand());
 		
-		generationController = new GenerationController(10, this, 2);
+		generationController = new ScalingGenerationController(10, this, 2);
 	}
 	
 	public boolean onCommand( CommandSender cs, org.bukkit.command.Command cmd, String label, String[] args )

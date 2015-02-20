@@ -30,8 +30,13 @@ public class DebugCommand implements Command {
 		boolean set = args.containsKey("setTo");
 		ArgumentReader valuereader=null;
 		Main plugin = ctx.getPlugin();
-		if(set)
+		if(set){
+			if(!ctx.getSender().isOp()){
+				ctx.printLn("setting with debug is only available for ops");
+				return "";
+			}
 			valuereader = new ArgumentReader((String) args.get("setTo"), null);
+		}
 		if(key==null){
 			set=false; key="";
 		}

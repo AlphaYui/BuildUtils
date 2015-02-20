@@ -72,6 +72,27 @@ public class CommandLibrary {
 		// execute command
 		return cmd.execute(args, context);
 	}
+	public CommandWithArgs getCommandWithArgs(String name, String arguments){
+		if(name=="") name="help"; // default: help
+		
+		// lookup command name
+		if(!commandTable.containsKey(name.toLowerCase())){
+			unknownCommand(name); return null;
+		}
+		Command cmd = commandTable.get(name);
+		
+		// parse arguments
+		ArgumentReader ar = new ArgumentReader(arguments,this);
+		Map<String, Object> args;
+		try {
+			args = ar.readArguments(cmd.args(), context);
+		} catch (ArgumentException e) {
+			handleArgumentException(e, cmd); return null;
+		}
+		
+		// execute command
+		return new CommandWithArgs(cmd, args, context);
+	}
 	public String execute(String command){
 		if(command.replace(" ", "")=="") return execute("help",""); // default: help
 		int i = command.indexOf(' ');

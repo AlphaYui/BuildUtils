@@ -33,8 +33,9 @@ public class DebugCommand implements Command {
 		if(set)
 			valuereader = new ArgumentReader((String) args.get("setTo"), null);
 		if(key==null){
-			
-		}else if(key.equalsIgnoreCase("blocksperperiod")){
+			set=false; key="";
+		}
+		if(key.equalsIgnoreCase("blocksperperiod") || key==""){
 			if(set){
 				try {
 					int v=ArgumentType.INTEGER.readAndValidateFrom(valuereader, ctx);
@@ -45,8 +46,10 @@ public class DebugCommand implements Command {
 				}
 			}else ctx.printLn("Blocks per period: "
 					+plugin.generationController.blocksPerPeriod());
-			return String.valueOf(plugin.generationController.blocksPerPeriod());
-		}else if(key.equalsIgnoreCase("period")){
+			if(key!="")
+				return String.valueOf(plugin.generationController.blocksPerPeriod());
+		}
+		if(key.equalsIgnoreCase("period") || key==""){
 			if(set){
 				try {
 					int v=ArgumentType.INTEGER.readAndValidateFrom(valuereader, ctx);
@@ -59,13 +62,17 @@ public class DebugCommand implements Command {
 				}
 			}else ctx.printLn("period: "
 					+plugin.generationController.period());
-			return String.valueOf(plugin.generationController.period());
-		}else if(key.equalsIgnoreCase("remainingstructs")){
+			if(key!="")
+				return String.valueOf(plugin.generationController.period());
+		}
+		if(key.equalsIgnoreCase("remainingstructs") || key==""){
 			if(set) ctx.printLn("can't set");
 			ctx.printLn("Remaining structs to generate: "
 					+plugin.generationController.remainingStructs());
-			return String.valueOf(plugin.generationController.remainingStructs());
-		}else if(key.equalsIgnoreCase("generating")){
+			if(key!="")
+				return String.valueOf(plugin.generationController.remainingStructs());
+		}
+		if(key.equalsIgnoreCase("generating") || key==""){
 			if(set){
 				try {
 					boolean b=ArgumentType.BOOLEAN.readAndValidateFrom(valuereader, ctx);
@@ -85,7 +92,8 @@ public class DebugCommand implements Command {
 				else
 					ctx.printLn("isn't generating");
 			}
-			return String.valueOf(plugin.generationController.isGenerating());
+			if(key!="")
+				return String.valueOf(plugin.generationController.isGenerating());
 		}
 		return "";
 	}

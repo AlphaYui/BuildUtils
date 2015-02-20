@@ -12,7 +12,7 @@ public class HashMapContext implements Context {
 	// Default implementation for Context.
 
 	public HashMap<String, Stack<Object>> values;
-	Main plugin;
+	Main plugin; CommandLibrary cl;
 	
 	public HashMapContext(Main plugin){
 		values = new HashMap<String, Stack<Object>>();
@@ -75,5 +75,15 @@ public class HashMapContext implements Context {
 	@Override
 	public Main getPlugin() {
 		return plugin;
+	}
+
+	@Override
+	public CommandLibrary getCommandLibrary() {
+		return cl;
+	}
+
+	@Override
+	public void setCommandLibrary(CommandLibrary cl) {
+		this.cl=cl;
 	}
 }

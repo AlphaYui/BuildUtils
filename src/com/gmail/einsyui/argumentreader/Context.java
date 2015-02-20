@@ -20,4 +20,7 @@ public interface Context {
 	public CommandSender getSender();
 	
 	public Main getPlugin();
+	
+	public CommandLibrary getCommandLibrary();
+	public void setCommandLibrary(CommandLibrary cl);
 }

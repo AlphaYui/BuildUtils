@@ -590,6 +590,24 @@ public interface ArgumentType {
 	public static final TUUID JAVA_UUID = new TUUID();
 	
 	////-----------------------------------------------------------------
+	/// Commands
+	public static final class TCommand implements ArgumentType{
+		@Override
+		public CommandWithArgs readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			ar.deactivateSubcommands();
+			String cmdstr=STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(ar, context);
+			ar.activateSubcommands();
+			return ar.getSubcommandLibrary().getCommandWithArgs(cmdstr);
+		}
+		@Override
+		public String name() {
+			return "command in []";
+		}
+	};
+	public static final TCommand COMMAND = new TCommand();
+	
+	////-----------------------------------------------------------------
 	////-----------------------------------------------------------------
 	/// Type Combinators
 	

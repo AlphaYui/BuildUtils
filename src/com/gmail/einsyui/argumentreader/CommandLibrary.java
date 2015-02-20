@@ -19,6 +19,7 @@ public class CommandLibrary {
 	public CommandLibrary(Main plugin){
 		commandTable = new HashMap<String, Command>();
 		context = new HashMapContext(plugin);
+		context.setCommandLibrary(this);
 		addCommand(new HelpCommand()); // always help
 	}
 	
@@ -92,6 +93,15 @@ public class CommandLibrary {
 		
 		// execute command
 		return new CommandWithArgs(cmd, args, context);
+	}
+	public CommandWithArgs getCommandWithArgs(String command){
+		if(command.replace(" ", "")=="") 
+			getCommandWithArgs("help",""); // default: help
+		int i = command.indexOf(' ');
+		if(i==-1)
+			return getCommandWithArgs(command, "");
+		else
+			return getCommandWithArgs(command.substring(0, i), command.substring(i+1));
 	}
 	public String execute(String command){
 		if(command.replace(" ", "")=="") return execute("help",""); // default: help

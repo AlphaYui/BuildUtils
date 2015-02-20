@@ -75,14 +75,16 @@ public class ArgumentReader {
 		// Error if no character available (i.e. at end)
 		if(position+1>arguments.length())
 			syntaxError("Premature end of command.");
-		if(arguments.charAt(position)=='[') replaceSubcommandHere();
+		if(arguments.charAt(position)=='[' || arguments.charAt(position)=='$') 
+			replaceSubcommandHere();
 		return arguments.charAt(position++);
 	}
 	public char tryReadChar() throws ArgumentException{
 		// return \0 character if no character available (i.e. at end)
 		if(position+1>arguments.length())
 			return '\0'; 
-		if(arguments.charAt(position)=='[') replaceSubcommandHere();
+		if(arguments.charAt(position)=='[' || arguments.charAt(position)=='$') 
+			replaceSubcommandHere();
 		return arguments.charAt(position++);
 	}
 	public String readString(int length) throws ArgumentException{ 
@@ -95,7 +97,9 @@ public class ArgumentReader {
 		String res = arguments.substring(position, 
 						Math.min(position+length,arguments.length()));
 		int i=res.indexOf('[');
-		if(replaceSubcommands && i!=-1){
+		int j=res.indexOf('$');
+		if(replaceSubcommands && (i!=-1 || j!=-1)){
+			if(i==-1) i=j; else if(j!=-1) i=Math.min(i, j);
 			position+=i;
 			replaceSubcommandHere();
 			return res.substring(0, i) + readString(length-i);
@@ -264,11 +268,17 @@ public class ArgumentReader {
 		if(!replaceSubcommands) return;
 		int pos=position; // save current position for later use
 		
-		// read command and execute it
-		replaceSubcommands=false;
-		String subcmd = 
-				ArgumentType.STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(this, null);
-		replaceSubcommands=true;
+		String subcmd;
+		if(tryExpect('$')){
+			String varname = ArgumentType.IDENTIFIER.readAndValidateFrom(this, null);
+			subcmd="var read "+varname;
+		}else{
+			// read command and execute it
+			replaceSubcommands=false;
+			subcmd = ArgumentType.STRING_IN_SQUARE_BRACKETS
+						.readAndValidateFrom(this, null);
+			replaceSubcommands=true;
+		}
 		String value = subcommandLibrary.execute(subcmd);
 		
 		// replace in String (StringBuffer needed for replace by Index)

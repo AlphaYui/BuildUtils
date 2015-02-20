@@ -16,6 +16,7 @@ import com.gmail.einsyui.commands.DoCommand;
 import com.gmail.einsyui.commands.LineCommand;
 import com.gmail.einsyui.commands.PlaneCommand;
 import com.gmail.einsyui.commands.SetCommand;
+import com.gmail.einsyui.commands.VarCommand;
 
 public class Main extends JavaPlugin{
 	
@@ -36,6 +37,7 @@ public class Main extends JavaPlugin{
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());
+		commands.addCommand(new VarCommand());
 		
 		generationController = new ScalingGenerationController(10, this, 2);
 	}

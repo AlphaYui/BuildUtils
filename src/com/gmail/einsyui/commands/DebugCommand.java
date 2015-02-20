@@ -65,6 +65,27 @@ public class DebugCommand implements Command {
 			ctx.printLn("Remaining structs to generate: "
 					+plugin.generationController.remainingStructs());
 			return String.valueOf(plugin.generationController.remainingStructs());
+		}else if(key.equalsIgnoreCase("generating")){
+			if(set){
+				try {
+					boolean b=ArgumentType.BOOLEAN.readAndValidateFrom(valuereader, ctx);
+					if(b)
+						plugin.generationController.startGenerating();
+					else
+						plugin.generationController.stopGenerating();
+					ctx.printLn("Set");
+				} catch (ArgumentException e) {
+					ctx.print("wrong syntax for value :");
+					ctx.printLn(e.getMessage());
+					return "";
+				}
+			}else {
+				if(plugin.generationController.isGenerating())
+					ctx.printLn("is generating");
+				else
+					ctx.printLn("isn't generating");
+			}
+			return String.valueOf(plugin.generationController.isGenerating());
 		}
 		return "";
 	}

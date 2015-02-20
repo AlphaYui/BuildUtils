@@ -53,7 +53,9 @@ public class DebugCommand implements Command {
 					plugin.generationController.setPeriod(v);
 					ctx.printLn("Set");
 				} catch (ArgumentException e) {
-					ctx.printLn("wrong syntax for value");
+					ctx.print("wrong syntax for value :");
+					ctx.printLn(e.getMessage());
+					return "";
 				}
 			}else ctx.printLn("period: "
 					+plugin.generationController.period());

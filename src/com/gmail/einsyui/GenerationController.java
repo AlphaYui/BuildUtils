@@ -3,18 +3,19 @@ package com.gmail.einsyui;
 import java.util.ArrayDeque;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 public class GenerationController implements Runnable {
 
 	protected ArrayDeque<Struct> todo;
 	protected long blocksPerPeriod;
-	protected Plugin plugin;
+	protected Main plugin;
 	protected int period;
 	protected int taskId;
 
-	public GenerationController() {
-		super();
+	public GenerationController(int blocksPerPeriod, int period, Main plugin) {
+		this.blocksPerPeriod=blocksPerPeriod;
+		this.period=period;
+		this.plugin=plugin;
 	}
 
 	public void startGenerating() {

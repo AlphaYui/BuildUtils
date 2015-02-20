@@ -2,8 +2,6 @@ package com.gmail.einsyui;
 
 import java.util.ArrayDeque;
 
-import org.bukkit.plugin.Plugin;
-
 public class ScalingGenerationController extends GenerationController {
 	
 	public int maxTimeInNanoseconds;
@@ -11,19 +9,18 @@ public class ScalingGenerationController extends GenerationController {
 	public int maxBlocksPerPeriod;
 	public long lastTimeInNanoseconds;
 	public ScalingGenerationController(int initialBlocksPerPeriod, 
-			Plugin plugin, int period, int minTimeNS, int maxTimeNS,
+			Main plugin, int period, int minTimeNS, int maxTimeNS,
 			int maxBlocksPerPeriod){
-		this.blocksPerPeriod = initialBlocksPerPeriod;
+		super(initialBlocksPerPeriod, period, plugin);
 		this.maxBlocksPerPeriod=maxBlocksPerPeriod;
 		this.minTimeInNanoseconds=minTimeNS;
 		this.maxTimeInNanoseconds=maxTimeNS;
 		this.plugin = plugin;
-		this.period = period;
 		todo = new ArrayDeque<Struct>();
 		taskId=-1;
 	}
 	public ScalingGenerationController(int initialBlocksPerPeriod, 
-			Plugin plugin, int period){
+			Main plugin, int period){
 		this(initialBlocksPerPeriod, plugin, period, 
 				1000000000/20/4, // fourth of a tick 
 				1000000000/20/2, // half a tick

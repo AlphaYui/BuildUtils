@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 public class GenerationController implements Runnable {
 	
 	ArrayDeque<Struct> todo;
-	int blocksPerPeriod;
+	long blocksPerPeriod;
 	Plugin plugin; 
 	int period;
 	int taskId;
@@ -62,7 +62,7 @@ public class GenerationController implements Runnable {
 		this.blocksPerPeriod=blocksPerPeriod; 
 	}
 	public int period(){ return period; }
-	public int blocksPerPeriod(){ return blocksPerPeriod; }
+	public long blocksPerPeriod(){ return blocksPerPeriod; }
 
 	@Override
 	public void run() {
@@ -72,8 +72,8 @@ public class GenerationController implements Runnable {
 			stopGenerating();
 			return;
 		}
-		int blocksPerStruct = blocksPerPeriod/numberOfStructs;
-		int structsToGenerate = numberOfStructs;
+		long blocksPerStruct = blocksPerPeriod/numberOfStructs;
+		long structsToGenerate = numberOfStructs;
 		if(blocksPerStruct==0){
 			structsToGenerate=blocksPerPeriod;
 			blocksPerStruct=1;
@@ -81,7 +81,7 @@ public class GenerationController implements Runnable {
 		for(int i=0;i<structsToGenerate;i++){
 			Struct s = todo.poll(); 
 			if(s!=null){
-				s.generate(blocksPerStruct);
+				s.generate((int) blocksPerStruct);
 				if(!s.isReady())
 					todo.offer(s);
 			}
@@ -89,13 +89,13 @@ public class GenerationController implements Runnable {
 		lastTimeInNanoseconds = ((System.nanoTime()-startTime));
 		if(lastTimeInNanoseconds==0) lastTimeInNanoseconds=1;
 		if(lastTimeInNanoseconds > maxTimeInNanoseconds){
-			blocksPerPeriod=(int) (((blocksPerPeriod*maxTimeInNanoseconds)
+			blocksPerPeriod=(((blocksPerPeriod*maxTimeInNanoseconds)
 					/lastTimeInNanoseconds)-1);
 			if(blocksPerPeriod<=0){ 
 				blocksPerPeriod=1;
 			}
 		}else if(lastTimeInNanoseconds < minTimeInNanoseconds){
-			blocksPerPeriod=(int) (((blocksPerPeriod*minTimeInNanoseconds)
+			blocksPerPeriod=(((blocksPerPeriod*minTimeInNanoseconds)
 					/lastTimeInNanoseconds));
 			if(blocksPerPeriod>maxBlocksPerPeriod)
 				blocksPerPeriod=maxBlocksPerPeriod;

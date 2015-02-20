@@ -12,10 +12,14 @@ public class GenerationController implements Runnable {
 	Plugin plugin; 
 	int period;
 	int taskId;
+	int maxTimeInMilliseconds;
+	int minTimeInMilliseconds;
 	public GenerationController(int blocksPerPeriod, Plugin plugin, int period){
 		this.blocksPerPeriod = blocksPerPeriod;
 		this.plugin = plugin;
 		this.period = period;
+		maxTimeInMilliseconds = 1000/20/2; // half a tick...
+		minTimeInMilliseconds = 1000/20/5; // fifth of a tick
 		todo = new ArrayDeque<Struct>();
 		taskId=-1;
 	}
@@ -50,6 +54,7 @@ public class GenerationController implements Runnable {
 
 	@Override
 	public void run() {
+		long startTime = System.nanoTime(); 
 		int numberOfStructs = todo.size();
 		if(numberOfStructs==0){ //nothing to do
 			stopGenerating();
@@ -68,6 +73,15 @@ public class GenerationController implements Runnable {
 				if(!s.isReady())
 					todo.offer(s);
 			}
+		}
+		long time = ((System.nanoTime()-startTime));
+		if(time==0) time=1;
+		if(time >= 1000000*maxTimeInMilliseconds){
+			blocksPerPeriod=(int) (((blocksPerPeriod*1000000*maxTimeInMilliseconds)
+					/time)-1);
+		}else if(time < 1000000*minTimeInMilliseconds){
+			blocksPerPeriod=(int) (((blocksPerPeriod*1000000*minTimeInMilliseconds)
+					/time));
 		}
 	}
 

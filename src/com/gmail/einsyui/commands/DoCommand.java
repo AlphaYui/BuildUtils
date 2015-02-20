@@ -34,7 +34,9 @@ public class DoCommand implements Command {
 		for(int i=0;i<n;i++){
 			for(CommandWithLateArgs cmd:cmds)
 				try {
-					cmd.execute();
+					if(cmd!=null)
+						cmd.execute();
+					else ctx.printLn("in do: unknown command");
 				} catch (ArgumentException e) {
 					ctx.printLn("error in do: "+e.getMessage());
 				}

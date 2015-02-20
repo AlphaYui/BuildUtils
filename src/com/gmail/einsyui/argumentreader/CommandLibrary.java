@@ -95,7 +95,7 @@ public class CommandLibrary {
 	}
 	public CommandWithArgs getCommandWithArgs(String command){
 		if(command.replace(" ", "")=="") 
-			getCommandWithArgs("help",""); // default: help
+			return getCommandWithArgs("help",""); // default: help
 		int i = command.indexOf(' ');
 		if(i==-1)
 			return getCommandWithArgs(command, "");
@@ -116,7 +116,7 @@ public class CommandLibrary {
 	}
 	public CommandWithLateArgs getCommandWithLateArgs(String command){
 		if(command.replace(" ", "")=="") 
-			getCommandWithArgs("help",""); // default: help
+			return getCommandWithLateArgs("help",""); // default: help
 		int i = command.indexOf(' ');
 		if(i==-1)
 			return getCommandWithLateArgs(command, "");

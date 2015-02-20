@@ -1,6 +1,5 @@
 package com.gmail.einsyui;
 
-import java.util.ArrayDeque;
 
 public class ScalingGenerationController extends GenerationController {
 	
@@ -15,8 +14,6 @@ public class ScalingGenerationController extends GenerationController {
 		this.maxBlocksPerPeriod=maxBlocksPerPeriod;
 		this.minTimeInNanoseconds=minTimeNS;
 		this.maxTimeInNanoseconds=maxTimeNS;
-		todo = new ArrayDeque<Struct>();
-		taskId=-1;
 	}
 	public ScalingGenerationController(int initialBlocksPerPeriod, 
 			Main plugin, int period){

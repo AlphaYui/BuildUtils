@@ -16,6 +16,8 @@ public class GenerationController implements Runnable {
 		this.blocksPerPeriod=blocksPerPeriod;
 		this.period=period;
 		this.plugin=plugin;
+		todo = new ArrayDeque<Struct>();
+		taskId=-1;
 	}
 
 	public void startGenerating() {

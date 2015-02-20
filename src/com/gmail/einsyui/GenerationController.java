@@ -12,9 +12,10 @@ public class GenerationController implements Runnable {
 	Plugin plugin; 
 	int period;
 	int taskId;
-	int maxTimeInNanoseconds;
-	int minTimeInNanoseconds;
-	int maxBlocksPerPeriod;
+	public int maxTimeInNanoseconds;
+	public int minTimeInNanoseconds;
+	public int maxBlocksPerPeriod;
+	public long lastTimeInNanoseconds;
 	public GenerationController(int initialBlocksPerPeriod, 
 			Plugin plugin, int period, int minTimeNS, int maxTimeNS,
 			int maxBlocksPerPeriod){
@@ -85,17 +86,17 @@ public class GenerationController implements Runnable {
 					todo.offer(s);
 			}
 		}
-		long time = ((System.nanoTime()-startTime));
-		if(time==0) time=1;
-		if(time > maxTimeInNanoseconds){
+		lastTimeInNanoseconds = ((System.nanoTime()-startTime));
+		if(lastTimeInNanoseconds==0) lastTimeInNanoseconds=1;
+		if(lastTimeInNanoseconds > maxTimeInNanoseconds){
 			blocksPerPeriod=(int) (((blocksPerPeriod*maxTimeInNanoseconds)
-					/time)-1);
+					/lastTimeInNanoseconds)-1);
 			if(blocksPerPeriod<=0){ 
 				blocksPerPeriod=1;
 			}
-		}else if(time < minTimeInNanoseconds){
+		}else if(lastTimeInNanoseconds < minTimeInNanoseconds){
 			blocksPerPeriod=(int) (((blocksPerPeriod*minTimeInNanoseconds)
-					/time));
+					/lastTimeInNanoseconds));
 			if(blocksPerPeriod>maxBlocksPerPeriod)
 				blocksPerPeriod=maxBlocksPerPeriod;
 		}

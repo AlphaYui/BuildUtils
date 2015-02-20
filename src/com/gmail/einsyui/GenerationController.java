@@ -45,6 +45,8 @@ public class GenerationController implements Runnable {
 	public void setBlocksPerPreiod(int blocksPerPeriod){ 
 		this.blocksPerPeriod=blocksPerPeriod; 
 	}
+	public int period(){ return period; }
+	public int blocksPerPeriod(){ return blocksPerPeriod; }
 
 	@Override
 	public void run() {
@@ -67,5 +69,9 @@ public class GenerationController implements Runnable {
 					todo.offer(s);
 			}
 		}
+	}
+
+	public int remainingStructs() {
+		return todo.size();
 	}
 }

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.argumentreader.CommandLibrary;
+import com.gmail.einsyui.commands.DebugCommand;
 import com.gmail.einsyui.commands.LineCommand;
 import com.gmail.einsyui.commands.PlaneCommand;
 import com.gmail.einsyui.commands.SetCommand;
@@ -31,6 +32,8 @@ public class Main extends JavaPlugin{
 		commands.addCommand( new SetCommand( this ) );
 		commands.addCommand( new LineCommand () );
 		commands.addCommand( new PlaneCommand () );
+		
+		commands.addCommand(new DebugCommand());
 		
 		generationController = new GenerationController(10, this, 2);
 	}

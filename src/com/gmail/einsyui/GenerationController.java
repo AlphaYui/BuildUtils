@@ -14,14 +14,17 @@ public class GenerationController implements Runnable {
 	int taskId;
 	int maxTimeInMilliseconds;
 	int minTimeInMilliseconds;
-	public GenerationController(int blocksPerPeriod, Plugin plugin, int period){
-		this.blocksPerPeriod = blocksPerPeriod;
+	public GenerationController(int initialBlocksPerPeriod, 
+			Plugin plugin, int period, int minTimeMS, int maxTimeMS){
+		this.blocksPerPeriod = initialBlocksPerPeriod;
 		this.plugin = plugin;
 		this.period = period;
-		maxTimeInMilliseconds = 1000/20/2; // half a tick...
-		minTimeInMilliseconds = 1000/20/5; // fifth of a tick
 		todo = new ArrayDeque<Struct>();
 		taskId=-1;
+	}
+	public GenerationController(int initialBlocksPerPeriod, 
+			Plugin plugin, int period){
+		this(initialBlocksPerPeriod, plugin, period, 1000/20/5, 1000/20/2);
 	}
 	
 	public void startGenerating(){

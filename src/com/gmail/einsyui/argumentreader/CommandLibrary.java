@@ -19,7 +19,6 @@ public class CommandLibrary {
 	public CommandLibrary(Main plugin){
 		commandTable = new HashMap<String, Command>();
 		context = new HashMapContext(plugin);
-		context.setCommandLibrary(this);
 		addCommand(new HelpCommand()); // always help
 	}
 	

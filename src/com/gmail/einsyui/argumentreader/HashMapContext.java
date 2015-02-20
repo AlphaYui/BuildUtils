@@ -76,14 +76,4 @@ public class HashMapContext implements Context {
 	public Main getPlugin() {
 		return plugin;
 	}
-
-	@Override
-	public CommandLibrary getCommandLibrary() {
-		return cl;
-	}
-
-	@Override
-	public void setCommandLibrary(CommandLibrary cl) {
-		this.cl=cl;
-	}
 }

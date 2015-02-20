@@ -12,14 +12,16 @@ public class GenerationController implements Runnable {
 	Plugin plugin; 
 	int period;
 	int taskId;
-	int maxTimeInMilliseconds;
-	int minTimeInMilliseconds;
+	int maxTimeInNanoseconds;
+	int minTimeInNanoseconds;
 	int maxBlocksPerPeriod;
 	public GenerationController(int initialBlocksPerPeriod, 
-			Plugin plugin, int period, int minTimeMS, int maxTimeMS,
+			Plugin plugin, int period, int minTimeNS, int maxTimeNS,
 			int maxBlocksPerPeriod){
 		this.blocksPerPeriod = initialBlocksPerPeriod;
 		this.maxBlocksPerPeriod=maxBlocksPerPeriod;
+		this.minTimeInNanoseconds=minTimeNS;
+		this.maxTimeInNanoseconds=maxTimeNS;
 		this.plugin = plugin;
 		this.period = period;
 		todo = new ArrayDeque<Struct>();
@@ -27,8 +29,10 @@ public class GenerationController implements Runnable {
 	}
 	public GenerationController(int initialBlocksPerPeriod, 
 			Plugin plugin, int period){
-		this(initialBlocksPerPeriod, plugin, period, 1000/20/5, 1000/20/2,
-				2000);
+		this(initialBlocksPerPeriod, plugin, period, 
+				1000000000/20/4, // fourth of a tick 
+				1000000000/20/2, // half a tick
+				2000); // 2000 blocks
 	}
 	
 	public void startGenerating(){
@@ -83,11 +87,14 @@ public class GenerationController implements Runnable {
 		}
 		long time = ((System.nanoTime()-startTime));
 		if(time==0) time=1;
-		if(time >= 1000000*maxTimeInMilliseconds){
-			blocksPerPeriod=(int) (((blocksPerPeriod*1000000*maxTimeInMilliseconds)
+		if(time > maxTimeInNanoseconds){
+			blocksPerPeriod=(int) (((blocksPerPeriod*maxTimeInNanoseconds)
 					/time)-1);
-		}else if(time < 1000000*minTimeInMilliseconds){
-			blocksPerPeriod=(int) (((blocksPerPeriod*1000000*minTimeInMilliseconds)
+			if(blocksPerPeriod<=0){ 
+				blocksPerPeriod=1;
+			}
+		}else if(time < minTimeInNanoseconds){
+			blocksPerPeriod=(int) (((blocksPerPeriod*minTimeInNanoseconds)
 					/time));
 			if(blocksPerPeriod>maxBlocksPerPeriod)
 				blocksPerPeriod=maxBlocksPerPeriod;

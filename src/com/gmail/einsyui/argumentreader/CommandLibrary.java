@@ -102,6 +102,29 @@ public class CommandLibrary {
 		else
 			return getCommandWithArgs(command.substring(0, i), command.substring(i+1));
 	}
+	public CommandWithLateArgs getCommandWithLateArgs(String name, String arguments){
+		if(name=="") name="help"; // default: help
+		
+		// lookup command name
+		if(!commandTable.containsKey(name.toLowerCase())){
+			unknownCommand(name); return null;
+		}
+		Command cmd = commandTable.get(name);
+		
+		// parse arguments
+		ArgumentReader ar = new ArgumentReader(arguments,this);
+		// execute command
+		return new CommandWithLateArgs(cmd, ar, context);
+	}
+	public CommandWithLateArgs getCommandWithLateArgs(String command){
+		if(command.replace(" ", "")=="") 
+			getCommandWithArgs("help",""); // default: help
+		int i = command.indexOf(' ');
+		if(i==-1)
+			return getCommandWithLateArgs(command, "");
+		else
+			return getCommandWithLateArgs(command.substring(0, i), command.substring(i+1));
+	}
 	public String execute(String command){
 		if(command.replace(" ", "")=="") return execute("help",""); // default: help
 		int i = command.indexOf(' ');

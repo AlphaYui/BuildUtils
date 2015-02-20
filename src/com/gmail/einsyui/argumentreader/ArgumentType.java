@@ -608,6 +608,25 @@ public interface ArgumentType {
 	public static final TCommand COMMAND = new TCommand();
 	
 	////-----------------------------------------------------------------
+	/// Commands with late-binding args
+	public static final class TLateCommand implements ArgumentType{
+		@Override
+		public CommandWithLateArgs readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			ar.deactivateSubcommands();
+			String cmdstr=STRING_IN_SQUARE_BRACKETS.readAndValidateFrom(ar, context);
+			ar.activateSubcommands();
+			return ar.getSubcommandLibrary().getCommandWithLateArgs(cmdstr);
+		}
+		@Override
+		public String name() {
+			return "command in []";
+		}
+	};
+	public static final TLateCommand LATE_COMMAND = new TLateCommand();
+	
+	
+	////-----------------------------------------------------------------
 	////-----------------------------------------------------------------
 	/// Type Combinators
 	

@@ -51,6 +51,7 @@ public class VarCommand implements Command {
 				by=1;
 			}
 			String oldval = (String) ctx.get(varname);
+			if(oldval==null) oldval="";
 			int oldval_i;
 			try {
 				oldval_i = ArgumentType.INTEGER

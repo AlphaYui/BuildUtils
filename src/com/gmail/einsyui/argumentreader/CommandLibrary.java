@@ -111,10 +111,8 @@ public class CommandLibrary {
 		}
 		Command cmd = commandTable.get(name);
 		
-		// parse arguments
-		ArgumentReader ar = new ArgumentReader(arguments,this);
 		// execute command
-		return new CommandWithLateArgs(cmd, ar, context);
+		return new CommandWithLateArgs(cmd, arguments, context, this);
 	}
 	public CommandWithLateArgs getCommandWithLateArgs(String command){
 		if(command.replace(" ", "")=="") 

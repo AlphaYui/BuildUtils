@@ -79,5 +79,9 @@ public class GenerationController implements Runnable {
 	public int remainingStructs() {
 		return todo.size();
 	}
+	
+	public void clearAll() {
+		todo.clear();
+	}
 
 }

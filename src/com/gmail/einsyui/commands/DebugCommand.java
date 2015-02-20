@@ -30,6 +30,20 @@ public class DebugCommand implements Command {
 		boolean set = args.containsKey("setTo");
 		ArgumentReader valuereader=null;
 		Main plugin = ctx.getPlugin();
+		
+		if(key!=null && ctx.getSender().isOp()){
+			if(key.equalsIgnoreCase("stop")){
+				key="generating"; set=true; args.put("setTo", "-");
+			}
+			if(key.equalsIgnoreCase("start")){
+				key="generating"; set=true; args.put("setTo", "+");
+			}
+			if(key.equalsIgnoreCase("clearall")){
+				plugin.generationController.clearAll();
+				return "";
+			}
+		}
+		
 		if(set){
 			if(!ctx.getSender().isOp()){
 				ctx.printLn("setting with debug is only available for ops");

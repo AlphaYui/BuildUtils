@@ -30,16 +30,18 @@ public class VarCommand implements Command {
 			ctx.printLn(ChatColor.RED+"me is not allowed as a varname");
 			return "";
 		}
-		if(cmd=="read"){
-			String val = ctx.get(varname).toString();
+		if(cmd.equals("read")){
+			Object val_o = ctx.get(varname);
+			if(val_o==null) val_o=0;
+			String val=val_o.toString();
 			ctx.printLn(varname+" = "+val);
 			return val; //TODO: better solution...
-		}else if(cmd=="set"){
+		}else if(cmd.equals("set")){
 			String val = (String) args.get("value");
 			ctx.set(varname, val);
 			ctx.printLn("Set "+varname+" to "+val);
-		}else if(cmd=="incr"){
-			String by_v = (String) Argument.getWithDefault(args, "value", 1);
+		}else if(cmd.equals("incr")){
+			String by_v = (String) Argument.getWithDefault(args, "value", "1");
 			ArgumentReader ar = new ArgumentReader (by_v, null);
 			ar.tryExpect("incr"); ar.skipWhitespace();
 			int by=1;

@@ -269,16 +269,16 @@ public class ArgumentReader {
 		int pos=position; // save current position for later use
 		
 		String subcmd;
+		replaceSubcommands=false;
 		if(tryExpect('$')){
 			String varname = ArgumentType.IDENTIFIER.readAndValidateFrom(this, null);
 			subcmd="var read "+varname;
 		}else{
 			// read command and execute it
-			replaceSubcommands=false;
 			subcmd = ArgumentType.STRING_IN_SQUARE_BRACKETS
 						.readAndValidateFrom(this, null);
-			replaceSubcommands=true;
 		}
+		replaceSubcommands=true;
 		String value = subcommandLibrary.execute(subcmd);
 		
 		// replace in String (StringBuffer needed for replace by Index)

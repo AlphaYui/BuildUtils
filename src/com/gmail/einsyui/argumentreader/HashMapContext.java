@@ -22,6 +22,7 @@ public class HashMapContext implements Context {
 	
 	@Override
 	public Object get(String name) {
+		if(!values.containsKey(name)) return null;
 		return values.get(name).peek();
 	}
 

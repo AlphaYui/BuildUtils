@@ -701,7 +701,8 @@ public interface ArgumentType {
 			ar.expect(end, "at end of delimited list");
 			return res;
 		}
-		public String name(){return "list of ("+elementType.name()+")";}
+		public String name(){return "list of ("+elementType.name()+") in "
+				+start+"A"+delimiter+"..."+end;}
 	};
 	
 	////-----------------------------------------------------------------

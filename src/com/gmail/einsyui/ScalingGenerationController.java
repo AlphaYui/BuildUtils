@@ -15,7 +15,6 @@ public class ScalingGenerationController extends GenerationController {
 		this.maxBlocksPerPeriod=maxBlocksPerPeriod;
 		this.minTimeInNanoseconds=minTimeNS;
 		this.maxTimeInNanoseconds=maxTimeNS;
-		this.plugin = plugin;
 		todo = new ArrayDeque<Struct>();
 		taskId=-1;
 	}

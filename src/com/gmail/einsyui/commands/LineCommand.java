@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -34,6 +35,11 @@ public class LineCommand implements Command {
 				ctx.getPlugin().getStackFor(ctx.getSender()));
 		ObjectGen objectgen = (ObjectGen) args.get("with");
 		List<Location> l = ls.getLast(2);
+		if(l.contains(null)){
+			ctx.printLn(ChatColor.RED+"[E] "+ChatColor.YELLOW
+					+"line needs 2 points set via set");
+			return "";
+		}
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
 		Line line = new Line(l.get(0), l.get(1), objectgen);
 		ctx.getPlugin().generate(line);

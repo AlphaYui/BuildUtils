@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -34,6 +35,11 @@ public class PlaneCommand implements Command {
 				ctx.getPlugin().getStackFor(ctx.getSender()));
 		ObjectGen objectgen = (ObjectGen) args.get("with");
 		List<Location> l = ls.getLast(3);
+		if(l.contains(null)){
+			ctx.printLn(ChatColor.RED+"[E] "+ChatColor.YELLOW
+					+"plane needs 3 points to be set via set");
+			return "";
+		}
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
 		Plane plane = new Plane(l.get(2), l.get(1), l.get(0), objectgen);
 		ctx.getPlugin().generate(plane);

@@ -14,9 +14,12 @@ public class GenerationController implements Runnable {
 	int taskId;
 	int maxTimeInMilliseconds;
 	int minTimeInMilliseconds;
+	int maxBlocksPerPeriod;
 	public GenerationController(int initialBlocksPerPeriod, 
-			Plugin plugin, int period, int minTimeMS, int maxTimeMS){
+			Plugin plugin, int period, int minTimeMS, int maxTimeMS,
+			int maxBlocksPerPeriod){
 		this.blocksPerPeriod = initialBlocksPerPeriod;
+		this.maxBlocksPerPeriod=maxBlocksPerPeriod;
 		this.plugin = plugin;
 		this.period = period;
 		todo = new ArrayDeque<Struct>();
@@ -24,7 +27,8 @@ public class GenerationController implements Runnable {
 	}
 	public GenerationController(int initialBlocksPerPeriod, 
 			Plugin plugin, int period){
-		this(initialBlocksPerPeriod, plugin, period, 1000/20/5, 1000/20/2);
+		this(initialBlocksPerPeriod, plugin, period, 1000/20/5, 1000/20/2,
+				2000);
 	}
 	
 	public void startGenerating(){
@@ -85,6 +89,8 @@ public class GenerationController implements Runnable {
 		}else if(time < 1000000*minTimeInMilliseconds){
 			blocksPerPeriod=(int) (((blocksPerPeriod*1000000*minTimeInMilliseconds)
 					/time));
+			if(blocksPerPeriod>maxBlocksPerPeriod)
+				blocksPerPeriod=maxBlocksPerPeriod;
 		}
 	}
 

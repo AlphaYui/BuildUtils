@@ -8,10 +8,10 @@ import org.bukkit.ChatColor;
 
 import com.gmail.einsyui.buildutils.argumentreader.Argument;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader;
+import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.Command;
 import com.gmail.einsyui.buildutils.argumentreader.Context;
-import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 
 public class VarCommand implements Command {
 	@Override

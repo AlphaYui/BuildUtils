@@ -4,10 +4,10 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader;
+import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.BukkitArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.Context;
-import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
 
 public interface ObjectGen {

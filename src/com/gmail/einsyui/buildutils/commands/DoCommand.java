@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.gmail.einsyui.buildutils.argumentreader.Argument;
+import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentWithDefault;
 import com.gmail.einsyui.buildutils.argumentreader.Command;
 import com.gmail.einsyui.buildutils.argumentreader.CommandWithLateArgs;
 import com.gmail.einsyui.buildutils.argumentreader.Context;
-import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 
 public class DoCommand implements Command {
 

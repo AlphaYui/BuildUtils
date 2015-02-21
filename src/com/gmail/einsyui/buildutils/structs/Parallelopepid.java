@@ -6,12 +6,13 @@ import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.Struct;
 import com.gmail.einsyui.buildutils.geometry.BlockIndex;
 
-public class Plane implements Struct {
+public class Parallelopepid implements Struct {
 	BlockIndex index;
 	ObjectGen generator;
 	
-	public Plane(Location start, Location to1, Location to2, ObjectGen generator){
-		index = new BlockIndex(start, to1, to2);
+	public Parallelopepid(Location start, Location to1, Location to2, Location to3, 
+			ObjectGen generator){
+		index = new BlockIndex(start, to1, to2, to3);
 		this.generator = generator;
 	}
 	
@@ -29,5 +30,4 @@ public class Plane implements Struct {
 	public boolean isReady() {
 		return index.isAtMax();
 	}
-
 }

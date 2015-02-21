@@ -9,9 +9,9 @@ import org.bukkit.Material;
 
 import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.argumentreader.Argument;
+import com.gmail.einsyui.buildutils.argumentreader.ArgumentType.TConstructorArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.BukkitArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.Context;
-import com.gmail.einsyui.buildutils.argumentreader.ArgumentType.TConstructorArgumentType;
 
 public class MaterialGen implements ObjectGen {
 	Material material;

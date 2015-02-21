@@ -44,17 +44,17 @@ public class BlockIndex extends MultiIndex<Location> {
 
 	@Override
 	protected boolean isIndexAtMin(int i) {
-		return currents[i].dot(directions[i])<=0;
+		return currents[i].dot(directions[i])<0;
 	}
 
 	@Override
 	protected boolean isIndexAtMax(int i) {
-		return currents[i].dot(directions[i])>=maxs[i].dot(directions[i]);
+		return currents[i].dot(directions[i])>maxs[i].dot(directions[i]);
 	}
 
 	@Override
 	public Location get() {
-		Location res = start;
+		Location res = start.clone();
 		for(Vector current:currents)
 			res=res.add(current);
 		return res;

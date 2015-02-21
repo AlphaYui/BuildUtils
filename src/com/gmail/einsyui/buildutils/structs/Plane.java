@@ -26,7 +26,7 @@ public class Plane implements Struct {
 
 	@Override
 	public boolean isReady() {
-		return index.atEnd();
+		return index.isAtMax();
 	}
 
 }

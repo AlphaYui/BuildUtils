@@ -30,6 +30,9 @@ public class VarCommand implements Command {
 			ctx.printLn(ChatColor.RED+"me is not allowed as a varname");
 			return "";
 		}
+		if(varname.equalsIgnoreCase("res")){
+			varname="#"+ctx.getSender().getName()+"-r";
+		}
 		if(cmd.equals("read")){
 			Object val_o = ctx.get(varname);
 			if(val_o==null) val_o=0;

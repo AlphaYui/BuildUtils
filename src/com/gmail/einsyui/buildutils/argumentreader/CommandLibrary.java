@@ -70,7 +70,9 @@ public class CommandLibrary {
 		}
 		
 		// execute command
-		return cmd.execute(args, context);
+		String res = cmd.execute(args, context);
+		context.set("#"+context.getSender().getName()+"-r", res);
+		return res;
 	}
 	public CommandWithArgs getCommandWithArgs(String name, String arguments){
 		if(name=="") name="help"; // default: help

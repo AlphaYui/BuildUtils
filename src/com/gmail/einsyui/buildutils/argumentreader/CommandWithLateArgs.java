@@ -14,7 +14,9 @@ public class CommandWithLateArgs {
 		this.subcommandLibrary=subcommandLibrary;
 	}
 	public String execute() throws ArgumentException{
-		return cmd.execute(new ArgumentReader(args, subcommandLibrary)
-				.readArguments(cmd.args(), context), context);
+		String res = cmd.execute(new ArgumentReader(args, subcommandLibrary)
+		.readArguments(cmd.args(), context), context);
+		context.set("#"+context.getSender().getName()+"-r", res);
+		return res;
 	}
 }

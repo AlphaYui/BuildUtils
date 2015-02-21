@@ -11,6 +11,8 @@ public class CommandWithArgs {
 		this.cmd=cmd; this.args=args; this.context=context;
 	}
 	public String execute(){
-		return cmd.execute(args, context);
+		String res = cmd.execute(args, context);
+		context.set("#"+context.getSender().getName()+"-r", res);
+		return res;
 	}
 }

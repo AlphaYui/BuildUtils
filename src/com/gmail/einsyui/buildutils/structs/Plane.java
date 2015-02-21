@@ -4,14 +4,14 @@ import org.bukkit.Location;
 
 import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.Struct;
-import com.gmail.einsyui.buildutils.geometry.BlockIndex2D;
+import com.gmail.einsyui.buildutils.geometry.BlockIndex;
 
 public class Plane implements Struct {
-	BlockIndex2D index;
+	BlockIndex index;
 	ObjectGen generator;
 	
 	public Plane(Location start, Location to1, Location to2, ObjectGen generator){
-		index = new BlockIndex2D(start, to1, to2);
+		index = new BlockIndex(start, to1, to2);
 		this.generator = generator;
 	}
 	

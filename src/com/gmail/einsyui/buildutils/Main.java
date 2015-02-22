@@ -24,6 +24,7 @@ import com.gmail.einsyui.buildutils.commands.SphereThroughCommand;
 import com.gmail.einsyui.buildutils.commands.VarCommand;
 import com.gmail.einsyui.buildutils.objectgens.EntitySpawnGen;
 import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
+import com.gmail.einsyui.buildutils.objectgens.SignGen;
 
 public class Main extends JavaPlugin{
 	
@@ -52,6 +53,7 @@ public class Main extends JavaPlugin{
 		
 		TObjectGen.register(MaterialGen.MATERIAL_GEN_AT);
 		TObjectGen.register(EntitySpawnGen.ENTITY_SPAWN_GEN_AT);
+		TObjectGen.register(SignGen.SIGN_GEN_AT);
 		
 		generationController = new ScalingGenerationController(10, this, 2);
 	}

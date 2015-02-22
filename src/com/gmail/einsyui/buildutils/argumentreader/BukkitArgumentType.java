@@ -1,6 +1,7 @@
 package com.gmail.einsyui.buildutils.argumentreader;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -61,7 +62,9 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.world.PortalCreateEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapCursor;
 import org.bukkit.map.MapView;
 import org.bukkit.material.CocoaPlant;
@@ -74,6 +77,7 @@ import org.bukkit.potion.PotionType;
 
 import com.gmail.einsyui.buildutils.LocationStack;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
+import com.gmail.einsyui.buildutils.argumentreader.ArgumentType.TConstructorArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType.TEnum;
 
 public class BukkitArgumentType {
@@ -299,4 +303,61 @@ public class BukkitArgumentType {
 		}
 	};
 	public static final TLocationStack LOCATION_STACK = new TLocationStack();
+	
+	////-----------------------------------------------------------------------
+	/// ItemStack
+	public static class TItemStack implements ArgumentType{
+		@Override
+		public String name() {
+			return "item stack";
+		}
+		@Override
+		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			Material m = (Material) MATERIAL.readAndValidateFrom(ar, context);
+			int amount=1;
+			if(ar.tryExpect('<')){
+				amount = INTEGER.readAndValidateFrom(ar, context);
+				ar.expect('>', "after amount");
+			}
+			return new ItemStack(m, amount);
+		}
+	};
+	public static final TItemStack ITEM_STACK = new TItemStack();
+	
+	////-----------------------------------------------------------------------
+	/// Inventory
+	public static class TInventory extends TConstructorArgumentType{
+		@Override
+		public String name() {
+			return "inventory";
+		}
+
+		@Override
+		public List<Argument> args() {
+			return Arrays.asList(
+					new Argument("holder", IDENTIFIER),
+					new Argument("type", INVENTORY_TYPE),
+					new Argument("size", INTEGER),
+					new Argument("title", STRING)
+					);
+		}
+
+		@Override
+		public Object construct(Map<String, Object> args, Context ctx) {
+			InventoryHolder owner = (InventoryHolder) 
+					Argument.getWithDefault(args, "holder", ctx.getSender());
+			if(args.containsKey("type")){
+				return Bukkit.createInventory(
+						owner,
+						(InventoryType) args.get("type"));
+			}else{
+				return Bukkit.createInventory(owner, 
+						(Integer) Argument.getWithDefault(args, "size", 1),
+						(String) Argument.getWithDefault(args, "title", "Inventory"));
+			}
+		}	
+	};
+	public static final TInventory INVENTORY = new TInventory();
+	
 };

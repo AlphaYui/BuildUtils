@@ -17,6 +17,9 @@ public class Utils {
 		direction = direction.normalize();
 		return direction.dot(v);
 	}
+	public static Vector getAnOrthogonalVector(Vector v){
+		return v.clone().add(ex).crossProduct(v).normalize();
+	}
 	
 	public static final Vector ex=new Vector(1,0,0);
 	public static final Vector ey=new Vector(0,1,0);

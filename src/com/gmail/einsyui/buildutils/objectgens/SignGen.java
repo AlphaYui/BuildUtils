@@ -14,6 +14,7 @@ import org.bukkit.block.BlockFace;
 import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.argumentreader.Argument;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
+import com.gmail.einsyui.buildutils.argumentreader.BukkitArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType.TConstructorArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.Context;
 
@@ -102,7 +103,7 @@ public class SignGen implements ObjectGen{
 		@Override
 		public List<Argument> args() {
 			return Arrays.asList( 	new Argument( "onWall", ArgumentType.BOOLEAN ),
-									new Argument( "orientation", ArgumentType.STRING ),
+									new Argument( "orientation", BukkitArgumentType.BLOCK_FACE),
 									new Argument( "line1", ArgumentType.STRING ),
 									new Argument( "line2", ArgumentType.STRING ),
 									new Argument( "line3", ArgumentType.STRING ),
@@ -113,7 +114,7 @@ public class SignGen implements ObjectGen{
 		public Object construct(Map<String, Object> args, Context ctx) {
 			
 			boolean wallSign = (boolean) Argument.getWithDefault( args, "onWall", true );
-			String orientation = (String) Argument.getWithDefault( args, "orientation", -1 );
+			BlockFace orientation = (BlockFace) Argument.getWithDefault( args, "orientation", -1 );
 			
 			List<String> lines = new ArrayList<String>();
 			for( int i=0; i<4; ++i )
@@ -121,12 +122,12 @@ public class SignGen implements ObjectGen{
 				lines.add( (String) Argument.getWithDefault( args, "line"+i, "" ) );
 			}
 			
-			return new SignGen( wallSign, lines, BlockFace.valueOf( orientation.toUpperCase() ) );
+			return new SignGen( wallSign, lines, orientation);
 		}
 
 		@Override
 		public String description() {
-			return "Generates a sign. Syntax: sign<onWall(Boolean) orientation(string) line1-3(strings)>";
+			return "Generates a sign. Syntax: sign<onWall(Boolean) orientation(BlockFace) line1-3(strings)>";
 		}
 		
 	};

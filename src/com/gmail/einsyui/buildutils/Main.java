@@ -19,6 +19,7 @@ import com.gmail.einsyui.buildutils.commands.LineCommand;
 import com.gmail.einsyui.buildutils.commands.ParallelepipedCommand;
 import com.gmail.einsyui.buildutils.commands.ParallelogramCommand;
 import com.gmail.einsyui.buildutils.commands.SetCommand;
+import com.gmail.einsyui.buildutils.commands.SphereCommand;
 import com.gmail.einsyui.buildutils.commands.VarCommand;
 import com.gmail.einsyui.buildutils.objectgens.EntitySpawnGen;
 import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
@@ -41,6 +42,7 @@ public class Main extends JavaPlugin{
 		commands.addCommand( new ParallelogramCommand () );
 		commands.addCommand( new ParallelepipedCommand () );
 		commands.addCommand( new CuboidCommand () );
+		commands.addCommand( new SphereCommand () );
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());

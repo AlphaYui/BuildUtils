@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.buildutils.argumentreader.CommandLibrary;
+import com.gmail.einsyui.buildutils.commands.CuboidCommand;
 import com.gmail.einsyui.buildutils.commands.DebugCommand;
 import com.gmail.einsyui.buildutils.commands.DoCommand;
 import com.gmail.einsyui.buildutils.commands.LineCommand;
@@ -35,7 +36,8 @@ public class Main extends JavaPlugin{
 		commands.addCommand( new SetCommand( this ) );
 		commands.addCommand( new LineCommand () );
 		commands.addCommand( new ParallelogramCommand () );
-		commands.addCommand(new ParallelepipedCommand());
+		commands.addCommand( new ParallelepipedCommand () );
+		commands.addCommand( new CuboidCommand () );
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());

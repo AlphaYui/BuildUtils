@@ -774,7 +774,7 @@ public interface ArgumentType {
 				return subTypes.get(String.valueOf(c))
 						.readAndValidateFrom(ar, context);
 			}else{
-				String name = IDENTIFIER.readAndValidateFrom(ar, context);
+				String name = IDENTIFIER.readAndValidateFrom(ar, context).toLowerCase();
 				ArgumentType t = subTypes.get(name);
 				if(t!=null){
 					return t.readAndValidateFrom(ar, context);

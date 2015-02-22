@@ -10,6 +10,7 @@ import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.gmail.einsyui.buildutils.ObjectGen.TObjectGen;
 import com.gmail.einsyui.buildutils.argumentreader.CommandLibrary;
 import com.gmail.einsyui.buildutils.commands.CuboidCommand;
 import com.gmail.einsyui.buildutils.commands.DebugCommand;
@@ -19,6 +20,8 @@ import com.gmail.einsyui.buildutils.commands.ParallelepipedCommand;
 import com.gmail.einsyui.buildutils.commands.ParallelogramCommand;
 import com.gmail.einsyui.buildutils.commands.SetCommand;
 import com.gmail.einsyui.buildutils.commands.VarCommand;
+import com.gmail.einsyui.buildutils.objectgens.EntitySpawnGen;
+import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
 
 public class Main extends JavaPlugin{
 	
@@ -42,6 +45,9 @@ public class Main extends JavaPlugin{
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());
 		commands.addCommand(new VarCommand());
+		
+		TObjectGen.register(MaterialGen.MATERIAL_GEN_AT);
+		TObjectGen.register(EntitySpawnGen.ENTITY_SPAWN_GEN_AT);
 		
 		generationController = new ScalingGenerationController(10, this, 2);
 	}

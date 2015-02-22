@@ -17,16 +17,16 @@ import com.gmail.einsyui.buildutils.argumentreader.Context;
 import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
 import com.gmail.einsyui.buildutils.structs.Parallelepiped;
 
-public class ParallelepipedCommand implements Command {
+public class CuboidCommand implements Command {
 
 	@Override
 	public String name() {
-		return "parallelepiped";
+		return "cuboid";
 	}
 
 	@Override
 	public String description() {
-		return "Generates a paralellepiped";
+		return "Generates a grid-aligned cuboid";
 	}
 
 	@Override
@@ -34,15 +34,15 @@ public class ParallelepipedCommand implements Command {
 		LocationStack ls = (LocationStack) Argument.getWithDefault(args, "stack", 
 				ctx.getPlugin().getStackFor(ctx.getSender()));
 		ObjectGen objectgen = (ObjectGen) args.get("with");
-		List<Location> l = ls.getLast(4);
+		List<Location> l = ls.getLast(2);
 		if(l.contains(null)){
 			ctx.printLn(ChatColor.RED+"[E] "+ChatColor.YELLOW
-					+"parallelepiped needs 4 points to be set via set");
+					+"cuboid needs 2 points to be set via set");
 			return "";
 		}
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
-		Parallelepiped parallelopepid = new Parallelepiped(l.get(3), l.get(2), l.get(1), l.get(0), 
-				objectgen);
+		Parallelepiped parallelopepid = 
+				Parallelepiped.makeGridAlignedCuboid(l.get(0), l.get(1), objectgen);
 		ctx.getPlugin().generate(parallelopepid);
 		return "";
 	}

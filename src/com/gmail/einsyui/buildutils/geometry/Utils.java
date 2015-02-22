@@ -17,4 +17,8 @@ public class Utils {
 		direction = direction.normalize();
 		return direction.dot(v);
 	}
+	
+	public static Vector ex=new Vector(1,0,0);
+	public static Vector ey=new Vector(0,1,0);
+	public static Vector ez=new Vector(0,0,1);
 }

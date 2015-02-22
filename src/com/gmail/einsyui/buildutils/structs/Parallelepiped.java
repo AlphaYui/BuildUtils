@@ -1,10 +1,12 @@
 package com.gmail.einsyui.buildutils.structs;
 
 import org.bukkit.Location;
+import org.bukkit.util.Vector;
 
 import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.Struct;
 import com.gmail.einsyui.buildutils.geometry.BlockIndex;
+import com.gmail.einsyui.buildutils.geometry.Utils;
 
 public class Parallelepiped implements Struct {
 	BlockIndex index;
@@ -14,6 +16,16 @@ public class Parallelepiped implements Struct {
 			ObjectGen generator){
 		index = new BlockIndex(start, to1, to2, to3);
 		this.generator = generator;
+	}
+	
+	public static Parallelepiped makeGridAlignedCuboid(Location a, Location b,
+			ObjectGen generator){
+		Vector d=b.subtract(a).toVector();
+		return new Parallelepiped(a,
+				a.add(Utils.getComponentInDirection(Utils.ex, d)),
+				a.add(Utils.getComponentInDirection(Utils.ey, d)),
+				a.add(Utils.getComponentInDirection(Utils.ez, d)),
+				generator);
 	}
 	
 	@Override

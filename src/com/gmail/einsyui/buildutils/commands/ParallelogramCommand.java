@@ -37,7 +37,7 @@ public class ParallelogramCommand implements Command {
 		List<Location> l = ls.getLast(3);
 		if(l.contains(null)){
 			ctx.printLn(ChatColor.RED+"[E] "+ChatColor.YELLOW
-					+"plane needs 3 points to be set via set");
+					+"parallelogram needs 3 points to be set via set");
 			return "";
 		}
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);

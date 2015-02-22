@@ -19,6 +19,8 @@ import com.gmail.einsyui.buildutils.argumentreader.Context;
 
 public class SignGen implements ObjectGen{
 
+	public final static TSignGen SIGN_GEN_AT = new TSignGen();
+	
 	String[] lines;
 	boolean isWallSign;
 	BlockFace faceDirection;

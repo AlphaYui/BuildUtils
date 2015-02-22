@@ -33,6 +33,14 @@ public class BlockIndex extends MultiIndex<Location> {
 			currents[i]=new Vector(0,0,0);
 		}
 	}
+	
+	public static BlockIndex forCuboid(Location a, Location b){
+		Vector d=b.subtract(a).toVector();
+		return new BlockIndex(a,
+				Utils.getComponentInDirection(d, Utils.ex),
+				Utils.getComponentInDirection(d, Utils.ey),
+				Utils.getComponentInDirection(d, Utils.ez));
+	}
 
 	@Override
 	protected void incIndex(int i) {

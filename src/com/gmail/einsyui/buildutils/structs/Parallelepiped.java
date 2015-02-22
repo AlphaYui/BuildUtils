@@ -28,9 +28,9 @@ public class Parallelepiped implements Struct {
 			ObjectGen generator){
 		Vector d=b.subtract(a).toVector();
 		return new Parallelepiped(a,
-				Utils.ex.multiply(d.getBlockX()),
-				Utils.ey.multiply(d.getBlockY()),
-				Utils.ez.multiply(d.getBlockZ()),
+				Utils.getComponentInDirection(d, Utils.ex),
+				Utils.getComponentInDirection(d, Utils.ey),
+				Utils.getComponentInDirection(d, Utils.ez),
 				generator);
 	}
 	

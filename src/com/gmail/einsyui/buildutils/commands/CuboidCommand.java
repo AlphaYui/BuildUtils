@@ -41,9 +41,9 @@ public class CuboidCommand implements Command {
 			return "";
 		}
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
-		Parallelepiped parallelopepid = 
+		Parallelepiped cuboid = 
 				Parallelepiped.makeGridAlignedCuboid(l.get(0), l.get(1), objectgen);
-		ctx.getPlugin().generate(parallelopepid);
+		ctx.getPlugin().generate(cuboid);
 		return "";
 	}
 

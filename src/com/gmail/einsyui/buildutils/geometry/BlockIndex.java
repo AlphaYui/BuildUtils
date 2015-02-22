@@ -21,6 +21,18 @@ public class BlockIndex extends MultiIndex<Location> {
 			currents[i]=new Vector(0,0,0);
 		}
 	}
+	public BlockIndex(Location start, Vector...directions) {
+		super(directions.length);
+		this.start=start;
+		this.maxs=new Vector[directions.length];
+		this.currents=new Vector[directions.length];
+		this.directions=new Vector[directions.length];
+		for(int i=0;i<directions.length;i++){
+			maxs[i]=directions[i].clone();
+			this.directions[i]=maxs[i].clone().normalize();
+			currents[i]=new Vector(0,0,0);
+		}
+	}
 
 	@Override
 	protected void incIndex(int i) {

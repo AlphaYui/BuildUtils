@@ -17,14 +17,20 @@ public class Parallelepiped implements Struct {
 		index = new BlockIndex(start, to1, to2, to3);
 		this.generator = generator;
 	}
+	public Parallelepiped(Location start, Vector to1, Vector to2, Vector to3, 
+			ObjectGen generator){
+		System.out.println(""+start+","+to1+","+to2+","+to3);
+		index = new BlockIndex(start, to1, to2, to3);
+		this.generator = generator;
+	}
 	
 	public static Parallelepiped makeGridAlignedCuboid(Location a, Location b,
 			ObjectGen generator){
 		Vector d=b.subtract(a).toVector();
 		return new Parallelepiped(a,
-				a.add(Utils.getComponentInDirection(Utils.ex, d)),
-				a.add(Utils.getComponentInDirection(Utils.ey, d)),
-				a.add(Utils.getComponentInDirection(Utils.ez, d)),
+				Utils.ex.multiply(d.getBlockX()),
+				Utils.ey.multiply(d.getBlockY()),
+				Utils.ez.multiply(d.getBlockZ()),
 				generator);
 	}
 	

@@ -101,7 +101,12 @@ public class BukkitArgumentType {
 
 		@Override
 		public String name() {
-			return "online player";
+			return "onlinePlayer";
+		}
+
+		@Override
+		public String description() {
+			return "A player that is currently online, by name";
 		}
 	};
 	public static final TPlayer PLAYER = new TPlayer();
@@ -123,7 +128,12 @@ public class BukkitArgumentType {
 
 		@Override
 		public String name() {
-			return "offine player";
+			return "player";
+		}
+
+		@Override
+		public String description() {
+			return "A player, by name";
 		}
 	};
 	public static final TOfflinePlayer OFFLINE_PLAYER = new TOfflinePlayer();
@@ -151,6 +161,10 @@ public class BukkitArgumentType {
 		@Override
 		public String name() {
 			return "world";
+		}
+		@Override
+		public String description() {
+			return "A world, by UUID or name";
 		}
 	};
 	public static final TWorld WORLD = new TWorld();
@@ -202,6 +216,10 @@ public class BukkitArgumentType {
 		@Override
 		public String name() {
 			return "Location";
+		}
+		@Override
+		public String description() {
+			return "A location in the syntax (world x y z yaw pitch) - command-like";
 		}
 	};
 	public static final TLocation LOCATION = new TLocation();
@@ -301,6 +319,10 @@ public class BukkitArgumentType {
 		public String name() {
 			return "location stack";
 		}
+		@Override
+		public String description() {
+			return "The name of a location stack";
+		}
 	};
 	public static final TLocationStack LOCATION_STACK = new TLocationStack();
 	
@@ -321,6 +343,10 @@ public class BukkitArgumentType {
 				ar.expect('>', "after amount");
 			}
 			return new ItemStack(m, amount);
+		}
+		@Override
+		public String description() {
+			return "An item stack, syntax: material OR material<amount>";
 		}
 	};
 	public static final TItemStack ITEM_STACK = new TItemStack();
@@ -356,6 +382,11 @@ public class BukkitArgumentType {
 						(Integer) Argument.getWithDefault(args, "size", 1),
 						(String) Argument.getWithDefault(args, "title", "Inventory"));
 			}
+		}
+
+		@Override
+		public String description() {
+			return "An inventory, syntax: <holder type size title> - command-like";
 		}	
 	};
 	public static final TInventory INVENTORY = new TInventory();

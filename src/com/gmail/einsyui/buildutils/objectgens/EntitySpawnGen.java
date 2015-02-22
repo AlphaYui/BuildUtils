@@ -40,6 +40,10 @@ public class EntitySpawnGen implements ObjectGen {
 					(EntityType) Argument.getWithDefault(
 							args, "type", EntityType.PIG));
 		}
+		@Override
+		public String description() {
+			return "Spawns an entity. Syntax: spawn<ENTITY_TYPE>";
+		}
 	};
 
 }

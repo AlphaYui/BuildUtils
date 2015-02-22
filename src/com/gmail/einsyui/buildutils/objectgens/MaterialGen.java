@@ -40,6 +40,10 @@ public class MaterialGen implements ObjectGen {
 					(Material) Argument.getWithDefault(
 							args, "material", Material.AIR));
 		}
+		@Override
+		public String description() {
+			return "Material. Syntax: material<MATERIAL>";
+		}
 	};
 
 }

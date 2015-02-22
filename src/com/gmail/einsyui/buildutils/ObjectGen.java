@@ -34,6 +34,10 @@ public interface ObjectGen {
 		public String name() {
 			return "object generator";
 		}
+		@Override
+		public String description() {
+			return "An object generator";
+		}
 	};
 	public static final TObjectGen OBJECT_GEN = TObjectGen.SINGLETON;
 }

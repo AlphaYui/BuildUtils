@@ -14,10 +14,12 @@ import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.UnknownArgumen
 
 public class CommandLibrary {
 	public HashMap<String, Command> commandTable;
+	HashMap<String, ArgumentType> usedArgumentTypes;
 	public Context context;
 	
 	public CommandLibrary(Main plugin){
 		commandTable = new HashMap<String, Command>();
+		usedArgumentTypes = new HashMap<String, ArgumentType>();
 		context = new HashMapContext(plugin);
 		addCommand(new HelpCommand()); // always help
 	}
@@ -161,6 +163,10 @@ public class CommandLibrary {
 	//// Adding commands
 	public void addCommand(Command cmd){
 		commandTable.put(cmd.name().toLowerCase(), cmd);
+		for(Argument arg:cmd.args()){
+			ArgumentType at = arg.type();
+			usedArgumentTypes.put(at.name(), at);
+		}
 	}
 
 	public void addCommands(Command...commands){

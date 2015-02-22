@@ -10,10 +10,9 @@ import java.util.UUID;
 
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 
-public interface ArgumentType {
+public interface ArgumentType  extends Describable{
 	public Object readAndValidateFrom(ArgumentReader ar, Context context) 
 			throws ArgumentException;
-	public String name();
 	
 	////-----------------------------------------------------------------
 	/// Numbers (in LOCALE-SPECIFIC Format)
@@ -38,7 +37,11 @@ public interface ArgumentType {
 			ar.setPosition(pp.getIndex());
 			return n;
 		}
-		public String name(){return "Locale specific number";}
+		public String name(){return "locale_specific_number";}
+		@Override
+		public String description() {
+			return "A"+(integer?"n integer":" decimal number")+" in a locale specific format";
+		}
 	};
 	public static final TLocaleSpecificNumber LS_NUMBER 
 		= new TLocaleSpecificNumber(false);
@@ -63,6 +66,10 @@ public interface ArgumentType {
 			return res.toString();
 		}
 		public String name(){return "Identifier";}
+		@Override
+		public String description() {
+			return "a valid java identifier (also class etc)";
+		}
 	};
 	public final static TIdentifier IDENTIFIER = new TIdentifier();
 	
@@ -101,6 +108,10 @@ public interface ArgumentType {
 			return null;
 		}
 		public String name(){return "Boolean";}
+		@Override
+		public String description() {
+			return "true (yes, +, 1) or false (no, -, 0)";
+		}
 	};
 	public final static TBoolean BOOLEAN = new TBoolean();
 	
@@ -122,7 +133,11 @@ public interface ArgumentType {
 				ar.syntaxError("Expected base "+radix+" digit, got '"+d+"'.");
 			return r;
 		}
-		public String name(){return "Base "+radix+" Digit";}
+		public String name(){return "Base"+radix+"Digit";}
+		@Override
+		public String description() {
+			return "A digit of the base "+radix+" number system";
+		}
 	};
 	public final static TDigit OCTAL_DIGIT = new TDigit(8);
 	public final static TDigit DECIMAL_DIGIT = new TDigit(10);
@@ -155,7 +170,11 @@ public interface ArgumentType {
 			if(c!='\0') ar.back();
 			return res*sign;
 		}
-		public String name(){return "Base "+radix+" integer";}
+		public String name(){return "Base"+radix+"integer";}
+		@Override
+		public String description() {
+			return "An integer in the base "+radix+" number system";
+		}
 	};
 	public final static TFixedRadixInteger BINARY_INTEGER
 		= new TFixedRadixInteger(2);
@@ -200,6 +219,11 @@ public interface ArgumentType {
 			return sign*(new TFixedRadixInteger(radix)).readAndValidateFrom(ar, context);
 		}
 		public String name(){return "integer";}
+		@Override
+		public String description() {
+			return "An integer. Allows Java-like 0x etc. An arbitrary base can be "
+					+"given using the syntax rBASErNUMBER.";
+		}
 	};
 	public final static TInteger INTEGER = new TInteger();
 	
@@ -220,7 +244,8 @@ public interface ArgumentType {
 				ar.syntaxError("Expected integer >="+min+", got "+res+".");
 			return res;
 		}
-		public String name(){return "integer ["+min+";"+max+"]";}
+		public String name(){return "integerFrom"+min+"To"+max;}
+		public String description(){ return "integer in ["+min+";"+max+"]"; }
 	};
 	
 	////-----------------------------------------------------------------
@@ -271,7 +296,12 @@ public interface ArgumentType {
 			
 			return sign*res;
 		}
-		public String name(){return "Base "+radix+" float";}
+		public String name(){return "Base"+radix+"Float";}
+		@Override
+		public String description() {
+			return "A floating point number in the base "+radix+" number system. "
+					+ "Scientific notation is allowed with e/x/*";
+		}
 	};
 	public static final TFixedRadixFloat BINARY_FLOAT
 		= new TFixedRadixFloat(2);
@@ -320,6 +350,13 @@ public interface ArgumentType {
 			return sign*(new TFixedRadixFloat(radix)).readAndValidateFrom(ar, context);
 		}
 		public String name(){return "float";}
+		@Override
+		public String description() {
+			return "A floating point number"
+					+ "Scientific notation is allowed with e/x/*. "
+					+"An arbitrary base can be "
+					+"given using the syntax rBASErNUMBER.";
+		}
 	};
 	public static final TFloat FLOAT = new TFloat('.');
 	
@@ -344,7 +381,10 @@ public interface ArgumentType {
 				ar.syntaxError("Expected float >="+min+", got "+res+".");
 			return res;
 		}
-		public String name(){return "float ["+min+";"+max+"]";}
+		public String name(){return "floatFrom"+min+"To"+max;}
+		public String description(){
+			return "A floating point number in ["+min+";"+max+"]";
+		}
 	};	
 	
 	////-----------------------------------------------------------------
@@ -396,7 +436,17 @@ public interface ArgumentType {
 			}
 			return res;
 		}
-		public String name(){return "Enum "+enumType.getName();}
+		public String name(){return enumType.getName();}
+		@Override
+		public String description() {
+			StringBuilder sb = new StringBuilder(
+					"A "+enumType.getName()+". One of: ");
+			for(Enum<?> e:enumType.getEnumConstants()){
+				sb.append(e.name());
+				sb.append(", ");
+			}
+			return sb.substring(0, sb.length()-2);
+		}
 	};
 	
 	////-----------------------------------------------------------------
@@ -408,6 +458,10 @@ public interface ArgumentType {
 			return sub.readAndValidateFrom(ar, context).byteValue();
 		}
 		public String name(){return "byte";}
+		@Override
+		public String description() {
+			return "A byte, i.e. an integer betweeen 0 and 255";
+		}
 	};
 	public static final TByte BYTE = new TByte();
 	
@@ -442,7 +496,11 @@ public interface ArgumentType {
 				ar.syntaxError("\""+name+"\" is not a valid value");
 			return map.get(name);
 		}
-		public String name(){return "custom enum";} //TODO: improve
+		public String name(){return "customEnum";} //TODO: improve
+		@Override
+		public String description() {
+			return "custom enum";
+		}
 	};
 	
 	////-----------------------------------------------------------------
@@ -465,6 +523,10 @@ public interface ArgumentType {
 			}
 		}
 		public String name(){return "Class";}
+		@Override
+		public String description() {
+			return "A java class name";
+		}
 	};
 	public static final TClass CLASS = new TClass();
 	
@@ -487,6 +549,10 @@ public interface ArgumentType {
 			}
 		}
 		public String name(){return "string";}
+		@Override
+		public String description() {
+			return "A string in \"\"";
+		}
 	};
 	public static final TString STRING = new TString();
 
@@ -524,6 +590,10 @@ public interface ArgumentType {
 		}
 		@Override
 		public String name() {
+			return "stringIn"+open+close;
+		}
+		@Override
+		public String description() {
 			return "string in "+open+close;
 		}
 	};
@@ -549,6 +619,10 @@ public interface ArgumentType {
 		@Override
 		public String name() {
 			return "raw";
+		}
+		@Override
+		public String description() {
+			return "the rest of the command line";
 		}
 	};
 	public static final TRestAsString REST_AS_RAW_STRING
@@ -586,6 +660,10 @@ public interface ArgumentType {
 		public String name() {
 			return "UUID";
 		}
+		@Override
+		public String description() {
+			return "a valid java UUID";
+		}
 	};
 	public static final TUUID JAVA_UUID = new TUUID();
 	
@@ -602,7 +680,11 @@ public interface ArgumentType {
 		}
 		@Override
 		public String name() {
-			return "command in []";
+			return "command";
+		}
+		@Override
+		public String description() {
+			return "A /bu command enclosed in []";
 		}
 	};
 	public static final TCommand COMMAND = new TCommand();
@@ -620,7 +702,11 @@ public interface ArgumentType {
 		}
 		@Override
 		public String name() {
-			return "command in []";
+			return "command";
+		}
+		@Override
+		public String description() {
+			return "A /bu command enclosed in []";
 		}
 	};
 	public static final TLateCommand LATE_COMMAND = new TLateCommand();
@@ -662,6 +748,15 @@ public interface ArgumentType {
 			}
 			return name.toString();
 		}
+		@Override
+		public String description() {
+			StringBuilder sb = new StringBuilder();
+			for(ArgumentType at:types){
+				sb.append(at.description());
+				sb.append(" OR ");
+			}
+			return sb.substring(0, sb.length()-4);
+		}
 	};
 	
 	////-----------------------------------------------------------------
@@ -701,15 +796,21 @@ public interface ArgumentType {
 			ar.expect(end, "at end of delimited list");
 			return res;
 		}
-		public String name(){return "list of ("+elementType.name()+") in "
+		public String name(){return "listOf("+elementType.name()+") in "
 				+start+"A"+delimiter+"..."+end;}
+		@Override
+		public String description() {
+			return "A list of "+elementType.name()+" elements in "
+					+start+delimiter+end+". Elements are: "
+					+elementType.description();
+		}
 	};
 	
 	////-----------------------------------------------------------------
 	/// Command arguments in brackets
 	public static class TCommandLikeArgumentsInBrackets implements ArgumentType{
 		List<Argument> args;
-		ArgumentType stringReader;
+		TStringInBalancedBrackets stringReader;
 		public TCommandLikeArgumentsInBrackets(char open, char close, 
 				List<Argument> args){
 			stringReader = new TStringInBalancedBrackets(open, close);
@@ -726,6 +827,19 @@ public interface ArgumentType {
 		@Override
 		public String name() {
 			return "";
+		}
+		@Override
+		public String description() {
+			StringBuilder sb = new StringBuilder();
+			sb.append(stringReader.open);
+			for(Argument arg:args){
+				sb.append(arg.name());
+				sb.append("(");
+				sb.append(arg.type().name());
+				sb.append(") ");
+			}
+			sb.append(stringReader.close);
+			return sb.toString();
 		}
 	};
 	////-----------------------------------------------------------------

@@ -37,7 +37,7 @@ public interface ArgumentType  extends Describable{
 			ar.setPosition(pp.getIndex());
 			return n;
 		}
-		public String name(){return "locale_specific_number";}
+		public String name(){return "locale specific number";}
 		@Override
 		public String description() {
 			return "A"+(integer?"n integer":" decimal number")+" in a locale specific format";
@@ -710,7 +710,6 @@ public interface ArgumentType  extends Describable{
 		}
 	};
 	public static final TLateCommand LATE_COMMAND = new TLateCommand();
-	
 	
 	////-----------------------------------------------------------------
 	////-----------------------------------------------------------------

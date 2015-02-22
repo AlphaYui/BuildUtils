@@ -191,8 +191,12 @@ public class CommandLibrary {
 				if(commandTable.containsKey(about)){
 					Command cmd = commandTable.get(about);
 					printLongDescription(cmd, ctx);
+				}else if(usedArgumentTypes.containsKey(about)){
+					ArgumentType at = usedArgumentTypes.get(about);
+					ctx.printLn("Argument Type "+about+":");
+					ctx.printLn(at.description());
 				}else{
-					ctx.printLn("command not found");
+					ctx.printLn("help topic not found");
 				}
 			}else{
 				for(Command cmd : commandTable.values()){
@@ -236,7 +240,9 @@ public class CommandLibrary {
 		@Override
 		public List<Argument> args() {
 			return Arrays.asList(
-					new Argument("about", ArgumentType.IDENTIFIER)
+					new Argument("about", 
+							new ArgumentType.TOr(ArgumentType.IDENTIFIER,
+									ArgumentType.STRING))
 					);
 		}
 		

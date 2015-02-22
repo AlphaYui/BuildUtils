@@ -123,6 +123,11 @@ public class SignGen implements ObjectGen{
 			
 			return new SignGen( wallSign, lines, BlockFace.valueOf( orientation.toUpperCase() ) );
 		}
+
+		@Override
+		public String description() {
+			return "Generates a sign. Syntax: sign<onWall(Boolean) orientation(string) line1-3(strings)>";
+		}
 		
 	};
 

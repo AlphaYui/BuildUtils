@@ -15,18 +15,18 @@ import com.gmail.einsyui.buildutils.argumentreader.BukkitArgumentType;
 import com.gmail.einsyui.buildutils.argumentreader.Command;
 import com.gmail.einsyui.buildutils.argumentreader.Context;
 import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
-import com.gmail.einsyui.buildutils.structs.Parallelopepid;
+import com.gmail.einsyui.buildutils.structs.Parallelogram;
 
-public class ParallelopepidCommand implements Command {
+public class ParallelogramCommand implements Command {
 
 	@Override
 	public String name() {
-		return "parallelopepid";
+		return "parallelogram";
 	}
 
 	@Override
 	public String description() {
-		return "Generates a paralellopepid";
+		return "Generates a parallelogram";
 	}
 
 	@Override
@@ -34,16 +34,15 @@ public class ParallelopepidCommand implements Command {
 		LocationStack ls = (LocationStack) Argument.getWithDefault(args, "stack", 
 				ctx.getPlugin().getStackFor(ctx.getSender()));
 		ObjectGen objectgen = (ObjectGen) args.get("with");
-		List<Location> l = ls.getLast(4);
+		List<Location> l = ls.getLast(3);
 		if(l.contains(null)){
 			ctx.printLn(ChatColor.RED+"[E] "+ChatColor.YELLOW
-					+"plane needs 4 points to be set via set");
+					+"plane needs 3 points to be set via set");
 			return "";
 		}
 		if(objectgen==null) objectgen = new MaterialGen(Material.AIR);
-		Parallelopepid parallelopepid = new Parallelopepid(l.get(3), l.get(2), l.get(1), l.get(0), 
-				objectgen);
-		ctx.getPlugin().generate(parallelopepid);
+		Parallelogram plane = new Parallelogram(l.get(2), l.get(1), l.get(0), objectgen);
+		ctx.getPlugin().generate(plane);
 		return "";
 	}
 

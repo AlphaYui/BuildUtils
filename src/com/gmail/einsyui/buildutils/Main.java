@@ -14,8 +14,8 @@ import com.gmail.einsyui.buildutils.argumentreader.CommandLibrary;
 import com.gmail.einsyui.buildutils.commands.DebugCommand;
 import com.gmail.einsyui.buildutils.commands.DoCommand;
 import com.gmail.einsyui.buildutils.commands.LineCommand;
-import com.gmail.einsyui.buildutils.commands.ParallelopepidCommand;
-import com.gmail.einsyui.buildutils.commands.PlaneCommand;
+import com.gmail.einsyui.buildutils.commands.ParallelepipedCommand;
+import com.gmail.einsyui.buildutils.commands.ParallelogramCommand;
 import com.gmail.einsyui.buildutils.commands.SetCommand;
 import com.gmail.einsyui.buildutils.commands.VarCommand;
 
@@ -34,8 +34,8 @@ public class Main extends JavaPlugin{
 		commands = new CommandLibrary(this);
 		commands.addCommand( new SetCommand( this ) );
 		commands.addCommand( new LineCommand () );
-		commands.addCommand( new PlaneCommand () );
-		commands.addCommand(new ParallelopepidCommand());
+		commands.addCommand( new ParallelogramCommand () );
+		commands.addCommand(new ParallelepipedCommand());
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());

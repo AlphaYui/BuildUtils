@@ -6,11 +6,11 @@ import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.Struct;
 import com.gmail.einsyui.buildutils.geometry.BlockIndex;
 
-public class Parallelopepid implements Struct {
+public class Parallelepiped implements Struct {
 	BlockIndex index;
 	ObjectGen generator;
 	
-	public Parallelopepid(Location start, Location to1, Location to2, Location to3, 
+	public Parallelepiped(Location start, Location to1, Location to2, Location to3, 
 			ObjectGen generator){
 		index = new BlockIndex(start, to1, to2, to3);
 		this.generator = generator;

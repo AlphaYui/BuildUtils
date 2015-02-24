@@ -25,6 +25,19 @@ public class Circle implements Struct {
 		this.fillGenerator=fillGenerator;
 		this.lineGenerator=lineGenerator;
 	}
+	public Circle(Location l1, Location l2, Location l3,
+			ObjectGen fillGenerator, ObjectGen lineGenerator){
+		this.center=l1.clone().add(l2).add(l3).multiply(1/3);
+		outerRadiusSquared = (int) Math.ceil(l1.distanceSquared(center));
+		innerRadiusSquared = (int) Math.pow(Math.sqrt(outerRadiusSquared)-1, 2); 
+		Vector v1=l1.toVector().subtract(center.toVector());
+		Vector v2=(l2.toVector().crossProduct(v1)).crossProduct(v1) //TODO: may be a problem for special cases?
+				.normalize().multiply(Math.sqrt(outerRadiusSquared));
+		index = new BlockIndex(center.clone().subtract(v1).subtract(v2),
+							v1.multiply(2), v2.multiply(2));
+		this.fillGenerator=fillGenerator;
+		this.lineGenerator=lineGenerator;
+	}
 
 	@Override
 	public void generate(int numberOfBlocks) {

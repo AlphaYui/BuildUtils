@@ -24,5 +24,5 @@ public interface Context {
 	
 	public Main getPlugin();
 	
-	public Map<String, Object> getDefaultParameters();
+	public Map<String, String> getDefaultParameters();
 }

@@ -13,13 +13,13 @@ public class HashMapContext implements Context {
 	// Default implementation for Context.
 
 	HashMap<String, Stack<Object>> values;
-	HashMap<CommandSender, HashMap<String, Object>> params;
+	HashMap<CommandSender, HashMap<String, String>> params;
 	Main plugin; CommandLibrary cl;
 	CommandSender cs;
 	
 	public HashMapContext(Main plugin){
 		values = new HashMap<String, Stack<Object>>();
-		params = new HashMap<CommandSender, HashMap<String, Object>>();
+		params = new HashMap<CommandSender, HashMap<String, String>>();
 		printCache = new StringBuilder();
 		this.plugin = plugin;
 	}
@@ -87,9 +87,9 @@ public class HashMapContext implements Context {
 	}
 
 	@Override
-	public Map<String, Object> getDefaultParameters() {
+	public Map<String, String> getDefaultParameters() {
 		if(!params.containsKey(cs))
-			params.put(cs, new HashMap<String, Object>());
+			params.put(cs, new HashMap<String, String>());
 		return params.get(cs);
 	}
 }

@@ -27,7 +27,7 @@ public class Circle implements Struct {
 	}
 	public Circle(Location l1, Location l2, Location l3,
 			ObjectGen fillGenerator, ObjectGen lineGenerator){
-		this.center=l1.clone().add(l2).add(l3).multiply(1/3);
+		this.center=l1.clone().add(l2).add(l3).multiply(1/3);  //TODO: won't work...
 		outerRadiusSquared = (int) Math.ceil(l1.distanceSquared(center));
 		innerRadiusSquared = (int) Math.pow(Math.sqrt(outerRadiusSquared)-1, 2); 
 		Vector v1=l1.toVector().subtract(center.toVector());

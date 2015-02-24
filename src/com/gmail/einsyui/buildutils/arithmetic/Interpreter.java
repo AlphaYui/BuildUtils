@@ -86,6 +86,10 @@ public class Interpreter{
 		res.addFn(new Cosinus());
 		res.addFn(new Tangens());
 		res.addFn(new Logarithm());
+		
+		res.atomType = new ArgumentType.TOr<Expression>(
+				new NumberExpression.TNumberExpression(),
+				new VariableExpression.TVariableExpression());
 		return res;
 	}
 

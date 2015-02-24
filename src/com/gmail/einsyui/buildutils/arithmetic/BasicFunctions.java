@@ -62,4 +62,44 @@ public class BasicFunctions {
 			return res;
 		}
 	};
+	public static class Sinus implements Function{
+		@Override
+		public String name() {
+			return "sin";
+		}
+		@Override
+		public Number evaluate(Number[] args) {
+			return Math.sin(args[0].doubleValue());
+		}
+	};
+	public static class Cosinus implements Function{
+		@Override
+		public String name() {
+			return "cos";
+		}
+		@Override
+		public Number evaluate(Number[] args) {
+			return Math.cos(args[0].doubleValue());
+		}
+	};
+	public static class Tangens implements Function{
+		@Override
+		public String name() {
+			return "tan";
+		}
+		@Override
+		public Number evaluate(Number[] args) {
+			return Math.tan(args[0].doubleValue());
+		}
+	};
+	public static class Logarithm implements Function{
+		@Override
+		public String name() {
+			return "ln";
+		}
+		@Override
+		public Number evaluate(Number[] args) {
+			return Math.log(args[0].doubleValue());
+		}
+	};
 }

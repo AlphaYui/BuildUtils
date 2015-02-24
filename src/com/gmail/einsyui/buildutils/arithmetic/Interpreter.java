@@ -8,11 +8,15 @@ import java.util.Map;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Cosinus;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Divide;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Logarithm;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Minus;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Multiply;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Plus;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Power;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Sinus;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Tangens;
 
 public class Interpreter{
 	public List<Function> ops = new ArrayList<Function>();
@@ -77,6 +81,15 @@ public class Interpreter{
 		res.ops.add(new Multiply());
 		res.ops.add(new Divide());
 		res.ops.add(new Power());
+		
+		res.addFn(new Sinus());
+		res.addFn(new Cosinus());
+		res.addFn(new Tangens());
+		res.addFn(new Logarithm());
 		return res;
+	}
+
+	private void addFn(Function fn) {
+		fns.put(fn.name(), fn);
 	}
 }

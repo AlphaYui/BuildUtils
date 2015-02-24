@@ -8,6 +8,11 @@ import java.util.Map;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Divide;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Minus;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Multiply;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Plus;
+import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Power;
 
 public class Interpreter{
 	public List<Function> ops = new ArrayList<Function>();
@@ -61,5 +66,17 @@ public class Interpreter{
 	
 	public Expression readExpression(ArgumentReader ar) throws ArgumentException{
 		return readOpExpression(ar, 0);
+	}
+	
+	public static Interpreter makeInterpreter(ArgumentType<? extends Expression> atom){
+		Interpreter res = new Interpreter();
+		res.atomType=atom;
+		res.open='('; res.close=')';
+		res.ops.add(new Plus());
+		res.ops.add(new Minus());
+		res.ops.add(new Multiply());
+		res.ops.add(new Divide());
+		res.ops.add(new Power());
+		return res;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentType;
+import com.gmail.einsyui.buildutils.argumentreader.Context;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Cosinus;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Divide;
 import com.gmail.einsyui.buildutils.arithmetic.BasicFunctions.Logarithm;
@@ -72,9 +73,8 @@ public class Interpreter{
 		return readOpExpression(ar, 0);
 	}
 	
-	public static Interpreter makeInterpreter(ArgumentType<? extends Expression> atom){
+	public static Interpreter makeDefaultInterpreter(){
 		Interpreter res = new Interpreter();
-		res.atomType=atom;
 		res.open='('; res.close=')';
 		res.ops.add(new Plus());
 		res.ops.add(new Minus());
@@ -96,4 +96,25 @@ public class Interpreter{
 	private void addFn(Function fn) {
 		fns.put(fn.name(), fn);
 	}
+	
+	public static Interpreter INTERPRETER = makeDefaultInterpreter();
+	
+	
+	public static class TArithmeticExpression implements ArgumentType<Expression>{
+		@Override
+		public String name() {
+			return "arithmetic expression";
+		}
+		@Override
+		public String description() {
+			return "a simple arithmetic expression";
+		}
+		@Override
+		public Expression readAndValidateFrom(ArgumentReader ar, Context context)
+				throws ArgumentException {
+			return INTERPRETER.readExpression(ar);
+		}
+	};
+	public static final TArithmeticExpression ARITHMETIC_EXPRESSION
+							= new TArithmeticExpression();
 }

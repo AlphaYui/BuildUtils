@@ -176,7 +176,7 @@ public class BukkitArgumentType {
 				throws ArgumentException {
 			if(ar.tryExpect("here")){
 				if(context!=null){
-					Object me = context.get("me");
+					Object me = context.getSender();
 					if(me instanceof Player){
 						return ((Player) me).getLocation();
 					}else if(me instanceof CommandBlock){

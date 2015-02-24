@@ -51,7 +51,7 @@ public class CommandLibrary {
 	}
 	
 	public void setCommandSender(CommandSender sender){
-		context.set("me", sender);
+		context.setSender(sender);
 	}
 	public String execute(String name, String arguments){
 		if(name=="") name="help"; // default: help

@@ -238,7 +238,10 @@ public class ArgumentReader {
 		while(argumentPosition<args.size()){
 			if(!res.containsKey(args.get(argumentPosition).name())){
 				Argument arg = args.get(argumentPosition);
-				if(arg instanceof AbstractArgumentWithDefault){
+				if(ctx.getDefaultParameters().containsKey(arg.name())){
+					Object v = ctx.getDefaultParameters().get(arg.name());
+					res.put(arg.name(), v); //TODO: add checks
+				}else if(arg instanceof AbstractArgumentWithDefault){
 					res.put(arg.name(), 
 							((ArgumentWithDefault) arg)
 							.defaultValue(ctx));

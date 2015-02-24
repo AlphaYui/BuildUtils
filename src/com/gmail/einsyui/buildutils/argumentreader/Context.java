@@ -1,6 +1,7 @@
 package com.gmail.einsyui.buildutils.argumentreader;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.bukkit.command.CommandSender;
 
@@ -19,6 +20,9 @@ public interface Context {
 	
 	public boolean amI(Class<?> type);
 	public CommandSender getSender();
+	public void setSender(CommandSender sender);
 	
 	public Main getPlugin();
+	
+	public Map<String, Object> getDefaultParameters();
 }

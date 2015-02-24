@@ -43,7 +43,7 @@ public class SetCommand implements Command{
 	@Override
 	public String execute(Map<String, Object> args, Context ctx) {
 		
-		CommandSender cs = (CommandSender) ctx.get( "me" );
+		CommandSender cs = ctx.getSender();
 
 		if( cs instanceof ConsoleCommandSender || cs instanceof RemoteConsoleCommandSender )
 			return executeForConsoles( args, ctx );
@@ -62,7 +62,7 @@ public class SetCommand implements Command{
 	
 	private String executeForConsoles( Map<String,Object> args, Context ctx )
 	{
-		CommandSender cs = (CommandSender) ctx.get( "me" );
+		CommandSender cs = ctx.getSender();
 		if( !args.containsKey( "x" ) || !args.containsKey( "y" ) || !args.containsKey( "z" ) || !args.containsKey( "world" ) )
 		{
 			cs.sendMessage( ChatColor.RED + "Illegal arguments! Using a console you need to enter all coordinates." );
@@ -84,7 +84,7 @@ public class SetCommand implements Command{
 	
 	private String executeForPlayers( Map<String,Object>args, Context ctx )
 	{
-		Player p = (Player)ctx.get( "me" );
+		Player p = (Player)ctx.getSender();
 		World w = (World) Argument.getWithDefault( args, "world", p.getWorld() );
 		
 		String groupName = (String) Argument.getWithDefault( args, "group", p.getName() );
@@ -100,7 +100,7 @@ public class SetCommand implements Command{
 	
 	private String executeForBlocks( Map<String,Object>args, Context ctx )
 	{
-		BlockCommandSender bcs = (BlockCommandSender)ctx.get( "me" );
+		BlockCommandSender bcs = (BlockCommandSender)ctx.getSender();
 		Block b = bcs.getBlock();
 		World w = (World) Argument.getWithDefault( args, "world", b.getWorld() );
 		

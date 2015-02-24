@@ -74,6 +74,7 @@ public class BlockIndex extends MultiIndex<Location> {
 
 	@Override
 	public Location get() {
+		if(isAtMax() || isAtMin()) return null;
 		Location res = start.clone();
 		for(Vector current:currents)
 			res=res.add(current);

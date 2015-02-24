@@ -239,8 +239,9 @@ public class ArgumentReader {
 			if(!res.containsKey(args.get(argumentPosition).name())){
 				Argument arg = args.get(argumentPosition);
 				if(ctx.getDefaultParameters().containsKey(arg.name())){
-					Object v = ctx.getDefaultParameters().get(arg.name());
-					res.put(arg.name(), v); //TODO: add checks
+					String v = ctx.getDefaultParameters().get(arg.name());
+					res.put(arg.name(), arg.readAndValidateValueFrom(
+							new ArgumentReader(v, subcommandLibrary), ctx));
 				}else if(arg instanceof AbstractArgumentWithDefault){
 					res.put(arg.name(), 
 							((ArgumentWithDefault) arg)

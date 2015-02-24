@@ -85,7 +85,7 @@ public class BukkitArgumentType {
 	
 	////----------------------------------------------------------------------
 	/// Player
-	public static class TPlayer implements ArgumentType{
+	public static class TPlayer implements ArgumentType<Player>{
 		static final TOr Name = 
 				new TOr(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
 		@Override
@@ -112,7 +112,7 @@ public class BukkitArgumentType {
 	public static final TPlayer PLAYER = new TPlayer();
 	////----------------------------------------------------------------------
 	/// Offline Player
-	public static class TOfflinePlayer implements ArgumentType{
+	public static class TOfflinePlayer implements ArgumentType<OfflinePlayer>{
 		static final TOr Name = 
 				new TOr(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
 		@Override
@@ -139,7 +139,7 @@ public class BukkitArgumentType {
 	public static final TOfflinePlayer OFFLINE_PLAYER = new TOfflinePlayer();
 	////----------------------------------------------------------------------
 	/// World
-	public static class TWorld implements ArgumentType{
+	public static class TWorld implements ArgumentType<World>{
 		@Override
 		public World readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -170,9 +170,9 @@ public class BukkitArgumentType {
 	public static final TWorld WORLD = new TWorld();
 	////----------------------------------------------------------------------
 	/// Location
-	public static class TLocation implements ArgumentType{
+	public static class TLocation implements ArgumentType<Location>{
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+		public Location readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			if(ar.tryExpect("here")){
 				if(context!=null){
@@ -300,9 +300,9 @@ public class BukkitArgumentType {
 	
 	////-----------------------------------------------------------------------
 	/// Location stacks
-	public static class TLocationStack implements ArgumentType{
+	public static class TLocationStack implements ArgumentType<LocationStack>{
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+		public LocationStack readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			String name="";
 			if(ar.tryExpect('~')){
@@ -328,13 +328,13 @@ public class BukkitArgumentType {
 	
 	////-----------------------------------------------------------------------
 	/// ItemStack
-	public static class TItemStack implements ArgumentType{
+	public static class TItemStack implements ArgumentType<ItemStack>{
 		@Override
 		public String name() {
 			return "item stack";
 		}
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+		public ItemStack readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			Material m = (Material) MATERIAL.readAndValidateFrom(ar, context);
 			int amount=1;

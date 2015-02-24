@@ -10,13 +10,13 @@ import java.util.UUID;
 
 import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.ArgumentException;
 
-public interface ArgumentType  extends Describable{
-	public Object readAndValidateFrom(ArgumentReader ar, Context context) 
+public interface ArgumentType<ResultType> extends Describable{
+	public ResultType readAndValidateFrom(ArgumentReader ar, Context context) 
 			throws ArgumentException;
 	
 	////-----------------------------------------------------------------
 	/// Numbers (in LOCALE-SPECIFIC Format)
-	public static class TLocaleSpecificNumber implements ArgumentType{
+	public static class TLocaleSpecificNumber implements ArgumentType<Number>{
 		boolean integer;
 		public TLocaleSpecificNumber(boolean integer){ 
 			this.integer=integer; 
@@ -50,7 +50,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Identifiers (i.e.: valid Java identifiers as Strings)
-	public static class TIdentifier implements ArgumentType{
+	public static class TIdentifier implements ArgumentType<String>{
 		@Override
 		public String readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -76,11 +76,11 @@ public interface ArgumentType  extends Describable{
 	////-----------------------------------------------------------------
 	/// Flags
 	// to be inherited by Boolean-like, i.e. Flag (+/-) arg
-	public static interface TFlag extends ArgumentType{}; 
+	public static interface TFlag extends ArgumentType<Boolean>{}; 
 	
 	////-----------------------------------------------------------------
 	/// Booleans
-	public static class TBoolean implements ArgumentType, TFlag{
+	public static class TBoolean implements ArgumentType<Boolean>, TFlag{
 		@Override
 		public Boolean readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -118,7 +118,7 @@ public interface ArgumentType  extends Describable{
 
 	////-----------------------------------------------------------------
 	/// Digits
-	public static class TDigit implements ArgumentType{
+	public static class TDigit implements ArgumentType<Integer>{
 		int radix;
 		public TDigit(int radix){
 			assert radix<=Character.MAX_RADIX && radix>=Character.MIN_RADIX;
@@ -145,7 +145,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Fixed-radix Integers
-	public static class TFixedRadixInteger implements ArgumentType{
+	public static class TFixedRadixInteger implements ArgumentType<Integer>{
 		int radix;
 		public TFixedRadixInteger(int radix){
 			assert radix>=Character.MIN_RADIX && radix<=Character.MAX_RADIX;
@@ -187,7 +187,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Integers
-	public static class TInteger implements ArgumentType{
+	public static class TInteger implements ArgumentType<Integer>{
 		@Override
 		public Integer readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -250,7 +250,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Fixed-radix Floating point numbers
-	public static class TFixedRadixFloat implements ArgumentType{
+	public static class TFixedRadixFloat implements ArgumentType<Double>{
 		int radix; char dot;
 		public TFixedRadixFloat(int radix, char dot){
 			this.radix=radix; this.dot=dot;
@@ -314,7 +314,7 @@ public interface ArgumentType  extends Describable{
 
 	////-----------------------------------------------------------------
 	/// Floating point numbers
-	public static class TFloat implements ArgumentType{
+	public static class TFloat implements ArgumentType<Double>{
 		char dot;
 		public TFloat(char dot){
 			this.dot = dot;
@@ -389,7 +389,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Enums
-	public static class TEnum implements ArgumentType{
+	public static class TEnum implements ArgumentType<Enum<?>>{
 		@SuppressWarnings("rawtypes")
 		Class<? extends Enum> enumType;
 		public <T extends Enum<T>> TEnum(Class<T> enumClass){
@@ -451,7 +451,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Bytes
-	public static class TByte implements ArgumentType{
+	public static class TByte implements ArgumentType<Byte>{
 		static final TIntegerInRange sub = new TIntegerInRange(0,255); 
 		@Override
 		public Byte readAndValidateFrom(ArgumentReader ar, Context context) throws ArgumentException{
@@ -467,7 +467,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Custom Enum (HashMap based)
-	public static class TCustomEnum implements ArgumentType{
+	public static class TCustomEnum implements ArgumentType<Object>{
 		HashMap<String, Object> map; boolean caseSensitive;
 		public TCustomEnum(boolean caseSensitive){
 			map = new HashMap<String, Object>();
@@ -505,7 +505,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Classes
-	public static class TClass implements ArgumentType{
+	public static class TClass implements ArgumentType<Class<?>>{
 		@Override
 		public Class<?> readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -532,7 +532,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Strings (with "" - see also: TIdentifier)
-	public static class TString implements ArgumentType{
+	public static class TString implements ArgumentType<String>{
 		@Override
 		public String readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -558,7 +558,7 @@ public interface ArgumentType  extends Describable{
 
 	////-----------------------------------------------------------------
 	/// in Balanced Brackets
-	public static class TStringInBalancedBrackets implements ArgumentType{
+	public static class TStringInBalancedBrackets implements ArgumentType<String>{
 		char open, close; boolean skipWhitespace;
 		public TStringInBalancedBrackets(char openBracket, char closeBracket,
 				boolean skipWhitespace){
@@ -608,9 +608,9 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	// Rest as String
-	public static class TRestAsString implements ArgumentType{
+	public static class TRestAsString implements ArgumentType<String>{
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+		public String readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			String res=ar.getWholeArguments().substring(ar.position());
 			ar.setPosition(ar.getWholeArguments().length());
@@ -630,7 +630,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// UUIDs
-	public static class TUUID implements ArgumentType{
+	public static class TUUID implements ArgumentType<UUID>{
 		public static String readHexDigits(ArgumentReader ar, int n,
 				Context context) 
 				throws ArgumentException{
@@ -669,7 +669,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Commands
-	public static final class TCommand implements ArgumentType{
+	public static final class TCommand implements ArgumentType<CommandWithArgs>{
 		@Override
 		public CommandWithArgs readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -691,7 +691,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Commands with late-binding args
-	public static final class TLateCommand implements ArgumentType{
+	public static final class TLateCommand implements ArgumentType<CommandWithLateArgs>{
 		@Override
 		public CommandWithLateArgs readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -717,16 +717,16 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Or
-	public static class TOr implements ArgumentType{
-		ArgumentType[] types;
-		public TOr(ArgumentType...argumentTypes){
+	public static class TOr implements ArgumentType<Object>{
+		ArgumentType<?>[] types;
+		public TOr(ArgumentType<?>...argumentTypes){
 			types=argumentTypes;
 		}
 		@Override
 		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			int position = ar.position();
-			for(ArgumentType type:types){
+			for(ArgumentType<?> type:types){
 				try{
 					Object res = type.readAndValidateFrom(ar, context);
 					return res;
@@ -740,7 +740,7 @@ public interface ArgumentType  extends Describable{
 		public String name(){
 			StringBuilder name = new StringBuilder();
 			boolean firstTime=true;
-			for(ArgumentType type:types){
+			for(ArgumentType<?> type:types){
 				if(firstTime){ firstTime=false; }
 				else name.append(" | ");
 				name.append(type.name());
@@ -750,7 +750,7 @@ public interface ArgumentType  extends Describable{
 		@Override
 		public String description() {
 			StringBuilder sb = new StringBuilder();
-			for(ArgumentType at:types){
+			for(ArgumentType<?> at:types){
 				sb.append(at.description());
 				sb.append(" OR ");
 			}
@@ -760,25 +760,25 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Delimited Lists
-	public static class TDelimitedList implements ArgumentType{
+	public static class TDelimitedList implements ArgumentType<List<Object>>{
 		char start, delimiter, end;
 		boolean skipWhitespace;
-		ArgumentType elementType;
+		ArgumentType<?> elementType;
 		public TDelimitedList(char start, char delimiter, char end,
-				ArgumentType elementType,
+				ArgumentType<?> elementType,
 				boolean skipWhitespace){
 			this.start=start; this.delimiter=delimiter; this.end=end;
 			this.skipWhitespace=skipWhitespace;
 			this.elementType = elementType;
 		}
 		public TDelimitedList(char start, char delimiter, char end,
-				ArgumentType elementType){
+				ArgumentType<?> elementType){
 			this(start, delimiter, end, elementType, true);
 		}
-		public TDelimitedList(char start, char end, ArgumentType elementType){
+		public TDelimitedList(char start, char end, ArgumentType<?> elementType){
 			this(start, ',', end, elementType, true);
 		}
-		public TDelimitedList(ArgumentType elementType){
+		public TDelimitedList(ArgumentType<?> elementType){
 			this('(', ',', ')', elementType, true);
 		}
 		@Override
@@ -807,7 +807,7 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Command arguments in brackets
-	public static class TCommandLikeArgumentsInBrackets implements ArgumentType{
+	public static class TCommandLikeArgumentsInBrackets implements ArgumentType<Object>{
 		List<Argument> args;
 		TStringInBalancedBrackets stringReader;
 		public TCommandLikeArgumentsInBrackets(char open, char close, 
@@ -843,7 +843,7 @@ public interface ArgumentType  extends Describable{
 	};
 	////-----------------------------------------------------------------
 	/// Constructor argument
-	public static abstract class TConstructorArgumentType implements ArgumentType{
+	public static abstract class TConstructorArgumentType implements ArgumentType<Object>{
 		@Override
 		public Object readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -867,10 +867,10 @@ public interface ArgumentType  extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Dispatch argument type	
-	public static abstract class TDispatchArgumentType implements ArgumentType {
-		public Map<String, ArgumentType> subTypes;
+	public static abstract class TDispatchArgumentType implements ArgumentType<Object> {
+		public Map<String, ArgumentType<?>> subTypes;
 		public TDispatchArgumentType(){
-			subTypes = new HashMap<String, ArgumentType>();
+			subTypes = new HashMap<String, ArgumentType<?>>();
 		}
 		public Object readDefault(ArgumentReader ar, Context context) 
 				throws ArgumentException{
@@ -888,7 +888,7 @@ public interface ArgumentType  extends Describable{
 						.readAndValidateFrom(ar, context);
 			}else{
 				String name = IDENTIFIER.readAndValidateFrom(ar, context).toLowerCase();
-				ArgumentType t = subTypes.get(name);
+				ArgumentType<?> t = subTypes.get(name);
 				if(t!=null){
 					return t.readAndValidateFrom(ar, context);
 				}else{

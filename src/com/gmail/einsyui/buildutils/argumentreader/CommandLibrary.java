@@ -14,12 +14,12 @@ import com.gmail.einsyui.buildutils.argumentreader.ArgumentReader.UnknownArgumen
 
 public class CommandLibrary {
 	public HashMap<String, Command> commandTable;
-	HashMap<String, ArgumentType> usedArgumentTypes;
+	HashMap<String, ArgumentType<?>> usedArgumentTypes;
 	public Context context;
 	
 	public CommandLibrary(Main plugin){
 		commandTable = new HashMap<String, Command>();
-		usedArgumentTypes = new HashMap<String, ArgumentType>();
+		usedArgumentTypes = new HashMap<String, ArgumentType<?>>();
 		context = new HashMapContext(plugin);
 		addCommand(new HelpCommand()); // always help
 	}
@@ -164,7 +164,7 @@ public class CommandLibrary {
 	public void addCommand(Command cmd){
 		commandTable.put(cmd.name().toLowerCase(), cmd);
 		for(Argument arg:cmd.args()){
-			ArgumentType at = arg.type();
+			ArgumentType<?> at = arg.type();
 			usedArgumentTypes.put(at.name(), at);
 		}
 	}
@@ -192,7 +192,7 @@ public class CommandLibrary {
 					Command cmd = commandTable.get(about);
 					printLongDescription(cmd, ctx);
 				}else if(usedArgumentTypes.containsKey(about)){
-					ArgumentType at = usedArgumentTypes.get(about);
+					ArgumentType<?> at = usedArgumentTypes.get(about);
 					ctx.printLn("Argument Type "+about+":");
 					ctx.printLn(at.description());
 				}else{

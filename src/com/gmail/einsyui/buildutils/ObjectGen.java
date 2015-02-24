@@ -17,11 +17,11 @@ public interface ObjectGen {
 	////------------------------------------------------------------------------
 	public class TObjectGen extends ArgumentType.TDispatchArgumentType{
 		public static TObjectGen SINGLETON = new TObjectGen();
-		public static void register(ArgumentType objectGenArgumentType){
+		public static void register(ArgumentType<?> objectGenArgumentType){
 			SINGLETON.subTypes.put(objectGenArgumentType.name(), 
 									objectGenArgumentType);
 		}
-		public static void register(String name, ArgumentType objectGenArgumentType){
+		public static void register(String name, ArgumentType<?> objectGenArgumentType){
 			SINGLETON.subTypes.put(name, objectGenArgumentType);
 		}
 		@Override

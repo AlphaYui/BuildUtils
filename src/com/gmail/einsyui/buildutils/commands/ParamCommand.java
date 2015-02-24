@@ -35,6 +35,7 @@ public class ParamCommand implements Command {
 			return "";
 		}else{
 			String v = ctx.getDefaultParameters().get(name);
+			ctx.printLn(name + ":= "+v);
 			return v;
 		}
 	}

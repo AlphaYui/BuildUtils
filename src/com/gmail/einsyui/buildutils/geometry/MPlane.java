@@ -33,4 +33,7 @@ public class MPlane {
 	public double distance(Location l){
 		return Math.abs(getSignedDistance(l));
 	}
+	public Vector normal() {
+		return normal;
+	}
 }

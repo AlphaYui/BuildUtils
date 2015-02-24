@@ -6,6 +6,7 @@ import org.bukkit.util.Vector;
 import com.gmail.einsyui.buildutils.ObjectGen;
 import com.gmail.einsyui.buildutils.Struct;
 import com.gmail.einsyui.buildutils.geometry.BlockIndex;
+import com.gmail.einsyui.buildutils.geometry.CoordinatePlane;
 import com.gmail.einsyui.buildutils.geometry.Utils;
 
 public class Circle implements Struct {
@@ -27,11 +28,19 @@ public class Circle implements Struct {
 	}
 	public Circle(Location l1, Location l2, Location l3,
 			ObjectGen fillGenerator, ObjectGen lineGenerator){
-		this.center=l1.clone().add(l2).add(l3).multiply(1/3);  //TODO: won't work...
+		CoordinatePlane cp = new CoordinatePlane(l1, l2, l3);
+		double x2 = cp.getX(l2);
+		double y2 = cp.getY(l2);
+		double x3 = cp.getX(l3);
+		double y3 = cp.getY(l3);
+		double ym = -(x2*x2+y2*y2)*x3/x2 / (y2*x3/x2-y3)/2;
+		double xm = (-x3*x3-y3*y3 -y3*2*ym)/x3/2;
+		this.center=cp.fromXY(xm, ym);
+		
 		outerRadiusSquared = (int) Math.ceil(l1.distanceSquared(center));
 		innerRadiusSquared = (int) Math.pow(Math.sqrt(outerRadiusSquared)-1, 2); 
 		Vector v1=l1.toVector().subtract(center.toVector());
-		Vector v2=(l2.toVector().crossProduct(v1)).crossProduct(v1) //TODO: may be a problem for special cases?
+		Vector v2=cp.normal().clone().crossProduct(v1)
 				.normalize().multiply(Math.sqrt(outerRadiusSquared));
 		index = new BlockIndex(center.clone().subtract(v1).subtract(v2),
 							v1.multiply(2), v2.multiply(2));

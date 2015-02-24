@@ -2,6 +2,7 @@ package com.gmail.einsyui.buildutils.geometry;
 
 public abstract class MultiIndex<T> {
 	public final int dimensions;
+	boolean atMax, atMin;
 	
 	public MultiIndex(int dimensions){ 
 		this.dimensions=dimensions;
@@ -25,10 +26,14 @@ public abstract class MultiIndex<T> {
 	
 	public void increment(){
 		if(isAtMax()) return;
+		atMin=false;
 		int i=0;
 		incIndex(i);
 		while(isIndexAtMax(i)){
-			if(i>=dimensions) return;
+			if(i>=dimensions-1){
+				atMax=true;
+				return;
+			}
 			resetIndexToMin(i);
 			i++;
 			incIndex(i);
@@ -36,10 +41,14 @@ public abstract class MultiIndex<T> {
 	}
 	public void decrement(){
 		if(isAtMin()) return;
+		atMax=false;
 		int i=0;
 		decIndex(i);
 		while(isIndexAtMin(i)){
-			if(i>=dimensions) return;
+			if(i>=dimensions-1){
+				atMin=true;
+				return;
+			}
 			resetIndexToMax(i);
 			i++;
 			decIndex(i);
@@ -47,14 +56,10 @@ public abstract class MultiIndex<T> {
 	}
 	
 	public boolean isAtMin(){
-		for(int i=0;i<dimensions;i++)
-			if(!isIndexAtMin(i)) return false;
-		return true;
+		return atMin;
 	}
 	public boolean isAtMax(){
-		for(int i=0;i<dimensions;i++)
-			if(!isIndexAtMax(i)) return false;
-		return true;
+		return atMax;
 	}
 	
 	public void resetToMin(){

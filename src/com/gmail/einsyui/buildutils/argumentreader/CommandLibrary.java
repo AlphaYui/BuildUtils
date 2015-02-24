@@ -165,7 +165,7 @@ public class CommandLibrary {
 		commandTable.put(cmd.name().toLowerCase(), cmd);
 		for(Argument arg:cmd.args()){
 			ArgumentType<?> at = arg.type();
-			usedArgumentTypes.put(at.name(), at);
+			usedArgumentTypes.put(at.name().toLowerCase(), at);
 		}
 	}
 

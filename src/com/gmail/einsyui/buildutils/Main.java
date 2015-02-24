@@ -12,6 +12,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.einsyui.buildutils.ObjectGen.TObjectGen;
 import com.gmail.einsyui.buildutils.argumentreader.CommandLibrary;
+import com.gmail.einsyui.buildutils.commands.CircleCommand;
+import com.gmail.einsyui.buildutils.commands.CircleThroughCommand;
 import com.gmail.einsyui.buildutils.commands.CuboidCommand;
 import com.gmail.einsyui.buildutils.commands.DebugCommand;
 import com.gmail.einsyui.buildutils.commands.DoCommand;
@@ -46,6 +48,8 @@ public class Main extends JavaPlugin{
 		commands.addCommand( new CuboidCommand () );
 		commands.addCommand( new SphereCommand () );
 		commands.addCommand( new SphereThroughCommand () );
+		commands.addCommand( new CircleCommand () );
+		commands.addCommand( new CircleThroughCommand () );
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());

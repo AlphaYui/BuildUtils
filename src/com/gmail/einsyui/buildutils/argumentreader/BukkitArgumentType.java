@@ -86,8 +86,8 @@ public class BukkitArgumentType {
 	////----------------------------------------------------------------------
 	/// Player
 	public static class TPlayer implements ArgumentType<Player>{
-		static final TOr Name = 
-				new TOr(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
+		static final TOr<String> Name = 
+				new TOr<String>(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
 		@Override
 		public Player readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
@@ -113,8 +113,8 @@ public class BukkitArgumentType {
 	////----------------------------------------------------------------------
 	/// Offline Player
 	public static class TOfflinePlayer implements ArgumentType<OfflinePlayer>{
-		static final TOr Name = 
-				new TOr(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
+		static final TOr<String> Name = 
+				new TOr<String>(IDENTIFIER, STRING, STRING_IN_ANGLE_BRACKETS);
 		@Override
 		public OfflinePlayer readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {

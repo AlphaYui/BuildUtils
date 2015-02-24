@@ -717,18 +717,19 @@ public interface ArgumentType<ResultType> extends Describable{
 	
 	////-----------------------------------------------------------------
 	/// Or
-	public static class TOr implements ArgumentType<Object>{
-		ArgumentType<?>[] types;
-		public TOr(ArgumentType<?>...argumentTypes){
+	public static class TOr<ResultType> implements ArgumentType<ResultType>{
+		ArgumentType<? extends ResultType>[] types;
+		@SafeVarargs
+		public TOr(ArgumentType<? extends ResultType>...argumentTypes){
 			types=argumentTypes;
 		}
 		@Override
-		public Object readAndValidateFrom(ArgumentReader ar, Context context)
+		public ResultType readAndValidateFrom(ArgumentReader ar, Context context)
 				throws ArgumentException {
 			int position = ar.position();
-			for(ArgumentType<?> type:types){
+			for(ArgumentType<? extends ResultType> type:types){
 				try{
-					Object res = type.readAndValidateFrom(ar, context);
+					ResultType res = type.readAndValidateFrom(ar, context);
 					return res;
 				}catch(ArgumentException e){
 					ar.setPosition(position);

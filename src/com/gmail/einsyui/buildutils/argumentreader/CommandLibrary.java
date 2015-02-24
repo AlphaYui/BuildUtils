@@ -241,7 +241,7 @@ public class CommandLibrary {
 		public List<Argument> args() {
 			return Arrays.asList(
 					new Argument("about", 
-							new ArgumentType.TOr(ArgumentType.IDENTIFIER,
+							new ArgumentType.TOr<String>(ArgumentType.IDENTIFIER,
 									ArgumentType.STRING))
 					);
 		}

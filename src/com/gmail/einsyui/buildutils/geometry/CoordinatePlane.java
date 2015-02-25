@@ -14,8 +14,8 @@ public class CoordinatePlane extends MPlane {
 		ey = Utils.getComponentOrthogonalTo(y, ex).normalize();
 	}
 	public CoordinatePlane(Location origin, Location tox, Location toy){
-		this(origin, tox.subtract(origin).toVector(), 
-				toy.subtract(origin).toVector());
+		this(origin, tox.clone().subtract(origin).toVector(), 
+				toy.clone().subtract(origin).toVector());
 	}
 	public double getH(Location l){
 		return getSignedDistance(l);

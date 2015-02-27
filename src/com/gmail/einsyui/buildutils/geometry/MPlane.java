@@ -9,7 +9,7 @@ public class MPlane {
 	Vector normal;
 	
 	public MPlane(Location origin, Vector normal){
-		this.origin=origin; this.normal=normal;
+		this.origin=origin; this.normal=normal.normalize();
 	}
 	public MPlane(Location origin, Vector u, Vector v){
 		this.origin = origin;
@@ -20,10 +20,10 @@ public class MPlane {
 	}
 	
 	public Vector orthogonalProjection(Vector v){
-		return Utils.getComponentOrthogonalTo(v, normal);
+		return Utils.getComponentOrthogonalTo(v, normal.clone());
 	}
 	public Location getNearest(Location l){
-		return Utils.getComponentOrthogonalTo((l.subtract(origin).toVector()), normal)
+		return Utils.getComponentOrthogonalTo((l.subtract(origin).toVector()), normal.clone())
 				.toLocation(l.getWorld());
 	}
 	

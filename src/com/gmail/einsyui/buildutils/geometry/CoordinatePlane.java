@@ -9,9 +9,9 @@ public class CoordinatePlane extends MPlane {
 	Vector ex, ey;
 	
 	public CoordinatePlane(Location origin, Vector x, Vector y) {
-		super(origin, x, y);
-		ex = x.normalize();
-		ey = Utils.getComponentOrthogonalTo(y, ex).normalize();
+		super(origin, x.clone(), y.clone());
+		ex = x.clone().normalize();
+		ey = Utils.getComponentOrthogonalTo(y.clone(), ex).normalize();
 	}
 	public CoordinatePlane(Location origin, Location tox, Location toy){
 		this(origin, tox.clone().subtract(origin).toVector(), 
@@ -21,12 +21,12 @@ public class CoordinatePlane extends MPlane {
 		return getSignedDistance(l);
 	}
 	public double getX(Location l){
-		Location n=getNearest(l);
-		return Utils.getLengthInDirection(n.subtract(origin).toVector(), ex);
+		Vector v = orthogonalProjection(l.toVector().subtract(origin.toVector()));
+		return Utils.getLengthInDirection(v, ex);
 	}
 	public double getY(Location l){
-		Location n=getNearest(l);
-		return Utils.getLengthInDirection(n.subtract(origin).toVector(), ey);
+		Vector v = orthogonalProjection(l.toVector().subtract(origin.toVector()));
+		return Utils.getLengthInDirection(v, ey);
 	}
 	
 	public Location fromXY(double x, double y){

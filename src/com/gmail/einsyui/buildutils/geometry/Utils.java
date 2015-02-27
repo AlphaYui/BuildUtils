@@ -7,15 +7,15 @@ import org.bukkit.util.Vector;
 public class Utils {
 
 	public static Vector getComponentInDirection(Vector v, Vector direction){
-		direction = direction.normalize();
-		return direction.multiply(direction.dot(v));
+		Vector direction2 = direction.clone().normalize();
+		return direction2.multiply(direction2.dot(v));
 	}
 	public static Vector getComponentOrthogonalTo(Vector v, Vector normal){
-		return v.subtract(getComponentInDirection(v, normal));
+		return v.clone().subtract(getComponentInDirection(v, normal));
 	}
 	public static double getLengthInDirection(Vector v, Vector direction) {
-		direction = direction.normalize();
-		return direction.dot(v);
+		Vector direction2 = direction.clone().normalize();
+		return direction2.dot(v);
 	}
 	public static Vector getAnOrthogonalVector(Vector v){
 		return v.clone().add(ex).crossProduct(v).normalize();

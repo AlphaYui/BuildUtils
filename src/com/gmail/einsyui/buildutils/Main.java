@@ -24,6 +24,7 @@ import com.gmail.einsyui.buildutils.commands.ParamCommand;
 import com.gmail.einsyui.buildutils.commands.SetCommand;
 import com.gmail.einsyui.buildutils.commands.SphereCommand;
 import com.gmail.einsyui.buildutils.commands.SphereThroughCommand;
+import com.gmail.einsyui.buildutils.commands.TriangleCommand;
 import com.gmail.einsyui.buildutils.commands.VarCommand;
 import com.gmail.einsyui.buildutils.objectgens.EntitySpawnGen;
 import com.gmail.einsyui.buildutils.objectgens.MaterialGen;
@@ -51,6 +52,7 @@ public class Main extends JavaPlugin{
 		commands.addCommand( new SphereThroughCommand () );
 		commands.addCommand( new CircleCommand () );
 		commands.addCommand( new CircleThroughCommand () );
+		commands.addCommand( new TriangleCommand () );
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());

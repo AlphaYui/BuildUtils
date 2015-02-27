@@ -30,10 +30,10 @@ public class CoordinatePlane extends MPlane {
 	}
 	
 	public Location fromXY(double x, double y){
-		return origin.add(ex.multiply(x)).add(ey.multiply(y));
+		return origin.clone().add(ex.clone().multiply(x)).add(ey.clone().multiply(y));
 	}
 	public Location fromXYH(double x, double y, double h){
-		return origin.add(ex.multiply(x)).add(ey.multiply(y))
+		return origin.clone().add(ex.clone().multiply(x)).add(ey.clone().multiply(y))
 				.add(normal.normalize().multiply(h));
 	}
 

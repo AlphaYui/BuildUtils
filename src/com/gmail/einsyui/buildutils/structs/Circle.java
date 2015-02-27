@@ -33,11 +33,14 @@ public class Circle implements Struct {
 		double y2 = cp.getY(l2);
 		double x3 = cp.getX(l3);
 		double y3 = cp.getY(l3);
-		double y2x3Ox2 = y2*x3/x2;
-		double y3Ox3 = y3/x3;
-		double ym = -(x2*x3+y2*y2x3Ox2)/(y2x3Ox2-y3)/2;
-		double xm = -x3/2-y3*y3Ox3/2 -ym*y3Ox3;
+		double d = 2*(x2*y3-x3*y2);
+		double ym = (y3*(x2*x2+y2*y2)-y2*(x3*x3+y3*y3))/d;
+		double xm = (x2*(x3*x3+y3*y3)-x3*(x2*x2+y2*y2))/d;
 		this.center=cp.fromXY(xm, ym);
+		this.center=new Location(center.getWorld(), 
+				Math.round(center.getX()),
+				Math.round(center.getBlockY()),
+				Math.round(center.getBlockZ()));
 		
 		outerRadiusSquared = (int) Math.ceil(l1.distanceSquared(center));
 		innerRadiusSquared = (int) Math.pow(Math.sqrt(outerRadiusSquared)-1, 2); 

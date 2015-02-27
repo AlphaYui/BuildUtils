@@ -21,6 +21,7 @@ import com.gmail.einsyui.buildutils.commands.LineCommand;
 import com.gmail.einsyui.buildutils.commands.ParallelepipedCommand;
 import com.gmail.einsyui.buildutils.commands.ParallelogramCommand;
 import com.gmail.einsyui.buildutils.commands.ParamCommand;
+import com.gmail.einsyui.buildutils.commands.PointsCommand;
 import com.gmail.einsyui.buildutils.commands.SetCommand;
 import com.gmail.einsyui.buildutils.commands.SphereCommand;
 import com.gmail.einsyui.buildutils.commands.SphereThroughCommand;
@@ -53,6 +54,7 @@ public class Main extends JavaPlugin{
 		commands.addCommand( new CircleCommand () );
 		commands.addCommand( new CircleThroughCommand () );
 		commands.addCommand( new TriangleCommand () );
+		commands.addCommand( new PointsCommand () );
 		
 		commands.addCommand(new DebugCommand());
 		commands.addCommand(new DoCommand());
